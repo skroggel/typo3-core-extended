@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+
+    <pages>
+        <uid>1</uid>
+        <pid>0</pid>
+        <title>Root-Page</title>
+        <is_siteroot>1</is_siteroot>
+        <doktype>1</doktype>
+    </pages>
+
+    <pages>
+        <uid>2</uid>
+        <pid>1</pid>
+        <title>Test-Page</title>
+        <doktype>1</doktype>
+    </pages>
+
+    <pages>
+        <uid>3</uid>
+        <pid>2</pid>
+        <title>Test-Sub-Page</title>
+        <doktype>1</doktype>
+    </pages>
+
+
+    <pages>
+        <uid>10</uid>
+        <pid>0</pid>
+        <title>Root-Page</title>
+        <is_siteroot>1</is_siteroot>
+        <doktype>1</doktype>
+    </pages>
+
+    <pages>
+        <uid>11</uid>
+        <pid>10</pid>
+        <title>Test-Page</title>
+        <doktype>1</doktype>
+    </pages>
+
+
+    <pages>
+        <uid>20</uid>
+        <pid>0</pid>
+        <title>Root-Page</title>
+        <is_siteroot>1</is_siteroot>
+        <doktype>1</doktype>
+    </pages>
+
+    <pages>
+        <uid>21</uid>
+        <pid>20</pid>
+        <title>Test-Sub-Page</title>
+        <doktype>1</doktype>
+        <fe_group>20</fe_group>
+    </pages>
+
+
+    <fe_groups>
+        <uid>20</uid>
+        <pid>1</pid>
+        <title>test</title>
+    </fe_groups>
+
+</dataset>

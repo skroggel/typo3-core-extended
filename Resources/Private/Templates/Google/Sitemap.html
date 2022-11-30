@@ -1,0 +1,18 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	data-namespace-typo3-fluid="true">
+
+	<f:layout name="Sitemap" />
+
+	<f:section name="main">
+		<f:if condition="{pages}">
+			<f:for each="{pages}" as="page">
+				<url>
+					<loc><f:uri.page pageUid="{page.uid}" absolute="1" /></loc>
+					<lastmod><f:format.date format="c">{page.tstamp}</f:format.date></lastmod>
+					<changefreq>weekly</changefreq>
+					<priority>0.5</priority>
+				</url>
+			</f:for>
+		</f:if>
+	</f:section>
+</html>

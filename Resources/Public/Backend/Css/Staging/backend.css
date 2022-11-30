@@ -1,0 +1,9 @@
+.topbar-header-site-name::after,
+.typo3-topbar-site-name::after {
+    content: "STAGING-SYSTEM";
+    background-color:darkorange !important;
+    color:#fff;
+    padding:16px;
+    margin-left:16px;
+    display:inline-block;
+}

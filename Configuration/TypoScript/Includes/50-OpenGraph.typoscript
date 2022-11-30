@@ -1,0 +1,153 @@
+####################################################################
+# Responsive Images v2.0
+####################################################################
+lib.txCoreExtended {
+
+	openGraphImage = COA
+	openGraphImage {
+
+        // teaser image with fallbacks
+        10 = FILES
+        10 {
+
+            references {
+                table = pages
+                data = levelmedia : -1, slide
+                override.data =  levelfield : -1, tx_coreextended_teaser_image, slide
+                override.required = 1
+            }
+            maxItems = 1
+
+            renderObj = COA
+            renderObj {
+
+                // we need to use register here because inside GIFBUILDER "file" is not available
+                10 = LOAD_REGISTER
+                10 {
+                   OgImageFileUid = TEXT
+                   OgImageFileUid.data = file:current:uid
+                }
+
+
+                // load publisher into register
+                11 = LOAD_REGISTER
+                11 {
+                    OgImagePublisher = TEXT
+                    OgImagePublisher {
+                        data = file:current:tx_coreextended_publisher
+                        noTrimWrap = | / ||
+                        noTrimWrap.if.isTrue.data = file:current:tx_coreextended_publisher
+                    }
+                }
+
+                # load name of source, combine it with publisher and load it into register
+                12 = RECORDS
+                12 {
+                    source.data = file:current:tx_coreextended_source
+                    dontCheckPid = 1
+                    tables = tx_coreextended_domain_model_mediasources
+
+                    # load name of source but only if it is set and not an internal source
+                    conf.tx_coreextended_domain_model_mediasources = COA
+                    conf.tx_coreextended_domain_model_mediasources {
+                        10 = LOAD_REGISTER
+                        10 {
+                            OgImageMediaSource = TEXT
+                            OgImageMediaSource {
+                                data = field:name
+
+                                stdWrap.noTrimWrap = |© |{register:OgImagePublisher}|
+                                stdWrap.insertData = 1
+
+                                # only if there is a name and the publisher is not internal
+                                if.isTrue.data = field:name
+                                if.isTrue.if.isFalse.data = field:internal
+                            }
+                        }
+                    }
+                }
+
+
+                20 = IMG_RESOURCE
+                20 {
+
+                    file = GIFBUILDER
+                    file {
+
+                        // define format and size
+                        // see: https://developers.facebook.com/docs/sharing/best-practices#images
+                        XY = 1200,630
+                        format = jpg
+
+                        // add image
+                        10 = IMAGE
+                        10 {
+                            file {
+                                import.data = register:OgImageFileUid
+                                width = 1200c
+                                height = 630c
+                                treatIdAsReference = 1
+                            }
+                        }
+
+                        // add copyright information
+                        20 = TEXT
+                        20 {
+                            text.data = register:OgImageMediaSource
+                            fontColor = #ffffff
+                            fontSize = 20
+                            offset = [10.w]-[20.w]+5,[10.h]-15
+                            angle = 90
+                            niceText = 1
+
+                            shadow.offset = 2,2
+                            shadow.blur = 20
+                            shadow.opacity = 100
+                        }
+                    }
+                }
+
+                90 = RESTORE_REGISTER
+            }
+        }
+	}
+}
+
+
+#=============================================================
+# Additions based on loaded extensions
+#=============================================================
+[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_infographics')]
+    lib.txCoreExtended {
+
+    	openGraphImage = COA
+    	openGraphImage {
+
+            10 {
+                references {
+
+                    // addition for rkw_infographics START
+                    override.override.cObject = FILES
+                    override.override.cObject {
+                        references {
+                            table = tx_rkwinfographics_domain_model_infographic
+                            uid.data = gp:tx_rkwinfographics_infographics|infographic
+                            uid.insertData = 1
+                            fieldName = image_social
+                        }
+
+                        begin = 0
+                        maxItems = 1
+                        required = 1
+
+                        renderObj = TEXT
+                        renderObj {
+                            data = file:current:uid
+                        }
+                    }
+                    // addition for rkw_infographics END
+                }
+            }
+        }
+    }
+[global]

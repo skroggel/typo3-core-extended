@@ -1,0 +1,118 @@
+#############################################################################
+# Tables that are extended
+#############################################################################
+config.tx_extbase {
+    persistence {
+        classes {
+
+            // Subclasses
+            \TYPO3\CMS\Extbase\Domain\Model\FileReference {
+                subclasses {
+                    tx_coreextended_fileReference = Madj2k\CoreExtended\Domain\Model\FileReference
+                }
+            }
+            \TYPO3\CMS\Extbase\Domain\Model\File {
+                subclasses {
+                    tx_coreextended_file = Madj2k\CoreExtended\Domain\Model\File
+                }
+            }
+
+            // ==================================================================
+            Madj2k\CoreExtended\Domain\Model\Pages {
+                mapping {
+                    tableName = pages
+
+                    # on pages tables it's the doktype
+                    # if we set an value, we filter by it
+                    # if we do not set anything, all pages are found
+                    recordType =
+
+                    # mapping to properties of class
+                    columns {
+                        uid.mapOnProperty = uid
+                        pid.mapOnProperty = pid
+                        sorting.mapOnProperty = sorting
+                        crdate.mapOnProperty = crdate
+                        tstamp.mapOnProperty = tstamp
+                        hidden.mapOnProperty = hidden
+                        deleted.mapOnProperty = deleted
+                        doktype.mapOnProperty = doktype
+                        title.mapOnProperty = title
+                        subtitle.mapOnProperty = subtitle
+                        no_search.mapOnProperty = noSearch
+                        lastUpdated.mapOnProperty = lastUpdated
+                        abstract.mapOnProperty = abstract
+                    }
+                }
+            }
+
+            // ==================================================================
+            Madj2k\CoreExtended\Domain\Model\FileMeta {
+                mapping {
+                    tableName = sys_file_metadata
+                    recordType =
+                }
+            }
+
+            // ==================================================================
+            Madj2k\CoreExtended\Domain\Model\File {
+                mapping {
+                    tableName = sys_file
+                }
+            }
+
+            // ==================================================================
+            Madj2k\CoreExtended\Domain\Model\FileReference {
+                mapping {
+                    tableName = sys_file_reference
+                    columns {
+                        uid_local.mapOnProperty = file
+                    }
+                }
+            }
+        }
+    }
+}
+
+#############################################################################
+# Configuration
+#############################################################################
+plugin.tx_coreextended {
+    view {
+        templateRootPath = {$plugin.tx_coreextended.view.templateRootPath}
+        partialRootPath = {$plugin.tx_coreextended.view.partialRootPath}
+        layoutRootPath = {$plugin.tx_coreextended.view.layoutRootPath}
+    }
+
+    persistence {
+        storagePid = {$plugin.tx_coreextended.persistence.storagePid}
+    }
+
+    features {
+        # uncomment the following line to enable the new Property Mapper.
+        # rewrittenPropertyMapper = 1
+    }
+
+    #===============================================================
+    # Settings
+    #===============================================================
+    settings {
+
+        # comma-separated list of fields to look up when searching for images
+        includeFieldsList = {$plugin.tx_coreextended.settings.includeFieldsList}
+    }
+}
+
+
+#===============================================================
+# CSS
+#===============================================================
+plugin.tx_coreextended._CSS_DEFAULT_STYLE (
+
+)
+
+
+#===============================================================
+# Includes
+#===============================================================
+<INCLUDE_TYPOSCRIPT: source="DIR:./Includes" extensions="typoscript">

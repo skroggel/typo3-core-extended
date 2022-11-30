@@ -1,0 +1,40 @@
+#===============================================================
+// Google Sitemap
+#===============================================================
+TxCoreExtendedGoogleSitemap = PAGE
+TxCoreExtendedGoogleSitemap {
+    typeNum = 1453279478
+    config {
+        disableAllHeaderCode = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        no_cache = 0
+        debug = 0
+
+        additionalHeaders.10.header = Content-Type:text/xml;charset=utf-8
+        metaCharset = utf-8
+
+        index_enable = 0
+        index_metatags = 0
+        index_externals = 0
+    }
+
+    10 = USER_INT
+    10 {
+        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+        extensionName = CoreExtended
+        pluginName = GoogleSitemap
+        vendorName = Madj2k
+        controller = Google
+        switchableControllerActions {
+            # Again: Controller-Name and Action
+            Google {
+                1 = sitemap
+            }
+        }
+
+        view < plugin.tx_coreextended.view
+        persistence < plugin.tx_coreextended.persistence
+        settings < plugin.tx_coreextended.settings
+    }
+}

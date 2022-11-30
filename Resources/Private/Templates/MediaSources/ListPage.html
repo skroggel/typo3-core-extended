@@ -1,0 +1,33 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:rkwBasics="http://typo3.org/ns/RKW/RkwBasics/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+
+    <f:section name="main">
+
+        <f:render partial="FlashMessages" arguments="{_all}" />
+
+        <f:if condition="{mediaSources}">
+            <f:for each="{mediaSources}" as="mediaSource" iteration="iterator">
+                <f:if condition="{mediaSource.imageTitle}">
+                    <f:then>
+                        {mediaSource.imageTitle}
+                    </f:then>
+                    <f:else>
+                        <f:if condition="{mediaSource.imageDescription}">
+                            <f:then>
+                                {mediaSource.imageDescription}:
+                            </f:then>
+                            <f:else>
+                                {mediaSource.fileName}:
+                            </f:else>
+                        </f:if>
+                    </f:else>
+                </f:if>
+                <rkwBasics:mediaCopyright originator="{mediaSource.publisher}" source="{mediaSource.distributerName}" />
+                <f:if condition="{iterator.isLast} != 1"> &ndash; </f:if>
+            </f:for>
+        </f:if>
+    </f:section>
+</html>

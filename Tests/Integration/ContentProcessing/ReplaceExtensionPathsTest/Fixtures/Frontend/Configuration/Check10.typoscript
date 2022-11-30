@@ -1,0 +1,5 @@
+config {
+    tx_coreextended_cdn {
+        ignoreIfContains = Old-Setup-Test
+    }
+}

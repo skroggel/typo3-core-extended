@@ -1,0 +1,179 @@
+lib.txCoreExtended {
+
+	pageNavigation {
+
+	    // ============================================
+        // get the parent uid of current page
+        // ============================================
+        pageUp = RECORDS
+        pageUp {
+            source.data = leveluid:-1
+            tables = pages
+            conf.pages = TEXT
+            conf.pages.field = pid
+        }
+
+
+        // ============================================
+        // get the uid of current page's next sibling
+        // ============================================
+        pageNext = CONTENT
+        pageNext {
+            table = pages
+            select {
+                pidInList.data = field:pid
+                orderBy = sorting ASC
+                where = deleted = 0 AND hidden = 0 AND doktype IN (0,1,4)
+                where.noTrimWrap = || AND sorting > {field:sorting} AND uid != {field:uid} AND (shortcut_mode IN (1,2) OR (shortcut_mode = 3 AND NOT shortcut ='{field:uid}') OR (shortcut_mode = 0 AND NOT shortcut ='{field:uid}'))|
+                where.insertData = 1
+                max = 1
+            }
+            renderObj = TEXT
+            renderObj.field = uid
+        }
+
+
+        // ============================================
+        // get the uid of the parents page's next sibling
+        // ============================================
+        pageNextParent = CONTENT
+        pageNextParent {
+            table = pages
+            select {
+                pidInList.data = leveluid:-3
+                orderBy = sorting ASC
+                where = deleted = 0 AND hidden = 0 AND doktype IN (0,1,4)
+                where.noTrimWrap = || AND sorting > (SELECT sorting FROM pages WHERE uid = {field:pid}) AND uid != {field:uid} AND (shortcut_mode IN (1,2) OR (shortcut_mode = 3 AND NOT shortcut ='{field:uid}') OR (shortcut_mode = 0 AND NOT shortcut ='{field:uid}'))|
+                where.insertData = 1
+                max = 1
+            }
+
+            renderObj = TEXT
+            renderObj.field = uid
+        }
+
+        // ============================================
+        // get the uid of the first child of current page
+        // ============================================
+        pageNextSub = CONTENT
+        pageNextSub{
+            table = pages
+            select {
+                pidInList = this
+                orderBy = sorting ASC
+                where = deleted = 0 AND hidden = 0 AND doktype IN (0,1,4)
+                where.noTrimWrap = || AND uid != {field:uid} AND (shortcut_mode IN (1,2) OR (shortcut_mode = 3 AND NOT shortcut ='{field:uid}' AND NOT shortcut = '0') OR (shortcut_mode = 0 AND NOT shortcut ='{field:uid}'))|
+                where.insertData = 1
+
+                max = 1
+            }
+
+            renderObj = TEXT
+            renderObj.field = uid
+        }
+
+        // ============================================
+        // get the id of current page's previous sibling
+        // ============================================
+        pagePrev = CONTENT
+        pagePrev {
+            table = pages
+            select {
+                pidInList.data = field:pid
+                orderBy = sorting DESC
+                where = deleted = 0 AND hidden = 0 AND doktype IN (0,1,4)
+                where.noTrimWrap = || AND sorting < {field:sorting} AND uid != {field:uid} AND (shortcut_mode IN (1,2) OR (shortcut_mode = 3 AND NOT shortcut ='{field:uid}') OR (shortcut_mode = 0 AND NOT shortcut ='{field:uid}'))|
+                where.insertData = 1
+                max = 1
+            }
+            renderObj = TEXT
+            renderObj.field = uid
+        }
+
+        // ============================================
+        // get the uid of the grand-parent page to get the previous sibling (may be a shortcut though)
+        // ============================================
+        pagePrevParent = CONTENT
+        pagePrevParent {
+            table = pages
+            select {
+                pidInList.data = leveluid:-3
+                orderBy = sorting DESC
+                where = deleted = 0 AND hidden = 0 AND doktype IN (0,1,4)
+                where.noTrimWrap = || AND (sorting <= (SELECT sorting FROM pages WHERE uid = {field:pid}) AND uid != {field:uid} AND ((shortcut_mode = 3 AND NOT shortcut ='{field:uid}') OR (shortcut_mode = 0 AND NOT shortcut ='{field:uid}'))) OR (sorting < (SELECT sorting FROM pages WHERE uid = {field:pid}) AND uid != {field:uid})|
+                where.insertData = 1
+                max = 1
+            }
+
+            renderObj = TEXT
+            renderObj.field = uid
+        }
+
+        // ============================================
+        // get the id of prev page's last sub page
+        // ============================================
+        pagePrevSub = CONTENT
+        pagePrevSub {
+            table = pages
+            select {
+                pidInList.cObject < lib.txCoreExtended.pageNavigation.pagePrev
+                orderBy = sorting DESC
+                where = deleted = 0 AND hidden = 0 AND doktype IN (0,1,4)
+                where.noTrimWrap = || AND uid != {field:uid} AND (shortcut_mode IN (1,2) OR (shortcut_mode = 3 AND NOT shortcut ='{field:uid}') OR (shortcut_mode = 0 AND NOT shortcut ='{field:uid}'))|
+                where.insertData = 1
+                max = 1
+            }
+
+            renderObj = TEXT
+            renderObj.field = uid
+        }
+
+        // ============================================
+        // get the navigation for next
+        //============================================
+        pageNextRecursive = TEXT
+        pageNextRecursive {
+
+            // try to go down to a lower level
+            cObject < lib.txCoreExtended.pageNavigation.pageNextSub
+
+            // if not available
+            ifEmpty{
+
+                // try the next page on same level
+                cObject < lib.txCoreExtended.pageNavigation.pageNext
+
+                // if not available
+                ifEmpty{
+
+                    // try the next page on higher level
+                    cObject < lib.txCoreExtended.pageNavigation.pageNextParent
+                }
+            }
+        }
+
+        // ============================================
+        // get the navigation for previous
+        // ============================================
+        pagePrevRecursive = TEXT
+        pagePrevRecursive {
+
+            // try to get the last sub page of the previous page
+            cObject < lib.txCoreExtended.pageNavigation.pagePrevSub
+
+            // if not available
+            ifEmpty {
+
+                // try the prev page on same level
+                cObject < lib.txCoreExtended.pageNavigation.pagePrev
+
+                // if not available
+                ifEmpty {
+
+                    // try the prev page on a higher level
+                    cObject < lib.txCoreExtended.pageNavigation.pagePrevParent
+                }
+            }
+        }
+	}
+}

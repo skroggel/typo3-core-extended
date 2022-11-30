@@ -5,18 +5,6 @@ call_user_func(
     function($extKey)
     {
 
-
-        //=================================================================
-        // Register Hooks
-        //=================================================================
-        if (TYPO3_MODE !== 'BE') {
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'RKW\\RkwBasics\\Hooks\\PseudoCdnHook->hook_contentPostProc';
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'RKW\\RkwBasics\\Hooks\\HtmlMinifyHook->hook_contentPostProc';
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'RKW\\RkwBasics\\Hooks\\ProxyCachingHook->sendHeader';
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][] = 'RKW\\RkwBasics\\Hooks\\CriticalCssHook->render_preProcess';
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-postTransform'][] = 'RKW\\RkwBasics\\Hooks\\CriticalCssHook->render_postTransform';
-        }
-
         //=================================================================
         // Register Caching
         //=================================================================
@@ -34,19 +22,40 @@ call_user_func(
         }
 
         //=================================================================
+        // Add Rootline Fields
+        //=================================================================
+        $rootlineFields = &$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
+        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,coreextended_no_index,tx_coreextended_no_follow';
+        $rootlineFields .= (empty($rootlineFields))? $newRootlineFields : ',' . $newRootlineFields;
+
+        //=================================================================
+        // Asset for routing
+        //=================================================================
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['PersistedSlugifiedPatternMapper']
+            = \Madj2k\CoreExtended\Routing\Aspect\PersistedSlugifiedPatternMapper::class;
+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['CHashRemovalMapper'] =
+            \Madj2k\CoreExtended\Routing\Aspect\CHashRemovalMapper::class;
+
+        //=================================================================
         // XClasses
         //=================================================================
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\ImageService::class] = [
-            'className' => Madj2k\Accelerator\XClasses\Extbase\Service\ImageService::class
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\EnvironmentService::class] = [
+            'className' => Madj2k\CoreExtended\XClasses\Extbase\Service\EnvironmentService::class
         ];
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Core\Resource\ResourceCompressor::class] = [
-            'className' => Madj2k\Accelerator\XClasses\Core\Resource\ResourceCompressor::class
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\ExtensionService::class] = [
+            'className' => Madj2k\CoreExtended\XClasses\Extbase\Service\ExtensionService::class
         ];
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_freecap')) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][SJBR\SrFreecap\Validation\Validator\CaptchaValidator::class] = [
+                'className' => Madj2k\CoreExtended\XClasses\Validation\Validator\CaptchaValidator::class
+            ];
+        }
 
         //=================================================================
         // Configure Logger
         //=================================================================
-        $GLOBALS['TYPO3_CONF_VARS']['LOG']['Madj2k']['Accelerator']['writerConfiguration'] = array(
+        $GLOBALS['TYPO3_CONF_VARS']['LOG']['Madj2k']['CoreExtended']['writerConfiguration'] = array(
 
             // configuration for WARNING severity, including all
             // levels with higher severity (ERROR, CRITICAL, EMERGENCY)
@@ -54,7 +63,7 @@ call_user_func(
                 // add a FileWriter
                 'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
                     // configuration for the writer
-                    'logFile' => 'typo3temp/var/logs/tx_accelerator.log'
+                    'logFile' => 'typo3temp/var/logs/tx_coreextended.log'
                 )
             ),
         );

@@ -1,0 +1,58 @@
+#===============================================================
+# Copyright text on images
+#===============================================================
+tt_content.image.20 {
+    caption {
+        1 {
+            100 = LOAD_REGISTER
+            100 {
+                # reset copyright data
+                currentImageCopyright.data = 0
+            }
+
+            # load name of source and register it
+            200 = RECORDS
+            200 {
+                source.data = file:current:tx_coreextended_source
+                dontCheckPid = 1
+                tables = tx_coreextended_domain_model_mediasources
+
+                # load name of source but only if it is set and not an internal source
+                conf.tx_coreextended_domain_model_mediasources = COA
+                conf.tx_coreextended_domain_model_mediasources {
+                    10 = LOAD_REGISTER
+                    10.currentImageCopyright {
+                        data = field:name
+                        typolink {
+                            parameter.data = field:url
+                            if.isTrue.data = field:url
+                        }
+
+                        # only if there is a name and the publisher is not internal
+                        if.isTrue.data = field:name
+                        if.isTrue.if.isFalse.data = field:internal
+                    }
+                }
+            }
+
+            300 = COA
+            300 {
+                10 = TEXT
+                10 {
+                    data = file:current:tx_coreextended_publisher
+                    noTrimWrap = || - |
+                    noTrimWrap.if.isTrue.data = file:current:tx_coreextended_publisher
+                }
+
+                20 = TEXT
+                20.data = register:currentImageCopyright
+
+                stdWrap.noTrimWrap = |<span class="copyright-hint">(© |)</span>|
+
+                # Only if it is not disabled!
+                if.isTrue.data = register:currentImageCopyright
+                if.isTrue.if.isFalse.data = field:tx_coreextended_images_no_copyright
+            }
+        }
+    }
+}

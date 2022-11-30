@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-02-19T11:21:59Z" product-name="coreextended">
+		<header/>
+		<body>
+
+            <!-- Templates/MediaSources/List -->
+            <trans-unit id="templates_mediaSources_list_sum">
+                <source>%s media sources.</source>
+            </trans-unit>
+
+            <!-- ===================================================== -->
+            <!-- VALIDATOR -->
+            <!-- ===================================================== -->
+            <trans-unit id="validator.bic.notvalid">
+                <source>The given subject is no valid BIC/SWIFT code.</source>
+            </trans-unit>
+            <trans-unit id="validator.iban.notvalid">
+                <source>The given subject is no valid iban.</source>
+            </trans-unit>
+
+		</body>
+	</file>
+</xliff>

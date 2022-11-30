@@ -11,8 +11,8 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = [
-	'title' => 'Accelerator',
-	'description' => 'Extension with some basic extensions for BE and FE',
+	'title' => 'CoreExtended',
+	'description' => 'Extension with some basic extensions for the core installation',
 	'category' => 'FE',
 	'author' => 'Steffen Kroggel',
 	'author_email' => 'developer@steffenkroggel.de',
@@ -30,11 +30,13 @@ $EM_CONF[$_EXTKEY] = [
     'constraints' => [
 		'depends' => [
 			'typo3' => '9.5.0-9.5.99',
+            'filemetadata' => '9.5.0.0-9.5.99',
         ],
 		'conflicts' => [
 		],
 		'suggests' => [
-            'varnish' => '2.4.0-2.4.99'
+            'persisted_sanitized_routing' => '1.0.4',
+            'sr_freecap' => '2.5.6-2.5.99',
 		],
 	],
 ];

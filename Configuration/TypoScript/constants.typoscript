@@ -1,0 +1,23 @@
+plugin.tx_coreextended {
+	view {
+		# cat=plugin.tx_coreextended/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:core_extended/Resources/Private/Templates/
+
+		# cat=plugin.tx_coreextended/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:core_extended/Resources/Private/Partials/
+
+		# cat=plugin.tx_coreextended/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:core_extended/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_coreextended//a; type=string; label=Default storage PID
+		storagePid =
+	}
+
+	settings {
+
+        # cat=plugin.tx_coreextended//a; type=string; label=comma-separated list of fields to look up when searching for images
+        includeFieldsList =
+	}
+}
+

@@ -1,0 +1,39 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:rkwBasics="http://typo3.org/ns/RKW/RkwBasics/ViewHelpers"
+	data-namespace-typo3-fluid="true">
+
+	<f:layout name="Default" />
+
+	<f:section name="main">
+
+		<f:render partial="FlashMessages" arguments="{_all}" />
+
+		<f:if condition="{mediaSources}">
+			<ul class="media-sources-list">
+				<f:for each="{mediaSources}" as="mediaSource">
+					<f:for each="{rkwBasics:PageListExplode(list:'{mediaSource.pagesList}', delimiter:'|' delimiterTwo:'###')}" as="pageTitle" key="pageUid">
+						<li>
+							<f:link.page pageUid="{pageUid}" rel="nofollow">{pageTitle}</f:link.page>:
+							<f:if condition="{mediaSource.imageTitle}">
+								<f:then>
+									{mediaSource.imageTitle}
+								</f:then>
+								<f:else>
+									<f:if condition="{mediaSource.imageDescription}">
+										<f:then>
+											{mediaSource.imageDescription}
+										</f:then>
+										<f:else>
+											{mediaSource.fileName}
+										</f:else>
+									</f:if>
+								</f:else>
+							</f:if>
+							<rkwBasics:mediaCopyright originator="{mediaSource.publisher}" source="{mediaSource.distributerName}" />
+					</f:for>
+				</f:for>
+			</ul>
+			<!-- <f:translate key="templates_mediaSources_list_sum" arguments="{0: mediaSourcesSum}" />-->
+		</f:if>
+	</f:section>
+</html>

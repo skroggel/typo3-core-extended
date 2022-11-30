@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2014-02-17T16:22:14Z" product-name="coreextended">
+		<header/>
+		<body>
+
+            <!-- pages -->
+            <trans-unit id="pages.tx_coreextended_alternative_title">
+                <source>Alternative Label for Menu</source>
+                <target>Alternative Beschriftung für Menü (Kurzbeschriftung)</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_fe_layout_next_level" approved="yes">
+				<source>Frontend Layout (for subpages of this page)</source>
+				<target>Frontend Layout (für Unterseiten dieser Seite)</target>
+			</trans-unit>
+            <trans-unit id="pages.tx_coreextended_no_index">
+                <source>Indexing by Search Engines</source>
+                <target>Indexierung durch Suchmaschinen</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_no_index.I.enabled">
+                <source>Inactivate (incl. Subpages)</source>
+                <target>Deaktivieren (inkl. Unterseiten)</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_no_follow">
+                <source>Link-Following by Search Engines</source>
+                <target>Link-Folgen durch Suchmaschinen</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_no_follow.I.enabled">
+                <source>Inactivate (incl. Subpages)</source>
+                <target>Deaktivieren (inkl. Unterseiten)</target>
+            </trans-unit>
+
+
+            <!-- sys_file_metadata -->
+            <trans-unit id="sys_file_metadata." approved="yes" >
+				<source>Media File</source>
+				<target>Media File</target>
+			</trans-unit>
+			<trans-unit id="sys_file_metadata.tx_coreextended_publisher" approved="yes">
+				<source>Publisher</source>
+				<target>Herausgeber / Copyright</target>
+			</trans-unit>
+			<trans-unit id="sys_file_metadata.tx_coreextended_source" approved="yes">
+				<source>Source</source>
+				<target>Quelle</target>
+			</trans-unit>
+
+
+            <!-- tt_content-->
+			<trans-unit id="tt_content.tx_coreextended_images_no_copyright" approved="yes">
+				<source>Copyright Information</source>
+				<target>Copyright-Informationen</target>
+			</trans-unit>
+			<trans-unit id="tt_content.tx_coreextended_images_no_copyright.I.disabled" approved="yes">
+				<source>Do not show copyright information in frontend</source>
+				<target>Im Frontend keine Copyright-Informationen ausgeben</target>
+			</trans-unit>
+
+
+            <!-- tx_coreextended_domain_model_mediasources -->
+            <trans-unit id="tx_coreextended_domain_model_mediasources" approved="yes">
+				<source>Media Sources</source>
+				<target>Medienquellen</target>
+			</trans-unit>
+			<trans-unit id="tx_coreextended_domain_model_mediasources.name" approved="yes">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_coreextended_domain_model_mediasources.url" approved="yes">
+				<source>Url</source>
+				<target>Url</target>
+			</trans-unit>
+			<trans-unit id="tx_coreextended_domain_model_mediasources.internal">
+				<source>Internal  (e.g. for own photos)</source>
+				<target>Intern (z.B. bei eigenen Fotos)</target>
+			</trans-unit>
+			<trans-unit id="tx_coreextended_domain_model_mediasources.internal.I.disabled" approved="yes">
+				<source>Do not show as copyright information in frontend</source>
+				<target>Im Frontend nicht als Copyright-Information anzeigen</target>
+			</trans-unit>
+
+
+            <!-- Flexform -->
+			<trans-unit id="flexform.mediasources.function.headline" approved="yes">
+				<source>Function</source>
+				<target>Funktion</target>
+			</trans-unit>
+			<trans-unit id="flexform.mediasources.function.select" approved="yes">
+				<source>Select function</source>
+				<target>Funktion auswählen</target>
+			</trans-unit>
+			<trans-unit id="flexform.mediasources.function.select.I.list" approved="yes">
+				<source>List of used media sources</source>
+				<target>Liste aller verwendeten Medienquellen</target>
+			</trans-unit>
+            <trans-unit id="flexform.mediasources.function.select.I.listPage" approved="yes">
+                <source>List of used media sources for current page</source>
+                <target>Liste aller verwendeten Medienquellen für aktuelle Seite</target>
+            </trans-unit>
+
+		</body>
+	</file>
+</xliff>

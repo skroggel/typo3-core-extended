@@ -1,0 +1,168 @@
+####################################################################
+# TitleTag
+####################################################################
+lib.txCoreExtended {
+
+    titleTag = COA_INT
+    titleTag {
+
+        // title
+        20 = TEXT
+        20 {
+            field = title
+        }
+
+        // global wrapper
+        stdWrap.wrap = <title>|</title>
+
+        // specialchars for title
+        stdWrap.htmlSpecialChars = 1
+    }
+}
+
+
+#=============================================================
+# Additions based on loaded extensions
+#=============================================================
+[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_pdf2content')]
+    lib.txCoreExtended {
+
+        titleTag {
+
+            // prepend publication title on publication pages
+            // For import-sub-pages only!
+            10 = COA
+            10 {
+
+                10 = USER
+                10 {
+                    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+                    extensionName = RkwPdf2content
+                    pluginName = Pi1
+                    vendorName = RKW
+                    controller = DisplayPages
+                    switchableControllerActions {
+                        // Again: Controller-Name and Action
+                        DisplayPages {
+                            1 = importParentPage
+                        }
+                    }
+
+                    view =< plugin.tx_rkwpdf2content.view
+                    persistence =< plugin.tx_rkwpdf2content.persistence
+                    settings =< plugin.tx_rkwpdf2content.settings
+                    settings.importParentPage.showField = title
+                }
+
+                stdWrap.noTrimWrap = ||: |
+                if {
+                    value = 1
+                    equals.field = tx_rkwpdf2content_is_import_sub
+                }
+            }
+
+
+            // additional label for publication main pages
+            // in order to avoid conflicts with blog-articles
+            21 = TEXT
+            21 {
+
+                value = Publikation
+                stdWrap.noTrimWrap = | - ||
+                if {
+                    value = 1
+                    equals {
+
+                        field = tx_rkwpdf2content_is_import
+                    }
+                }
+            }
+        }
+    }
+[global]
+
+
+[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_events')]
+    lib.txCoreExtended {
+
+        titleTag {
+
+            // additional title for events
+            30 = COA
+            30 {
+
+                10 = TEXT
+                10 {
+                    dataWrap = DB:tx_rkwevents_domain_model_event:{gp:tx_rkwevents_pi1|event}:title
+                    wrap3 = {|}
+                    insertData=1
+                }
+
+                stdWrap.noTrimWrap = |: | - Veranstaltung |
+                stdWrap.required = 1
+            }
+        }
+    }
+[global]
+
+
+[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_authors')]
+    lib.txCoreExtended {
+
+        titleTag {
+
+            // additional title for authors
+            40 = COA
+            40 {
+
+                10 = TEXT
+                10 {
+                    dataWrap = DB:tx_rkwauthors_domain_model_authors:{gp:tx_rkwauthors_rkwauthorsdetail|author}:first_name
+                    wrap3 = {|}
+                    insertData=1
+                }
+
+                stdWrap.noTrimWrap = |: ||
+                stdWrap.required = 1
+            }
+
+            50 = COA
+            50 {
+
+                10 = TEXT
+                10 {
+                    dataWrap = DB:tx_rkwauthors_domain_model_authors:{gp:tx_rkwauthors_rkwauthorsdetail|author}:last_name
+                    wrap3 = {|}
+                    insertData=1
+                }
+
+                stdWrap.noTrimWrap = | | - Kontakt |
+                stdWrap.required = 1
+            }
+        }
+    }
+[global]
+
+[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_infographics')]
+    lib.txCoreExtended {
+
+        titleTag {
+
+            // additional title for infographics
+            60 = COA
+            60 {
+
+                10 = TEXT
+                10 {
+                    dataWrap = DB:tx_rkwinfographics_domain_model_infographic:{gp:tx_rkwinfographics_infographics|infographic}:title
+                    wrap3 = {|}
+                    insertData=1
+                }
+
+                stdWrap.noTrimWrap = |: | - Infografik |
+                stdWrap.required = 1
+            }
+
+        }
+    }
+[global]

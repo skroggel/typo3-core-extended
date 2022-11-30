@@ -1,10 +1,10 @@
 {
-    "name": "madj2k/accelerator",
+    "name": "madj2k/coreextended",
     "type": "typo3-cms-extension",
-    "description": "Speed up your TYPO3 installation",
+    "description": "Adds some basic features to your TYPO3 installation",
     "homepage": "https://www.steffenkroggel.de",
     "license": ["GPL-2.0+"],
-    "keywords": ["TYPO3 CMS", "Critical CSS", "Above The Fold", "CDN", "HTML Minify", "Responsive Images", "Varnish"],
+    "keywords": ["TYPO3 CMS", "Layout", "Google Sitemap", "SEO", "ViewHelpers", "Fluid", "Frontend Simulation", "General Tools", "Cache", "Asset Files", "Routing", "Media Sources"],
     "support": {
         "email": "developer@steffenkroggel.de"
     },
@@ -19,19 +19,21 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "typo3/cms-core": "~9.5.0"
+        "typo3/cms-core": "~9.5.0",
+		"typo3/cms-filemetadata": "~9.5.0"
 	},
 	"suggest": {
-		"sopsone-ch/varnish": "~2.4"
+		"sjbr/sr-freecap": "~2.4",
+		"calien/persisted-sanitized-routing" : "^1.0.4"
 	},
     "autoload": {
         "psr-4": {
-            "Madj2k\\Accelerator\\": "Classes/"
+            "Madj2k\\CoreExtended\\": "Classes/"
         }
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "accelerator"
+            "extension-key": "core_extended"
         }
     }
 }
