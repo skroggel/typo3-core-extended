@@ -154,7 +154,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
      * @return array
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public static function getTyposcriptConfiguration(string $extension = '', string $type = \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
+    public static function getTypoScriptConfiguration(string $extension = '', string $type = \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
     {
 
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class);

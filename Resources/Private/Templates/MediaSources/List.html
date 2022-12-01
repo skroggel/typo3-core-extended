@@ -1,5 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	xmlns:rkwBasics="http://typo3.org/ns/RKW/RkwBasics/ViewHelpers"
+	xmlns:coreExtended="http://typo3.org/ns/Madj2k/CoreExtended/ViewHelpers"
 	data-namespace-typo3-fluid="true">
 
 	<f:layout name="Default" />
@@ -29,7 +29,7 @@
 									</f:if>
 								</f:else>
 							</f:if>
-							<rkwBasics:mediaCopyright originator="{mediaSource.publisher}" source="{mediaSource.distributerName}" />
+							<coreExtended:mediaCopyright originator="{mediaSource.publisher}" source="{mediaSource.distributerName}" />
 					</f:for>
 				</f:for>
 			</ul>

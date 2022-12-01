@@ -15,16 +15,9 @@ namespace Madj2k\CoreExtended\Tests\Integration\XClasses\Extbase\Service;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Madj2k\CoreExtended\Domain\Repository\PagesRepository;
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
-use RKW\RkwMailer\Domain\Model\QueueMail;
-use RKW\RkwMailer\Domain\Model\QueueRecipient;
-use RKW\RkwMailer\View\MailStandaloneView;
-use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
-
 
 /**
  * EnvironmentServiceTest

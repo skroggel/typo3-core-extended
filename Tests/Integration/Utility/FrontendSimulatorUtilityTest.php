@@ -17,14 +17,9 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
 use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Context\LanguageAspect;
-use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * FrontendSimulatorUtilityTest
@@ -136,8 +131,8 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         GeneralUtility::getIndpEnv('HTTP_HOST');
 
         self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
-        self::assertEquals('www.rkw-kompetenzzentrum.rkw.local', $_SERVER['HTTP_HOST']);
-        self::assertEquals('www.rkw-kompetenzzentrum.rkw.local',  GeneralUtility::getIndpEnv('HTTP_HOST'));
+        self::assertEquals('www.example.local', $_SERVER['HTTP_HOST']);
+        self::assertEquals('www.example.local',  GeneralUtility::getIndpEnv('HTTP_HOST'));
 
     }
 
@@ -187,7 +182,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::class, $GLOBALS['TSFE']);
 
         self::assertEquals('/', $GLOBALS['TSFE']->config['config']['absRefPrefix']);
-        self::assertEquals('www.rkw-kompetenzzentrum.rkw.local', $GLOBALS['TSFE']->config['config']['baseURL']);
+        self::assertEquals('www.example.local', $GLOBALS['TSFE']->config['config']['baseURL']);
         self::assertEquals('/', $GLOBALS['TSFE']->absRefPrefix);
 
     }
@@ -466,7 +461,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
 
-        $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'rkwBasics');
+        $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'coreExtended');
         self::assertEquals(1, $settings['frontendContext']);
     }
 
@@ -729,7 +724,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
 
-        $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'rkwBasics');
+        $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'coreExtended');
         self::assertEquals(1, $settings['backendContext']);
     }
 

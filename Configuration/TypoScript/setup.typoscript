@@ -5,15 +5,16 @@ config.tx_extbase {
     persistence {
         classes {
 
-            // Subclasses
-            \TYPO3\CMS\Extbase\Domain\Model\FileReference {
+            TYPO3\CMS\Extbase\Domain\Model\FileReference {
                 subclasses {
-                    tx_coreextended_fileReference = Madj2k\CoreExtended\Domain\Model\FileReference
+                    Tx_Coreextended_FileReference = Madj2k\CoreExtended\Domain\Model\FileReference
                 }
             }
-            \TYPO3\CMS\Extbase\Domain\Model\File {
+
+            // ==================================================================
+            TYPO3\CMS\Extbase\Domain\Model\File {
                 subclasses {
-                    tx_coreextended_file = Madj2k\CoreExtended\Domain\Model\File
+                    Tx_Coreextended_File = Madj2k\CoreExtended\Domain\Model\File
                 }
             }
 
@@ -47,7 +48,7 @@ config.tx_extbase {
             }
 
             // ==================================================================
-            Madj2k\CoreExtended\Domain\Model\FileMeta {
+            Madj2k\CoreExtended\Domain\Model\FileMetadata {
                 mapping {
                     tableName = sys_file_metadata
                     recordType =

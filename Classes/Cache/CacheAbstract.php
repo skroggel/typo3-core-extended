@@ -14,12 +14,14 @@ namespace Madj2k\CoreExtended\Cache;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Cache\CacheManager;
+
 /**
  * Class CacheAbstract
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Steffen Kroggel
- * @package Madj2k_CoreExtended
+ * @package Madj2k_Accelerator
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
@@ -28,12 +30,12 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * @var string Key for cache
      */
-    protected $_key = 'core_extended';
+    protected $_key = 'tx_accelerator';
 
     /**
      * @var string Identifier for cache
      */
-    protected $_identifier = 'core_extended';
+    protected $_identifier = 'tx_accelerator';
 
     /**
      * @var string Contains context mode (Production, Development...)
@@ -45,6 +47,25 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected $environmentMode = '';
 
+
+    /**
+     * Constructor
+     *
+     * @param string $environmentMode
+     * @param string $contextMode
+     * @return void
+     */
+    public function __construct(string $environmentMode = '', string $contextMode = '')
+    {
+
+        if ($environmentMode) {
+            $this->environmentMode = $environmentMode;
+        }
+
+        if ($contextMode) {
+            $this->contextMode = $contextMode;
+        }
+    }
 
     /**
      * Returns cache identifier
@@ -60,10 +81,10 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Returns cache identifier
      *
-     * @param mixed $identifier
+     * @param string $identifier
      * @return $this
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): self
     {
         $this->_identifier = sha1($identifier);
         return $this;
@@ -73,10 +94,11 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Returns cached object
      *
-     * @param mixed $identifier
+     * @param string $identifier
      * @return mixed
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
-    public function getContent($identifier = null)
+    public function getContent(string $identifier = '')
     {
 
         if ($identifier) {
@@ -92,7 +114,7 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
             return false;
         }
 
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+        $this->getCacheManager()
             ->getCache($this->_key)
             ->get($this->getIdentifier());
     }
@@ -103,11 +125,12 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @param mixed $data
      * @param array $tags
-     * @param mixed $identifier
+     * @param string $identifier
      * @param integer $lifetime
      * @return $this
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
-    public function setContent($data, $tags = array(), $identifier = null, $lifetime = 21600)
+    public function setContent($data, array $tags = array(), string $identifier = '', int $lifetime = 21600): self
     {
 
         if ($identifier) {
@@ -123,7 +146,7 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
             return $this;
         }
 
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+        $this->getCacheManager()
             ->getCache($this->_key)
             ->set($this->getIdentifier(), $data, $tags, $lifetime);
 
@@ -136,10 +159,10 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @return \TYPO3\CMS\Core\Cache\CacheManager
      */
-    public function getCacheManager()
+    public function getCacheManager(): CacheManager
     {
         /** @var $cacheManager \TYPO3\CMS\Core\Cache\CacheManager */
-        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(CacheManager::class);
         return $cacheManager;
     }
 
@@ -147,9 +170,9 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Function to return the current TYPO3_CONTEXT.
      *
-     * @return string|NULL
+     * @return string
      */
-    protected function getContextMode()
+    protected function getContextMode(): string
     {
 
         if (!$this->contextMode) {
@@ -158,7 +181,7 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
 
-        return $this->contextMode;
+        return $this->contextMode ?: '';
     }
 
     /**
@@ -168,7 +191,7 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
      * @return string
      * @see \TYPO3\CMS\Core\Resource\AbstractRepository
      */
-    protected function getEnvironmentMode()
+    protected function getEnvironmentMode(): string
     {
 
         if (!$this->environmentMode) {
@@ -177,26 +200,7 @@ abstract class CacheAbstract implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
 
-        return $this->environmentMode;
-    }
-
-
-    /**
-     * Constructor
-     *
-     * @param string $environmentMode
-     * @param string $contextMode
-     */
-    public function __construct($environmentMode = null, $contextMode = null)
-    {
-
-        if ($environmentMode) {
-            $this->environmentMode = $environmentMode;
-        }
-
-        if ($contextMode) {
-            $this->contextMode = $contextMode;
-        }
+        return $this->environmentMode ?: '';
     }
 
 }

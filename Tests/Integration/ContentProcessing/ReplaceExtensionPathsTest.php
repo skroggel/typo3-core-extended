@@ -15,9 +15,7 @@ namespace Madj2k\CoreExtended\Tests\Integration\ContentProcessing;
  */
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Madj2k\CoreExtended\ContentProcessing\PseudoCdn;
 use Madj2k\CoreExtended\ContentProcessing\ReplaceExtensionPaths;
-use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
