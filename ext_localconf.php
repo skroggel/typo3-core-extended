@@ -25,8 +25,15 @@ call_user_func(
         // Add Rootline Fields
         //=================================================================
         $rootlineFields = &$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
-        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,coreextended_no_index,tx_coreextended_no_follow';
+        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,tx_coreextended_no_index,tx_coreextended_no_follow';
         $rootlineFields .= (empty($rootlineFields))? $newRootlineFields : ',' . $newRootlineFields;
+
+        //=================================================================
+        // Register Hooks
+        //=================================================================
+        if (TYPO3_MODE !== 'BE') {
+            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'Madj2k\\CoreExtended\\Hooks\\ReplaceExtensionPathsHook->hook_contentPostProc';
+        }
 
         //=================================================================
         // Asset for routing
@@ -46,13 +53,9 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\ExtensionService::class] = [
             'className' => Madj2k\CoreExtended\XClasses\Extbase\Service\ExtensionService::class
         ];
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_freecap')) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][SJBR\SrFreecap\Validation\Validator\CaptchaValidator::class] = [
-                'className' => Madj2k\CoreExtended\XClasses\Validation\Validator\CaptchaValidator::class
-            ];
-        }
 
-        //=================================================================
+
+        //====================re=============================================
         // Configure Logger
         //=================================================================
         $GLOBALS['TYPO3_CONF_VARS']['LOG']['Madj2k']['CoreExtended']['writerConfiguration'] = array(

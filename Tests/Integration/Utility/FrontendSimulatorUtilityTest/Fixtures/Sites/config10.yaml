@@ -1,4 +1,4 @@
-base: www.rkw.local
+base: www.test.local
 errorHandling:
   -
     errorCode: '404'

@@ -1,5 +1,5 @@
 {
-    "name": "madj2k/core-extended",
+    "name": "madj2k/t3-core-extended",
     "type": "typo3-cms-extension",
     "description": "Adds some basic features to your TYPO3 installation",
     "homepage": "https://www.steffenkroggel.de",
@@ -20,10 +20,7 @@
         "php": ">=7.4",
         "ext-json": "*",
         "typo3/cms-core": "~9.5.0",
-		"typo3/cms-filemetadata": "~9.5.0"
-	},
-	"suggest": {
-		"sjbr/sr-freecap": "~2.4",
+		"typo3/cms-filemetadata": "~9.5.0",
 		"calien/persisted-sanitized-routing" : "^1.0.4"
 	},
     "autoload": {

@@ -11,7 +11,7 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = [
-	'title' => 'CoreExtended',
+	'title' => 'TYPO3 Core Extended',
 	'description' => 'Extension with some basic extensions for the core installation',
 	'category' => 'FE',
 	'author' => 'Steffen Kroggel',
@@ -26,17 +26,16 @@ $EM_CONF[$_EXTKEY] = [
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '9.5.0',
+	'version' => '9.5.1',
     'constraints' => [
 		'depends' => [
 			'typo3' => '9.5.0-9.5.99',
             'filemetadata' => '9.5.0.0-9.5.99',
+            'persisted_sanitized_routing' => '1.0.4',
         ],
 		'conflicts' => [
 		],
 		'suggests' => [
-            'persisted_sanitized_routing' => '1.0.4',
-            'sr_freecap' => '2.5.6-2.5.99',
 		],
 	],
 ];

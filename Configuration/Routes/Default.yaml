@@ -1,12 +1,12 @@
 routeEnhancers:
   RkwBasics:
     type: Extbase
-    namespace: 'tx_coreextended_rkwmediasources'
+    namespace: 'tx_coreextended_mediasources'
     routes:
-      - routePath: '/rkw-basics/mediasources'
+      - routePath: '/coreextended/mediasources'
         _controller: 'MediaSources::list'
-      - routePath: '/rkw-basics/mediasouces-page'
+      - routePath: '/coreextended/mediasouces-page'
         _controller: 'MediaSources::listPage'
-      - routePath: '/rkw-basics/sitemap'
-        _controller: 'Rkwgoogle::sitemap'
+      - routePath: '/coreextended/sitemap'
+        _controller: 'Google::sitemap'
     defaultController: 'MediaSources::list'
