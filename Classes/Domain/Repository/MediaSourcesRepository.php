@@ -2,6 +2,7 @@
 
 namespace Madj2k\CoreExtended\Domain\Repository;
 
+use Madj2k\CoreExtended\Utility\QueryUtility;
 use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
 
 /*
@@ -25,7 +26,7 @@ use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class MediaSourcesRepository extends AbstractRepository
+class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
     /**
@@ -186,8 +187,42 @@ class MediaSourcesRepository extends AbstractRepository
         ');
 
         return $query->execute(true);
-        //===
+    }
+
+
+    /**
+     * get the WHERE clause for the enabled fields of this TCA table
+     * depending on the context
+     *
+     * @param string $table
+     * @return string the additional where clause, something like " AND deleted=0 AND hidden=0"
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @see \TYPO3\CMS\Core\Resource\AbstractRepository
+     */
+    protected function getWhereClauseForEnabledFields(string $table): string
+    {
+        if ($this->getEnvironmentMode() === 'FE' && $GLOBALS['TSFE']->sys_page) {
+            // frontend context
+            $whereClause = $GLOBALS['TSFE']->sys_page->enableFields($table);
+            $whereClause .= $GLOBALS['TSFE']->sys_page->deleteClause($table);
+        } else {
+            // backend context
+            $whereClause = QueryTypo3::getWhereClauseEnabled($table);
+            $whereClause .= QueryTypo3::getWhereClauseDeleted($table);
+        }
+
+        return $whereClause;
+    }
+
+    /**
+     * Function to return the current TYPO3_MODE.
+     * This function can be mocked in unit tests to be able to test frontend behaviour.
+     *
+     * @return string
+     * @see \TYPO3\CMS\Core\Resource\AbstractRepository
+     */
+    protected function getEnvironmentMode(): string
+    {
+        return TYPO3_MODE;
     }
 }
-
-?>

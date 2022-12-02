@@ -8,9 +8,7 @@ return [
 		'cruser_id' => 'cruser_id',
 		'dividers2tabs' => true,
 		'default_sortby' => 'ORDER BY name',
-
 		'versioningWS' => true,
-
 		'languageField' => 'sys_language_uid',
 		'transOrigPointerField' => 'l10n_parent',
 		'transOrigDiffSourceField' => 'l10n_diffsource',

@@ -6,6 +6,45 @@ call_user_func(
     {
 
         //=================================================================
+        // Configure Plugins
+        //=================================================================
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Madj2k.CoreExtended',
+            'MediaSources',
+            array(
+                'MediaSources' => 'list, listPage',
+            ),
+            // non-cacheable actions
+            array(
+
+            )
+        );
+
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Madj2k.CoreExtended',
+            'GoogleSitemap',
+            array(
+                'Google' => 'sitemap',
+            ),
+            // non-cacheable actions
+            array(
+
+            )
+        );
+
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Madj2k.CoreExtended',
+            'AssetNotFound',
+            array(
+                'NotFound' => 'assets',
+            ),
+            // non-cacheable actions
+            array(
+                'NotFound' => 'assets',
+            )
+        );
+
+        //=================================================================
         // Register Caching
         //=================================================================
 
