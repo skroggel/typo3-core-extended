@@ -1,5 +1,5 @@
 <?php
-namespace Madj2k\CoreExtended\Tests\Unit\Utility;
+namespace Madj2k\CoreExtended\Tests\Integration\Utility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -166,6 +166,118 @@ class GeneralUtilityTest extends FunctionalTestCase
 
     }
 
+
+    //=============================================
+
+    /**
+     * @test
+     */
+    public function arrayMergeRecursiveDistinctMergesOneDimensionalArray ()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given array1 has one dimension with keys and numbers
+         * Given array2 has one dimension with keys and numbers
+         * When arrayMergeRecursiveDistinct is called
+         * Then the arrays are merged like array_merge does
+         */
+
+        $array1 = [
+            'farbe' => 'rot',
+            2,
+            4
+        ];
+
+        $array2 = [
+            'a',
+            'b',
+            'farbe' => 'grün',
+            'form' => 'trapezoid',
+            4
+        ];
+
+        $expected = [
+            'farbe' => 'grün',
+            0 => 2,
+            1 => 4,
+            2 => 'a',
+            3 => 'b',
+            'form' => 'trapezoid',
+            4 => 4,
+        ];
+
+        $result = array_merge ($array1, $array2);
+        $result2 = $this->subject::arrayMergeRecursiveDistinct($array1, $array2);
+        self::assertEquals($expected, $result);
+        self::assertEquals($expected, $result2);
+    }
+
+
+    /**
+     * @test
+     */
+    public function arrayMergeRecursiveDistinctMergesTwoDimensionalArray ()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given array1 has two dimensions with keys and numbers
+         * Given array2 has two dimension with keys and numbers
+         * When arrayMergeRecursiveDistinct is called
+         * Then the arrays are merged like array_merge does, but recursively
+         */
+
+        $array1 = [
+            'farbe' => 'rot',
+            2,
+            4,
+            'sub' => [
+                'farbe' => 'rot',
+                2,
+                3,
+            ]
+        ];
+
+        $array2 = [
+            'a',
+            'b',
+            'farbe' => 'grün',
+            'form' => 'trapezoid',
+            4,
+            'sub' => [
+                'a',
+                'b',
+                'farbe' => 'blau',
+                'form' => 'trapezoid',
+                3,
+            ]
+        ];
+
+        $expected = [
+            'farbe' => 'grün',
+            0 => 2,
+            1 => 4,
+            'sub' => [
+                'farbe' => 'blau',
+                0 => 2,
+                1 => 3,
+                2 => 'a',
+                3 => 'b',
+                'form' => 'trapezoid',
+                4 => 3,
+            ],
+            2 => 'a',
+            3 => 'b',
+            'form' => 'trapezoid',
+            4 => 4,
+        ];
+
+        $result = $this->subject::arrayMergeRecursiveDistinct($array1, $array2);
+        self::assertEquals($expected, $result);
+    }
 
     //=============================================
 

@@ -36,17 +36,17 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
     /**
      * @var array Setter/Getter underscore transformation cache
      */
-    protected static $_underscoreCache = [];
+    protected static array $_underscoreCache = [];
 
     /**
      * @var array Setter/Getter backslash transformation cache
      */
-    protected static $_backslashCache = [];
+    protected static array $_backslashCache = [];
 
     /**
      * @var array Setter/Getter camlize transformation cache
      */
-    protected static $_camelizeCache = [];
+    protected static array $_camelizeCache = [];
 
 
     /**
@@ -67,6 +67,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 
         return $result;
     }
+
 
     /**
      * Converts field names for setters and getters
@@ -154,8 +155,10 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
      * @return array
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
-    public static function getTypoScriptConfiguration(string $extension = '', string $type = \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS): array
-    {
+    public static function getTypoScriptConfiguration(
+        string $extension = '',
+        string $type = \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+    ): array {
 
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class);
 
@@ -266,6 +269,42 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
         return $result;
     }
 
+
+    /**
+     * Merges array recursively but behaves like array_merge
+     *
+     * @param array $array1
+     * @param array $array2
+     * @return array
+     * @author Daniel <daniel@danielsmedegaardbuus.dk>
+     * @author Gabriel Sobrinho <gabriel.sobrinho@gmail.com>
+     * @author fantomx1 <fantomx1@gmail.om>
+     * @author Steffen Kroggel <developer@steffenkroggel.de>
+     */
+    static function arrayMergeRecursiveDistinct (array &$array1, array &$array2 ): array
+    {
+        $merged = $array1;
+        foreach ($array2 as $key => &$value) {
+
+            // numeric keys are simply added
+            if (is_numeric($key)) {
+                $merged [] = $value;
+
+            } else {
+
+                // recursive call if array
+                if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                    $merged[$key] = self::arrayMergeRecursiveDistinct($merged[$key], $value);
+
+                    // associative keys are overridden
+                } else {
+                    $merged[$key] = $value;
+                }
+            }
+        }
+
+        return $merged;
+    }
 
 
     /**
