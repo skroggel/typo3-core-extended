@@ -31,9 +31,10 @@ class ObjectStorageSortViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
 {
 
     /**
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('objectStorage', ObjectStorage::class, 'The objectStorage to sort', true);
@@ -48,7 +49,6 @@ class ObjectStorageSortViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
      * ObjectStorage takes precedence.
      *
      * @return  \TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     * @throws \TYPO3\CMS\Extbase\Reflection\Exception\PropertyNotAccessibleException
      */
     public function render(): ObjectStorage
     {
@@ -106,6 +106,7 @@ class ObjectStorageSortViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
 
         return $storage;
     }
+
 
     /**
      * Gets the value to use as sorting value from $object

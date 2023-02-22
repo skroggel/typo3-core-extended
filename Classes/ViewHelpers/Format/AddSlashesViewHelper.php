@@ -37,14 +37,16 @@ class AddSlashesViewHelper extends AbstractViewHelper {
     /**
      * Initialize arguments.
      *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('value', 'string', 'string to format');
         $this->registerArgument('charList', 'string', 'Characters to escape. If not set, it behaves like the PHP-function addslashes()');
     }
+
 
     /**
      * Applies addslashes() on the specified value.

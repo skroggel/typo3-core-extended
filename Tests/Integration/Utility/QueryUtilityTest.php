@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Versioning\VersionState;
  * QueryUtilityTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright RKW Kompetenzzentrum
+ * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */

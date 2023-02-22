@@ -27,25 +27,21 @@ class MediaSources extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**
-     * name
-     *
      * @var string
      */
-    protected $name = '';
+    protected string $name = '';
+
 
     /**
-     * url
-     *
      * @var string
      */
-    protected $url = '';
+    protected string $url = '';
+
 
     /**
-     * internal
-     *
      * @var boolean
      */
-    protected $internal = false;
+    protected bool $internal = false;
 
 
     /**
@@ -53,10 +49,11 @@ class MediaSources extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return string $name
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
+
 
     /**
      * Sets the name
@@ -64,20 +61,22 @@ class MediaSources extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $name
      * @return void
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
+
 
     /**
      * Returns the url
      *
      * @return string $url
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
+
 
     /**
      * Sets the url
@@ -85,7 +84,7 @@ class MediaSources extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $url
      * @return void
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         $this->url = $url;
     }
@@ -96,30 +95,31 @@ class MediaSources extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return boolean $internal
      */
-    public function getInternal()
+    public function getInternal(): bool
     {
         return $this->internal;
     }
 
+
     /**
      * Sets the internal
      *
-     * @param boolean $internal
+     * @param bool $isInternal
      * @return void
      */
-    public function setInternal($isInternal)
+    public function setInternal(bool $isInternal)
     {
         $this->internal = $isInternal;
     }
+
 
     /**
      * Returns the boolean state of internal
      *
      * @return boolean
      */
-    public function isInternal()
+    public function isInternal(): bool
     {
         return $this->internal;
     }
-
 }

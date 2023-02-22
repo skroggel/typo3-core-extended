@@ -15,6 +15,11 @@ namespace Madj2k\CoreExtended\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\Accelerator\Cache\CacheAbstract;
+use Madj2k\CoreExtended\Cache\SitemapCache;
+use Madj2k\CoreExtended\Domain\Repository\PagesRepository;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -28,18 +33,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
-
     /**
-     * @var \Madj2k\CoreExtended\Cache\SitemapCache
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+     * @var \TYPO3\CMS\Core\Log\Logger|null
      */
-    protected $cache;
+    protected ?Logger $logger = null;
 
-
-    /**
-     * @var \TYPO3\CMS\Core\Log\Logger
-     */
-    protected $logger;
 
     /**
      * pagesRepository
@@ -47,7 +45,7 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * @var \Madj2k\CoreExtended\Domain\Repository\PagesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $pagesRepository = null;
+    protected PagesRepository $pagesRepository;
 
 
     /**
@@ -55,11 +53,13 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      *
      * @return string
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
-    public function sitemapAction()
+    public function sitemapAction(): string
     {
 
-        if (!$sitemap = $this->getCache()->getContent($this->getCacheKey())) {
+        $cache = $this->getCache()->setEntryIdentifier(GeneralUtility::getIndpEnv('HTTP_HOST'));
+        if (!$sitemap = $cache->getContent()) {
 
             $currentPid = $GLOBALS['TSFE']->id;
             $depth = 999999;
@@ -74,16 +74,10 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $sitemap = $this->view->render();
 
             // flush caches
-            $this->getCache()->getCacheManager()->flushCachesByTag('rkwbasics_sitemap');
+            $cache->flushByTag(CacheAbstract::TAG_IDENTIFIER_PLUGIN);
 
             // save results in cache
-            $this->getCache()->setContent(
-                $sitemap,
-                array(
-                    'rkwbasics_sitemap',
-                ),
-                $this->getCacheKey()
-            );
+            $cache->setContent($sitemap);
 
             $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Successfully rebuilt Google sitemap feed.'));
         } else {
@@ -96,27 +90,15 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 
     /**
-     * Returns cache key
-     *
-     * @return string
-     */
-    protected function getCacheKey()
-    {
-        return GeneralUtility::getIndpEnv('HTTP_HOST');
-    }
-
-
-
-    /**
      * Returns logger instance
      *
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    protected function getLogger()
+    protected function getLogger(): Logger
     {
 
         if (!$this->logger instanceof \TYPO3\CMS\Core\Log\Logger) {
-            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Core\Log\LogManager')->getLogger(__CLASS__);
+            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         }
 
         return $this->logger;
@@ -128,13 +110,12 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      *
      * @return \Madj2k\CoreExtended\Cache\SitemapCache
      */
-    protected function getCache()
+    protected function getCache(): SitemapCache
     {
-
-        if (!$this->cache instanceof \Madj2k\CoreExtended\Cache\SitemapCache) {
-            $this->cache = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Madj2k\CoreExtended\Cache\SitemapCache::class);
-        }
-
-        return $this->cache;
+        $cache = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SitemapCache::class);
+        $cache->setIdentifier($this->extensionName);
+        $cache->setRequest($this->request);
+        return $cache;
     }
+
 }

@@ -33,7 +33,7 @@ class EnvironmentService extends \TYPO3\CMS\Extbase\Service\EnvironmentService
      *
      * @return bool
      */
-    public function isEnvironmentInFrontendMode()
+    public function isEnvironmentInFrontendMode(): bool
     {
         if (
             (isset($GLOBALS['TSFE']))
@@ -42,15 +42,16 @@ class EnvironmentService extends \TYPO3\CMS\Extbase\Service\EnvironmentService
             return true;
         }
 
-        return (defined('TYPO3_MODE') && TYPO3_MODE === 'FE') ?: false;
+        return defined('TYPO3_MODE') && TYPO3_MODE === 'FE' || false;
     }
+
 
     /**
      * Detects if TYPO3_MODE is defined and its value is "BE"
      *
      * @return bool
      */
-    public function isEnvironmentInBackendMode()
+    public function isEnvironmentInBackendMode(): bool
     {
         if (
             (isset($GLOBALS['TSFE']))
@@ -59,7 +60,7 @@ class EnvironmentService extends \TYPO3\CMS\Extbase\Service\EnvironmentService
             return false;
         }
 
-        return (defined('TYPO3_MODE') && TYPO3_MODE === 'BE') ?: false;
+        return defined('TYPO3_MODE') && TYPO3_MODE === 'BE' || false;
     }
 
 }

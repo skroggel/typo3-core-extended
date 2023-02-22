@@ -34,14 +34,22 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 {
 
     /**
+     * @const int
+     */
+    const RANDOM_STRING_LENGTH = 30;
+
+
+    /**
      * @var array Setter/Getter underscore transformation cache
      */
     protected static array $_underscoreCache = [];
+
 
     /**
      * @var array Setter/Getter backslash transformation cache
      */
     protected static array $_backslashCache = [];
+
 
     /**
      * @var array Setter/Getter camlize transformation cache
@@ -50,9 +58,6 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 
 
     /**
-     * Converts field names for setters and getters
-     * Uses cache to eliminate unnecessary preg_replace
-     *
      * @param string $name
      * @return string
      */
@@ -70,8 +75,6 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 
 
     /**
-     * Converts field names for setters and getters
-     * Uses cache to eliminate unnecessary preg_replace
      *
      * @param string $name
      * @return string
@@ -113,41 +116,6 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 
 
     /**
-     * Allows multiple delimiter replacement for explode
-     *
-     * @param array  $delimiters
-     * @param string $string
-     * @return array
-     */
-    public static function multiExplode(array $delimiters, string $string): array
-    {
-        $ready = str_replace($delimiters, $delimiters[0], $string);
-        $result = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode($delimiters[0], $ready, true);
-        return $result;
-    }
-
-
-    /**
-     * Splits string at upper-case chars
-     *
-     * @param string  $string String to process
-     * @param integer $key Key to return
-     * @return array
-     * @see http://stackoverflow.com/questions/8577300/explode-a-string-on-upper-case-characters
-     */
-    public static function splitAtUpperCase(string $string, $key = null)
-    {
-        $result = preg_split('/(?=[A-Z])/', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-        if ($key !== null) {
-            return $result[$key];
-        }
-
-        return $result;
-    }
-
-
-    /**
      * Get TypoScript configuration
      *
      * @param string $extension
@@ -157,7 +125,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
      */
     public static function getTypoScriptConfiguration(
         string $extension = '',
-        string $type = \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+        string $type = ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
     ): array {
 
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class);
@@ -230,6 +198,41 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
         }
 
         return $theList;
+    }
+
+
+    /**
+     * Allows multiple delimiter replacement for explode
+     *
+     * @param array  $delimiters
+     * @param string $string
+     * @return array
+     */
+    public static function multiExplode(array $delimiters, string $string): array
+    {
+        $ready = str_replace($delimiters, $delimiters[0], $string);
+        $result = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode($delimiters[0], $ready, true);
+        return $result;
+    }
+
+
+    /**
+     * Splits string at upper-case chars
+     *
+     * @param string $string String to process
+     * @param int $key Key to return
+     * @return mixed
+     * @see http://stackoverflow.com/questions/8577300/explode-a-string-on-upper-case-characters
+     */
+    public static function splitAtUpperCase(string $string, int $key = -1)
+    {
+        $result = preg_split('/(?=[A-Z])/', $string, -1, PREG_SPLIT_NO_EMPTY);
+
+        if ($key !== -1) {
+            return $result[$key];
+        }
+
+        return $result;
     }
 
 
@@ -310,6 +313,8 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
     /**
      * Sanitizes slugs and removes slashes, too
      *
+     * @author Christian Dilger <c.dilger@addorange.de>
+     * @author Steffen Kroggel <developer@steffenkroggel.de>
      * @param string $slug
      * @param string $separator
      * @return string
@@ -344,6 +349,20 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
         $slug = mb_strtolower($slug, 'utf-8');
 
         return trim($slug, $separator);
+    }
+
+
+    /**
+     * creates a random string of the defined length
+     *
+     * @return string
+     * @throws \Exception
+     * @see https://www.php.net/manual/en/function.random-bytes.php
+     */
+    public static function getUniqueRandomString(): string
+    {
+        $bytes = random_bytes(self::RANDOM_STRING_LENGTH / 2);
+        return bin2hex($bytes);
     }
 
 

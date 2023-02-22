@@ -23,7 +23,7 @@ namespace Madj2k\CoreExtended\Cache;
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class SitemapCache extends CacheAbstract
+class SitemapCache extends \Madj2k\Accelerator\Cache\CacheAbstract
 {
 
 

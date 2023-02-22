@@ -31,22 +31,25 @@ class ContainsViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewH
 
     use CompileWithContentArgumentAndRenderStatic;
 
+
     /**
      * @var bool
      */
     protected $escapeOutput = false;
 
+
     /**
      * Initialize arguments.
-     *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('needle', 'string', 'string to search for', true);
         $this->registerArgument('haystack', 'string', 'string to search in', true);
     }
+
 
     /**
      * Check if needle is in haystack

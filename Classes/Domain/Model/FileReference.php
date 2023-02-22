@@ -28,31 +28,55 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
     /**
      * @var string
      */
-    protected $tableLocal = 'sys_file';
-
-
-    /**
-     * @var string
-     */
-    protected $fieldname = 'image';
-
-
-    /**
-     * @var \Madj2k\CoreExtended\Domain\Model\File
-     */
-    protected $file;
-
-
-    /**
-     * @var string
-     */
-    protected $tablenames = '';
+    protected string $tableLocal = 'sys_file';
 
 
     /**
      * @var int
      */
-    protected $uidForeign = 0;
+    protected int $uidForeign = 0;
+
+
+    /**
+     * @var string
+     */
+    protected string $fieldname = 'image';
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Model\File|null
+     */
+    protected ?File $file = null;
+
+
+    /**
+     * @var string
+     */
+    protected string $tablenames = '';
+
+
+
+    /**
+     * Returns the uidLocal
+     *
+     * @return int $uidLocal
+     */
+    public function getUidLocal(): int
+    {
+        return $this->uidLocal;
+    }
+
+
+    /**
+     * Sets the uidLocal
+     *
+     * @param int $uidLocal
+     * @return void
+     */
+    public function setUidLocal(int $uidLocal): void
+    {
+        $this->uidLocal = $uidLocal;
+    }
 
 
     /**
@@ -78,6 +102,29 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
 
 
     /**
+     * Returns the uidForeign
+     *
+     * @return int $uidForeign
+     */
+    public function getUidForeign(): int
+    {
+        return $this->uidForeign;
+    }
+
+
+    /**
+     * Sets the uidForeign
+     *
+     * @param int $uidForeign
+     * @return void
+     */
+    public function setUidForeign(int $uidForeign): void
+    {
+        $this->uidForeign = $uidForeign;
+    }
+
+
+    /**
      * Get fieldname
      *
      * @return string
@@ -91,7 +138,7 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
     /**
      * Set fieldname
      *
-     * @param string
+     * @param string $fieldname
      */
     public function setFieldname(string $fieldname): void
     {
@@ -112,9 +159,9 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
     /**
      * Get file
      *
-     * @return \Madj2k\CoreExtended\Domain\Model\File
+     * @return \Madj2k\CoreExtended\Domain\Model\File|null
      */
-    public function getFile()
+    public function getFile():? File
     {
         return $this->file;
     }
@@ -130,6 +177,7 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
         return $this->tablenames;
     }
 
+
     /**
      * Sets the tablenames
      *
@@ -139,27 +187,6 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
     public function setTablenames(string $tablenames): void
     {
         $this->tablenames = $tablenames;
-    }
-
-    /**
-     * Returns the uidForeign
-     *
-     * @return int $uidForeign
-     */
-    public function getUidForeign(): int
-    {
-        return $this->uidForeign;
-    }
-
-    /**
-     * Sets the uidForeign
-     *
-     * @param int $uidForeign
-     * @return void
-     */
-    public function setUidForeign(int $uidForeign): void
-    {
-        $this->uidForeign = $uidForeign;
     }
 
 

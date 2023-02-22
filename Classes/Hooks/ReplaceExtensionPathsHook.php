@@ -23,12 +23,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Steffen Kroggel
- * @package RKW_RkwTemplates
+ * @package core_extended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class ReplaceExtensionPathsHook
 {
-
 
     /**
      * Called before page is outputed in order to include INT-Scripts
@@ -36,7 +35,7 @@ class ReplaceExtensionPathsHook
      * @param array $params
      * @return void The content is passed by reference
      */
-    function hook_contentPostProc(&$params)
+    function hook_contentPostProc(array &$params): void
     {
 
         // get object

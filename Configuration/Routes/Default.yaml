@@ -1,5 +1,5 @@
 routeEnhancers:
-  RkwBasics:
+  coreExtended:
     type: Extbase
     namespace: 'tx_coreextended_mediasources'
     routes:

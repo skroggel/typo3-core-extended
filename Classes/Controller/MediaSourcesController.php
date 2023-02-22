@@ -15,6 +15,7 @@ namespace Madj2k\CoreExtended\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
@@ -35,7 +36,8 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @var \Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $mediaSourcesRepository = null;
+    protected MediaSourcesRepository $mediaSourcesRepository;
+
 
     /**
      * shows all resources

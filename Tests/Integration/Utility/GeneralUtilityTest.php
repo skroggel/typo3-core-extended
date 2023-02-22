@@ -13,16 +13,14 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 
 /**
  * GeneralUtilityTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright RKW Kompetenzzentrum
+ * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -416,6 +414,51 @@ class GeneralUtilityTest extends FunctionalTestCase
         $result = $this->subject::slugify($string);
 
         self::assertEquals('at', $result);
+    }
+
+    #==============================================================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getUniqueRandomStringGeneratesRandomStrings ()
+    {
+        /**
+         * Scenario:
+         *
+         * When the method is called multiple times
+         * Then each time a string is returned
+         * Then every string is unique
+         */
+
+        $arrayOfStrings = [];
+        for ($i = 1; $i <= 10000; $i++) {
+
+            $string = $this->subject::getUniqueRandomString();
+            self::assertNotContains($string, $arrayOfStrings);
+            $arrayOfStrings[] = $string;
+        }
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getUniqueRandomStringReturnsStringOfDefinedLength ()
+    {
+        /**
+         * Scenario:
+         *
+         * When the method is called multiple times
+         * Then a string is returned
+         * Then the string has the length of GeneralUtility::RANDOM_STRING_LENGTH
+         */
+
+        $string = $this->subject::getUniqueRandomString();
+        self::assertEquals($this->subject::RANDOM_STRING_LENGTH, strlen($string));
+
     }
 
     //=============================================

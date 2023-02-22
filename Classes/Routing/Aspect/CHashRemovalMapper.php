@@ -27,22 +27,25 @@ use TYPO3\CMS\Core\Site\SiteLanguageAwareTrait;
  */
 class CHashRemovalMapper implements StaticMappableAspectInterface
 {
+
     use SiteLanguageAwareTrait;
+
 
     /**
      * @param string $value
-     * @return string|null
+     * @return string
      */
-    public function generate(string $value): ?string
+    public function generate(string $value):? string
     {
         return $value ?: null;
     }
 
+
     /**
      * @param string $value
      * @return string|null
      */
-    public function resolve(string $value): ?string
+    public function resolve(string $value):? string
     {
         return $value ?: null;
     }

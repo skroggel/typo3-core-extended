@@ -39,15 +39,16 @@ class StripTagsViewHelper extends AbstractViewHelper {
     /**
      * Initialize arguments.
      *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('value', 'string', 'string to strip tags from');
         $this->registerArgument('preserveSpaces', 'boolean', 'if set to true spaces are preserved');
-
     }
+
 
     /**
      * Applies stripTags() on the specified value.

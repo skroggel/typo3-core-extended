@@ -47,19 +47,19 @@ class FrontendSimulatorUtility
     /**
      * @var array
      */
-    protected static $backup;
+    protected static array $backup = [];
 
 
     /**
      * @var array
      */
-    protected static $cache;
+    protected static array $cache = [];
 
 
     /**
-     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
+     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication|null
      */
-    protected static $frontendUserAuthentication;
+    protected static ?FrontendUserAuthentication $frontendUserAuthentication = null;
 
 
     /**
@@ -158,7 +158,7 @@ class FrontendSimulatorUtility
      *
      * @return void
      */
-    protected static function initConfigurationManager (): void
+    protected static function initConfigurationManager(): void
     {
 
         // load correct concreteConfigurationManager based on new environmentContext (FE vs. BE)
@@ -210,7 +210,7 @@ class FrontendSimulatorUtility
      * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
-    protected static function initTypoScriptFrontendController (int $pid): void
+    protected static function initTypoScriptFrontendController(int $pid): void
     {
         /**
          * Init TypoScriptFrontendController - but using our own class because
@@ -265,7 +265,7 @@ class FrontendSimulatorUtility
      * @return \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
-    protected static function getFrontendUserAuthentication (): FrontendUserAuthentication
+    protected static function getFrontendUserAuthentication(): FrontendUserAuthentication
     {
 
         if (! self::$frontendUserAuthentication) {
@@ -289,7 +289,7 @@ class FrontendSimulatorUtility
      *
      * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
      */
-    protected static function getBackendUserAuthentication (): BackendUserAuthentication
+    protected static function getBackendUserAuthentication(): BackendUserAuthentication
     {
 
         return GeneralUtility::makeInstance(
@@ -305,7 +305,7 @@ class FrontendSimulatorUtility
      * @param int $pageId
      * @return string
      */
-    protected static function getHostname (int $pageId): string
+    protected static function getHostname(int $pageId): string
     {
 
         // get rootPage based on given id

@@ -26,118 +26,120 @@ namespace Madj2k\CoreExtended\Domain\Model;
 class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
-
     /**
-     * crdate
-     *
-     * @var integer
-     */
-    protected $crdate = 0;
-
-
-    /**
-     * tstamp
-     *
-     * @var integer
-     */
-    protected $tstamp = 0;
-
-
-    /**
-     * hidden
-     *
-     * @var bool
-     */
-    protected $hidden = 0;
-
-
-    /**
-     * deleted
-     *
-     * @var bool
-     */
-    protected $deleted = 0;
-
-
-    /**
-     * sorting
+     * sysLanguageUid
      *
      * @var int
      */
-    protected $sorting = 0;
+    protected int $sysLanguageUid = 0;
 
 
     /**
-     * doktype
-     *
      * @var int
      */
-    protected $doktype = 1;
+    protected int $crdate = 0;
 
 
     /**
-     * title
-     *
-     * @var string
+     * @var int
      */
-    protected $title = '';
+    protected int $tstamp = 0;
 
 
     /**
-     * subtitle
-     *
-     * @var string
-     */
-    protected $subtitle = '';
-
-
-    /**
-     * abstract
-     *
-     * @var string
-     */
-    protected $abstract = '';
-
-
-    /**
-     * description
-     *
-     * @var string
-     */
-    protected $description = '';
-
-
-    /**
-     * noSearch
-     *
      * @var bool
      */
-    protected $noSearch = false;
+    protected bool $hidden = false;
 
 
     /**
-     * lastUpdated
-     *
-     * @var integer
+     * @var bool
      */
-    protected $lastUpdated = 0;
+    protected bool $deleted = false;
 
 
     /**
-     * TxCoreExtendedAlternativeTitle
-     *
+     * @var int
+     */
+    protected int $sorting = 0;
+
+
+    /**
+     * @var int
+     */
+    protected int $doktype = 1;
+
+
+    /**
      * @var string
      */
-    protected $TxCoreExtendedAlternativeTitle = '';
+    protected string $title = '';
 
 
     /**
-     * TxCoreExtendedFeLayoutNextLevel
-     *
-     * @var \integer
+     * @var string
      */
-    protected $TxCoreExtendedFeLayoutNextLevel = 0;
+    protected string $subtitle = '';
 
+
+    /**
+     * @var string
+     */
+    protected string $abstract = '';
+
+
+    /**
+     * @var string
+     */
+    protected string $description = '';
+
+
+    /**
+     * @var bool
+     */
+    protected bool $noSearch = false;
+
+
+    /**
+     * @var int
+     */
+    protected int $lastUpdated = 0;
+
+
+    /**
+     * @var string
+     */
+    protected string $txCoreextendedAlternativeTitle = '';
+
+
+    /**
+     * @var int
+     */
+    protected int $txCoreextendedFeLayoutNextLevel = 0;
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $txCoreextendedPreviewImage = null;
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $txCoreextendedOgImage = null;
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $txCoreextendedFile = null;
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Domain\Model\FileReference|null
+     */
+    protected ?FileReference $txCoreextendedCover = null;
 
 
     /**
@@ -150,10 +152,22 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->pid;
     }
 
+
+    /**
+     * Returns the sysLanguageUid
+     *
+     * @return int
+     */
+    public function getSysLanguageUid(): int
+    {
+        return $this->sysLanguageUid;
+    }
+
+
     /**
      * Returns the crdate value
      *
-     * @return integer
+     * @return int
      * @api
      */
     public function getCrdate(): int
@@ -174,16 +188,18 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->crdate = $crdate;
     }
 
+
     /**
      * Returns the tstamp value
      *
-     * @return integer
+     * @return int
      * @api
      */
     public function getTstamp(): int
     {
         return $this->tstamp;
     }
+
 
     /**
      * Sets the tstamp value
@@ -196,6 +212,7 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->tstamp = $tstamp;
     }
+
 
     /**
      * Returns the hidden value
@@ -220,6 +237,7 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->hidden = $hidden;
     }
+
 
     /**
      * Returns the deleted value
@@ -433,48 +451,138 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 
     /**
-     * Returns the TxCoreExtendedAlternativeTitle
+     * Returns the TxCoreextendedAlternativeTitle
      *
-     * @return string $TxCoreExtendedAlternativeTitle
+     * @return string $TxCoreextendedAlternativeTitle
      */
-    public function getTxCoreExtendedAlternativeTitle(): string
+    public function getTxCoreextendedAlternativeTitle(): string
     {
-        return $this->TxCoreExtendedAlternativeTitle;
+        return $this->txCoreextendedAlternativeTitle;
     }
 
 
     /**
-     * Sets the TxCoreExtendedAlternativeTitle
+     * Sets the TxCoreextendedAlternativeTitle
      *
-     * @param string $TxCoreExtendedAlternativeTitle
+     * @param string $txCoreextendedAlternativeTitle
      * @return void
      */
-    public function setTxCoreExtendedAlternativeTitle(string $TxCoreExtendedAlternativeTitle): void
+    public function setTxCoreextendedAlternativeTitle(string $txCoreextendedAlternativeTitle): void
     {
-        $this->TxCoreExtendedAlternativeTitle = $TxCoreExtendedAlternativeTitle;
+        $this->txCoreextendedAlternativeTitle = $txCoreextendedAlternativeTitle;
     }
 
 
     /**
-     * Returns the TxCoreExtendedFeLayoutNextLevel
+     * Returns the TxCoreextendedFeLayoutNextLevel
      *
-     * @return int TxCoreExtendedFeLayoutNextLevel
+     * @return int TxCoreextendedFeLayoutNextLevel
      */
-    public function getTxCoreExtendedFeLayoutNextLevel(): int
+    public function getTxCoreextendedFeLayoutNextLevel(): int
     {
-        return $this->TxCoreExtendedFeLayoutNextLevel;
+        return $this->txCoreextendedFeLayoutNextLevel;
     }
 
 
     /**
-     * Sets the TxCoreExtendedFeLayoutNextLevel
+     * Sets the TxCoreextendedFeLayoutNextLevel
      *
-     * @param \integer $TxCoreExtendedFeLayoutNextLevel
-     * @return \integer TxCoreExtendedFeLayoutNextLevel
+     * @param int $txCoreextendedFeLayoutNextLevel
+     * @return void
      */
-    public function setTxCoreExtendedFeLayoutNextLevel(int $TxCoreExtendedFeLayoutNextLevel): void
+    public function setTxCoreextendedFeLayoutNextLevel(int $txCoreextendedFeLayoutNextLevel): void
     {
-        $this->TxCoreExtendedFeLayoutNextLevel = $TxCoreExtendedFeLayoutNextLevel;
+        $this->txCoreextendedFeLayoutNextLevel = $txCoreextendedFeLayoutNextLevel;
     }
 
+
+    /**
+     * Returns the txCoreextendedPreviewImage
+     *
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference
+     */
+    public function getTxCoreextendedPreviewImage():? FileReference
+    {
+        return $this->txCoreextendedPreviewImage;
+    }
+
+
+    /**
+     * Sets the txCoreextendedPreviewImage
+     *
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference
+     * @return void
+     */
+    public function setCoreExtendedPreviewImage(FileReference $txCoreextendedPreviewImage): void
+    {
+        $this->txCoreextendedPreviewImage = $txCoreextendedPreviewImage;
+    }
+
+
+    /**
+     * Returns the txCoreextendedOgImage
+     *
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference
+     */
+    public function getTxCoreextendedOgImage():? FileReference
+    {
+        return $this->txCoreextendedOgImage;
+    }
+
+
+    /**
+     * Sets the txCoreextendedOgImage
+     *
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $txCoreextendedOgImage
+     * @return void
+     */
+    public function setCoreExtendedOgImage(FileReference $txCoreextendedOgImage): void
+    {
+        $this->txCoreextendedOgImage = $txCoreextendedOgImage;
+    }
+
+
+    /**
+     * Sets the txCoreextendedFile
+     *
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $txCoreextendedFile
+     * @return void
+     */
+    public function setCoreExtendedFile(FileReference $txCoreextendedFile): void
+    {
+        $this->txCoreextendedFile = $txCoreextendedFile;
+    }
+
+    /**
+     * Returns the txCoreextendedFile
+     *
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference
+     */
+    public function getTxCoreextendedFile():? FileReference
+    {
+        return $this->txCoreextendedFile;
+    }
+
+
+    /**
+     * Returns the txCoreextendedCover
+     *
+     * @return \Madj2k\CoreExtended\Domain\Model\FileReference
+     */
+    public function getTxCoreextendedCover():? FileReference
+    {
+        return $this->txCoreextendedCover;
+    }
+
+
+    /**
+     * Sets the txCoreextendedCover
+     *
+     * @param \Madj2k\CoreExtended\Domain\Model\FileReference $txCoreextendedCover
+     * @return void
+     */
+    public function setCoreExtendedCover(FileReference $txCoreextendedCover): void
+    {
+        $this->txCoreextendedCover = $txCoreextendedCover;
+    }
 }

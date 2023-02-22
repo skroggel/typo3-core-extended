@@ -38,9 +38,10 @@ class RemoveEmptyParagraphsViewHelper extends AbstractViewHelper {
     /**
      * Initialize arguments.
      *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('value', 'string', 'string to format');

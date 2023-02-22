@@ -29,6 +29,22 @@
                 <source>Inactivate (incl. Subpages)</source>
                 <target>Deaktivieren (inkl. Unterseiten)</target>
             </trans-unit>
+            <trans-unit id="pages.tx_coreextended_preview_image">
+                <source>Preview Image</source>
+                <target>Vorschaubild</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_og_image">
+                <source>OpenGraph Image (e.g. Twitter, Facebook)</source>
+                <target>Bild für OpenGraph (z.B. Twitter, Facebook)</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_file">
+                <source>File</source>
+                <target>Datei</target>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_cover">
+                <source>Cover for File</source>
+                <target>Cover für Datei</target>
+            </trans-unit>
 
 
             <!-- sys_file_metadata -->

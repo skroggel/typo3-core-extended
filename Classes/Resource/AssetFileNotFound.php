@@ -31,16 +31,16 @@ class AssetFileNotFound
     /**
      * @var string
      */
-    public static $assetPath = 'typo3temp/assets/images';
+    public static string $assetPath = 'typo3temp/assets/images';
 
 
     /**
      * Searches for a file that begins with the same filename and sets a symlink to it
      *
      * @param string $url
-     * @return bool|array
+     * @return array
      */
-    public static function searchFile(string $url)
+    public static function searchFile(string $url): array
     {
 
         $parsedUrl = parse_url($url);
@@ -95,6 +95,6 @@ class AssetFileNotFound
             }
         }
 
-        return false;
+        return [];
     }
 }

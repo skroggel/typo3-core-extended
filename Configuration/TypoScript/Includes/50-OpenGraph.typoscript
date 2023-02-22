@@ -13,8 +13,10 @@ lib.txCoreExtended {
             references {
                 table = pages
                 data = levelmedia : -1, slide
-                override.data =  levelfield : -1, tx_coreextended_teaser_image, slide
+                override.data =  levelfield : -1, tx_coreextended_preview_image, slide
                 override.required = 1
+                override.override.data =  levelfield : -1, tx_coreextended_og_image, slide
+                override.override.required = 1
             }
             maxItems = 1
 

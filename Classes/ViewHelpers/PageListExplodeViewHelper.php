@@ -35,12 +35,14 @@ class PageListExplodeViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abstra
      */
     protected $escapeOutput = false;
 
+
     /**
      * Initialize arguments.
      *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('list', 'string', 'The list that is to split', false, '');
@@ -48,25 +50,26 @@ class PageListExplodeViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abstra
         $this->registerArgument('delimiterTwo', 'string', 'The second delimiter to use', false, '###');
     }
 
+
     /**
      * Explodes a list of pages with two given delimiters
      *
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
      * @param \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface $renderingContext
-     * @return string
+     * @return array
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ): string {
+    ): array {
 
         $list = $arguments['list'];
         $delimiter = $arguments['delimiter'];
         $delimiterTwo = $arguments['delimiterTwo'];
 
-        $result = array();
+        $result = [];
         $items = explode($delimiter, $list);
 
         foreach ($items as $item) {

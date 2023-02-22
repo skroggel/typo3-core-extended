@@ -23,8 +23,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * EnvironmentServiceTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright RKW Kompetenzzentrum
- * @package RKW_RkwMailer
+ * @copyright Steffen Kroggel
+ * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class EnvironmentServiceTest extends FunctionalTestCase
@@ -61,7 +61,6 @@ class EnvironmentServiceTest extends FunctionalTestCase
     private $objectManager;
 
 
-
     /**
      * Setup
      * @throws \Exception
@@ -85,6 +84,7 @@ class EnvironmentServiceTest extends FunctionalTestCase
         $this->subject = $this->objectManager->get(\Madj2k\CoreExtended\XClasses\Extbase\Service\EnvironmentService::class);
     }
 
+    //=============================================
 
     /**
      * @test
@@ -126,7 +126,6 @@ class EnvironmentServiceTest extends FunctionalTestCase
 
     //=============================================
 
-
     /**
      * @test
      * @throws \Exception
@@ -144,6 +143,7 @@ class EnvironmentServiceTest extends FunctionalTestCase
 
         self::assertTrue($this->subject->isEnvironmentInBackendMode());
     }
+
 
     /**
      * @test
@@ -164,8 +164,6 @@ class EnvironmentServiceTest extends FunctionalTestCase
         FrontendSimulatorUtility::simulateFrontendEnvironment(1);
         self::assertFalse($this->subject->isEnvironmentInBackendMode());
     }
-
-
 
     //=============================================
 

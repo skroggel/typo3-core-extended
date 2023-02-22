@@ -24,6 +24,18 @@
             <trans-unit id="pages.tx_coreextended_no_follow.I.enabled">
                 <source>Inactivate (incl. Subpages)</source>
             </trans-unit>
+            <trans-unit id="pages.tx_coreextended_preview_image">
+                <source>Preview Image</source>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_og_image">
+                <source>OpenGraph Image (e.g. Twitter, Facebook)</source>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_file">
+                <source>File</source>
+            </trans-unit>
+            <trans-unit id="pages.tx_coreextended_cover">
+                <source>Cover for File</source>
+            </trans-unit>
 
 
             <!-- sys_file_metadata -->
@@ -46,7 +58,7 @@
 
             <!-- tx_coreextended_domain_model_mediasources -->
             <trans-unit id="tx_coreextended_domain_model_mediasources" approved="yes">
-				<source>RKW Basics: Media Sources</source>
+				<source>Core Extended: Media Sources</source>
 			</trans-unit>
 			<trans-unit id="tx_coreextended_domain_model_mediasources.name" approved="yes">
 				<source>Name</source>

@@ -8,6 +8,8 @@ CREATE TABLE pages
 	tx_coreextended_fe_layout_next_level int(11) DEFAULT '0' NOT NULL,
 	tx_coreextended_no_index             int(11) unsigned DEFAULT '0' NOT NULL,
 	tx_coreextended_no_follow            int(11) unsigned DEFAULT '0' NOT NULL,
+	tx_coreextended_preview_image        int(11) unsigned NOT NULL default '0',
+	tx_coreextended_og_image             int(11) unsigned NOT NULL default '0',
 );
 
 #

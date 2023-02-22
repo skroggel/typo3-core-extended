@@ -15,6 +15,8 @@ namespace Madj2k\CoreExtended\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
 /**
  * Class PagesRepository
  *
@@ -31,7 +33,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
 
         /** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
@@ -39,10 +41,8 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         // don't add the pid constraint
         $querySettings->setRespectStoragePage(false);
-
         $this->setDefaultQuerySettings($querySettings);
     }
-
 
 
     /**
@@ -50,10 +50,10 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param array $uidList
      * @param array $dokTypes
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findByUidListAndDokTypes(array $uidList, array $dokTypes = [1])
+    public function findByUidListAndDokTypes(array $uidList, array $dokTypes = [1]): QueryResultInterface
     {
 
         $query = $this->createQuery();
