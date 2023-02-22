@@ -146,6 +146,7 @@ lib.txCoreExtended {
                         renderObj {
                             data = file:current:uid
                         }
+                        if.isTrue.data = GP:tx_rkwinfographics_infographics|infographic
                     }
                     // addition for rkw_infographics END
                 }
