@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * ReplaceExtensionPathsTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright RKW Kompetenzzentrum
+ * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -47,15 +47,15 @@ class ReplaceExtensionPathsTest extends FunctionalTestCase
 
 
     /**
-     * @var \Madj2k\CoreExtended\ContentProcessing\ReplaceExtensionPaths
+     * @var \Madj2k\CoreExtended\ContentProcessing\ReplaceExtensionPaths|null
      */
-    private $subject;
+    private ?ReplaceExtensionPaths $subject = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
 
@@ -85,8 +85,6 @@ class ReplaceExtensionPathsTest extends FunctionalTestCase
         $this->subject = $this->objectManager->get(ReplaceExtensionPaths::class);
     }
 
-
-
     //=============================================
 
     /**
@@ -109,6 +107,7 @@ class ReplaceExtensionPathsTest extends FunctionalTestCase
         self::assertEquals($expected, $this->subject->process($html));
     }
 
+
     /**
      * @test
      */
@@ -129,7 +128,7 @@ class ReplaceExtensionPathsTest extends FunctionalTestCase
         self::assertEquals($expected, $this->subject->process($html));
     }
 
-
+    //=============================================
 
     /**
      * TearDown

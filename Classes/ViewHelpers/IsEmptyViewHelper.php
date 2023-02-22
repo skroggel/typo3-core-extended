@@ -35,16 +35,19 @@ class IsEmptyViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHe
      */
     protected $escapeOutput = false;
 
+
     /**
      * Initialize arguments.
      *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('string', 'string', 'string to check if it is empty.', false, '');
     }
+
 
     /**
      * Apply is empty on string

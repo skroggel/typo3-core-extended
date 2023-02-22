@@ -25,5 +25,62 @@ namespace Madj2k\CoreExtended\Domain\Model;
 class File extends \TYPO3\CMS\Extbase\Domain\Model\File
 {
 
+    /**
+     * @var string
+     */
+    protected string $identifier = '';
+
+
+    /**
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("persist") persist
+     * @var \Madj2k\CoreExtended\Domain\Model\FileMetadata|null
+     */
+    protected ?FileMetadata $metadata = null;
+
+
+    /**
+     * Returns the identifier
+     *
+     * @return string $identifier
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+
+    /**
+     * Sets the identifier
+     *
+     * @param string $identifier
+     * @return void
+     */
+    public function setIdentifier(string $identifier): void
+    {
+        $this->identifier = $identifier;
+    }
+
+
+    /**
+     * Return the metadata
+     *
+     * @return \Madj2k\CoreExtended\Domain\Model\FileMetadata|null $metadata
+     */
+    public function getMetadata():? FileMetadata
+    {
+        return $this->metadata;
+    }
+
+
+    /**
+     * Set the fileMetadata
+     *
+     * @param \Madj2k\CoreExtended\Domain\Model\FileMetadata $metadata
+     * @return void
+     */
+    public function setMetadata(FileMetadata $metadata): void
+    {
+        $this->metadata = $metadata;
+    }
 
 }

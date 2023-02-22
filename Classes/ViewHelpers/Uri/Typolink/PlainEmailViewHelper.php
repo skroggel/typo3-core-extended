@@ -29,12 +29,13 @@ class PlainEmailViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
+
     /**
      * Initialize arguments
      *
-     * @api
+     * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('email', 'string', 'The email address to be used without mailto:- prefix', true);
@@ -46,7 +47,6 @@ class PlainEmailViewHelper extends AbstractViewHelper
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
-     *
      * @return string Plain email
      */
     public static function renderStatic(

@@ -4,6 +4,7 @@ namespace Madj2k\CoreExtended\Domain\Repository;
 
 use Madj2k\CoreExtended\Utility\QueryUtility;
 use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -33,10 +34,11 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * Finds all used images on active pages that are from image databases and returns their source meta-data
      *
      * @param array $pagesUidList
-     * @param bool  $respectFields
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @param bool $respectFields
+     * @return array
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
-    public function findAllWithPublisher($pagesUidList = array(), $respectFields = true)
+    public function findAllWithPublisher(array $pagesUidList = [], bool $respectFields = true): array
     {
 
         $fileTable = 'sys_file';
@@ -155,17 +157,16 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->statement($statement);
 
         return $query->execute(true);
-        //===
     }
 
 
     /**
      * Finds source meta-data for given file uid
      *
-     * @param integer $uid
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @param int $uid
+     * @return array
      */
-    public function findByFileUid($uid)
+    public function findByFileUid(int $uid): array
     {
 
         $fileMetaTable = 'sys_file_metadata';
@@ -207,8 +208,8 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $whereClause .= $GLOBALS['TSFE']->sys_page->deleteClause($table);
         } else {
             // backend context
-            $whereClause = QueryTypo3::getWhereClauseEnabled($table);
-            $whereClause .= QueryTypo3::getWhereClauseDeleted($table);
+            $whereClause = QueryUtility::getWhereClauseEnabled($table);
+            $whereClause .= QueryUtility::getWhereClauseDeleted($table);
         }
 
         return $whereClause;

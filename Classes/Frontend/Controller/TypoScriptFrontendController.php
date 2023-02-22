@@ -33,8 +33,10 @@ class TypoScriptFrontendController extends \TYPO3\CMS\Frontend\Controller\TypoSc
      * in order for all rootline functionality and access restrictions to be in place further on.
      *
      * Additionally, if a translated page is found, $this->sys_language_uid/sys_language_content is set as well.
+     *
+     * @return void
      */
-    protected function resolveTranslatedPageId()
+    protected function resolveTranslatedPageId(): void
     {
         $this->page = $this->sys_page->getPage($this->id, true); // the only change is here - disableGroupAccessCheck!
         // Accessed a default language page record, nothing to resolve

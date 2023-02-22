@@ -36,11 +36,11 @@ class FileReferenceRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Workaround for add-method because the foreign-field has to be updated manually
      *
-     * @see https://docs.typo3.org/m/typo3/reference-fal/8.7/en-us/UsingFal/Examples/FileFolder/Index.html
-     * @todo remove this work-around when it isn't needed any more
      * @param \Madj2k\CoreExtended\Domain\Model\FileReference $object
      * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @see https://docs.typo3.org/m/typo3/reference-fal/8.7/en-us/UsingFal/Examples/FileFolder/Index.html
+     * @todo remove this work-around when it isn't needed any more
      */
     public function add($object)
     {

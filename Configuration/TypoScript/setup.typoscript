@@ -5,18 +5,100 @@ config.tx_extbase {
     persistence {
         classes {
 
-            TYPO3\CMS\Extbase\Domain\Model\FileReference {
+            // ==================================================================
+            TYPO3\CMS\Extbase\Domain\Model\BackendUser {
                 subclasses {
-                    Tx_Coreextended_FileReference = Madj2k\CoreExtended\Domain\Model\FileReference
+                    Tx_CoreExtended_BackendUser = Madj2k\CoreExtended\Domain\Model\BackendUser
+                }
+            }
+
+            Madj2k\CoreExtended\Domain\Model\BackendUser {
+                mapping {
+
+                    # tablename
+                    tableName = be_users
+
+                    # if we set an value, we filter by it
+                    # if do not set anything, all records are found
+                    recordType =
+
+                }
+            }
+
+		    // ==================================================================
+            TYPO3\CMS\Extbase\Domain\Model\FrontendUser {
+                subclasses {
+                    Tx_CoreExtended_FrontendUser = Madj2k\CoreExtended\Domain\Model\FrontendUser
+                }
+            }
+
+            Madj2k\CoreExtended\Domain\Model\FrontendUser {
+
+                // storage for new records in cross-extension-context
+                newRecordStoragePid = {$plugin.tx_coreextended.persistence.storagePid}
+
+                mapping {
+
+                    # tablename
+                    tableName = fe_users
+
+                    # if we set an value, we filter by it
+                    # if do not set anything, all records are found
+                    recordType = 0
+
+                    # mapping to properties of class
+                    columns {
+                        tstamp.mapOnProperty = tstamp
+                        starttime.mapOnProperty = starttime
+                        endtime.mapOnProperty = endtime
+                        crdate.mapOnProperty = crdate
+                        disable.mapOnProperty = disable
+                        deleted.mapOnProperty = deleted
+                        password.mapOnProperty = password
+                        tx_extbase_type.mapOnProperty = txExtbaseType
+                    }
                 }
             }
 
             // ==================================================================
             TYPO3\CMS\Extbase\Domain\Model\File {
                 subclasses {
-                    Tx_Coreextended_File = Madj2k\CoreExtended\Domain\Model\File
+                    Tx_CoreExtended_File = Madj2k\CoreExtended\Domain\Model\File
                 }
             }
+
+            Madj2k\CoreExtended\Domain\Model\File {
+                mapping {
+                    tableName = sys_file
+                    identifier = identifier
+                }
+            }
+
+            // ==================================================================
+            TYPO3\CMS\Extbase\Domain\Model\FileReference {
+                subclasses {
+                    Tx_CoreExtended_FileReference = Madj2k\CoreExtended\Domain\Model\FileReference
+                }
+            }
+
+            Madj2k\CoreExtended\Domain\Model\FileReference {
+                mapping {
+                    tableName = sys_file_reference
+                    columns {
+                        uid_local.mapOnProperty = file
+                    }
+                }
+            }
+
+
+            // ==================================================================
+            Madj2k\CoreExtended\Domain\Model\FileMetadata {
+                mapping {
+                    tableName = sys_file_metadata
+                    recordType =
+                }
+            }
+
 
             // ==================================================================
             Madj2k\CoreExtended\Domain\Model\Pages {
@@ -32,6 +114,7 @@ config.tx_extbase {
                     columns {
                         uid.mapOnProperty = uid
                         pid.mapOnProperty = pid
+                        sys_language_uid.mapOnProperty = sysLanguageUid
                         sorting.mapOnProperty = sorting
                         crdate.mapOnProperty = crdate
                         tstamp.mapOnProperty = tstamp
@@ -48,29 +131,38 @@ config.tx_extbase {
             }
 
             // ==================================================================
-            Madj2k\CoreExtended\Domain\Model\FileMetadata {
+            Madj2k\CoreExtended\Domain\Model\PagesLanguageOverlay {
+
                 mapping {
-                    tableName = sys_file_metadata
+
+                    # set table name to map to
+                    tableName = pages_language_overlay
+
+                    # on pages tables it's the doktype
+                    # if we set an value, we filter by it
+                    # if do not set anything, all pages are found
                     recordType =
-                }
-            }
 
-            // ==================================================================
-            Madj2k\CoreExtended\Domain\Model\File {
-                mapping {
-                    tableName = sys_file
-                }
-            }
-
-            // ==================================================================
-            Madj2k\CoreExtended\Domain\Model\FileReference {
-                mapping {
-                    tableName = sys_file_reference
+                    # mapping to properties of class
                     columns {
-                        uid_local.mapOnProperty = file
+                        uid.mapOnProperty = uid
+                        pid.mapOnProperty = pid
+                        sys_language_uid.mapOnProperty = sysLanguageUid
+                        sorting.mapOnProperty = sorting
+                        crdate.mapOnProperty = crdate
+                        tstamp.mapOnProperty = tstamp
+                        hidden.mapOnProperty = hidden
+                        deleted.mapOnProperty = deleted
+                        title.mapOnProperty = title
+                        subtitle.mapOnProperty = subtitle
+                        no_search.mapOnProperty = noSearch
+                        lastUpdated.mapOnProperty = lastUpdated
+                        abstract.mapOnProperty = abstract
                     }
                 }
             }
+
+
         }
     }
 }

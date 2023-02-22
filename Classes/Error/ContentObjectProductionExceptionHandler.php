@@ -38,7 +38,7 @@ class ContentObjectProductionExceptionHandler extends ProductionExceptionHandler
      * return a nice error message for production context.
      *
      * @param \Exception $exception
-     * @param AbstractContentObject $contentObject
+     * @param AbstractContentObject|null $contentObject
      * @param array $contentObjectConfiguration
      * @return string
      * @throws \Exception
@@ -56,7 +56,7 @@ class ContentObjectProductionExceptionHandler extends ProductionExceptionHandler
         }
 
         $requestedUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
-        $errorMessage = isset($this->configuration['errorMessage']) ? $this->configuration['errorMessage'] : 'Oops, an error occurred! Code: %s';
+        $errorMessage = $this->configuration['errorMessage'] ?? 'Oops, an error occurred! Code: %s';
 
         $random = GeneralUtility::makeInstance(Random::class);
         $code = date('YmdHis', $_SERVER['REQUEST_TIME']) . $random->generateRandomHexString(8);
@@ -65,6 +65,7 @@ class ContentObjectProductionExceptionHandler extends ProductionExceptionHandler
         return str_replace('%s', $code, $errorMessage);
     }
 
+
     /**
      * @param \Exception $exception
      * @param string $errorMessage
@@ -72,7 +73,7 @@ class ContentObjectProductionExceptionHandler extends ProductionExceptionHandler
      */
     protected function logException(\Exception $exception, $errorMessage, $code)
     {
-        $this->getLogger()->alert('Code "' . $code . '" on ' . $errorMessage, ['exception' => $exception]);
+        $this->logger->alert('Code "' . $code . '" on ' . $errorMessage, ['exception' => $exception]);
     }
 
 }

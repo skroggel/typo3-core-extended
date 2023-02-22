@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * AssetFileNotFoundTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright RKW Kompetenzzentrum
+ * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -40,6 +40,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
         'typo3conf/ext/core_extended',
     ];
 
+
     /**
      * @var string[]
      */
@@ -47,15 +48,15 @@ class AssetFileNotFoundTest extends FunctionalTestCase
 
 
     /**
-     * @var \Madj2k\CoreExtended\Resource\AssetFileNotFound
+     * @var \Madj2k\CoreExtended\Resource\AssetFileNotFound|null
      */
-    private $subject;
+    private ?AssetFileNotFound $subject = null;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
-    private $objectManager;
+    private ?ObjectManager $objectManager = null;
 
 
 
@@ -92,15 +93,10 @@ class AssetFileNotFoundTest extends FunctionalTestCase
                 }
             }
         }
-
-
     }
 
 
-
     //=============================================
-
-
 
     /**
      * @test
@@ -117,7 +113,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * When searchFile is called
          * Then false is returned
          */
-        $url = 'https://www.rkw-bw.de/typo3temp/assets/images/csd_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
+        $url = 'https://www.beispiel.de/typo3temp/assets/images/csd_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
         self::assertFalse( $this->subject->searchFile($url));
     }
     /**
@@ -134,10 +130,9 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * When searchFile is called
          * Then an array is returned
          */
-        $url = 'https://www.rkw-bw.de/typo3temp/assets/babalala/csm_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
+        $url = 'https://www.beispiel.de/typo3temp/assets/babalala/csm_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
         self::assertIsArray( $this->subject->searchFile($url));
     }
-
 
 
     /**
@@ -157,7 +152,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * When searchFile is called
          * Then false is returned
          */
-        $url = 'https://www.rkw-bw.de/typo3temp/assets/images/csd_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.png';
+        $url = 'https://www.beispiel.de/typo3temp/assets/images/csd_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.png';
         self::assertFalse( $this->subject->searchFile($url));
     }
 
@@ -183,7 +178,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * Then the file extension of the given image file is returned
          * Then the file size of the the existing file is returned
          */
-        $url = 'https://www.rkw-bw.de/typo3temp/assets/images/csm_2020-10-08-Unternehmensstandort_e47fb575c0_3.jpg';
+        $url = 'https://www.beispiel.de/typo3temp/assets/images/csm_2020-10-08-Unternehmensstandort_e47fb575c0_3.jpg';
         $result = $this->subject->searchFile($url);
 
         self::assertIsArray( $result);
@@ -207,7 +202,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * Scenario:
          *
          * Given the url does refer to an image file
-         * Given the the image file has the right path
+         * Given the image file has the right path
          * Given the image file has the csm-prefix
          * Given the name of the image file is not identical with an existing file
          * Given the name of the image file begins with the name of an existing file
@@ -220,7 +215,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * Then the file size of the first matching file is returned
          * Then a symlink from the missing to the existing file is generated
          */
-        $url = 'https://www.rkw-bw.de/typo3temp/assets/images/csm_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
+        $url = 'https://www.beispiel.de/typo3temp/assets/images/csm_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
         $result = $this->subject->searchFile($url);
 
         self::assertIsArray( $result);

@@ -31,22 +31,26 @@ class MediaCopyrightViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abstrac
 
     use CompileWithContentArgumentAndRenderStatic;
 
+
     /**
      * @var bool
      */
     protected $escapeOutput = false;
 
+
     /**
      * Initialize arguments.
      *
+     * @return void
      * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('source', 'mixed', 'The stock agency where the media was bought (uid or string)', false, '');
         $this->registerArgument('originator', 'string', 'The originator of the media', false, '');
     }
+
 
     /**
      * Generates a normalized copyright information for media

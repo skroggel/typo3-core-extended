@@ -25,7 +25,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * FrontendSimulatorUtilityTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
- * @copyright RKW Kompetenzzentrum
+ * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
@@ -41,6 +41,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
     ];
+
 
     /**
      * @var string[]
@@ -84,8 +85,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         );
 
     }
-
-
 
     //=============================================
 
@@ -133,7 +132,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
         self::assertEquals('www.example.local', $_SERVER['HTTP_HOST']);
         self::assertEquals('www.example.local',  GeneralUtility::getIndpEnv('HTTP_HOST'));
-
     }
 
 
@@ -158,8 +156,8 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
         self::assertEquals(3, $_GET['id']);
         self::assertEquals(3, $_POST['id']);
-
     }
+
 
     /**
      * @test
@@ -184,7 +182,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertEquals('/', $GLOBALS['TSFE']->config['config']['absRefPrefix']);
         self::assertEquals('www.example.local', $GLOBALS['TSFE']->config['config']['baseURL']);
         self::assertEquals('/', $GLOBALS['TSFE']->absRefPrefix);
-
     }
 
 
@@ -240,8 +237,8 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Page\PageRepository::class, $GLOBALS['TSFE']->sys_page);
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication::class, $GLOBALS['TSFE']->fe_user);
         self::assertInstanceOf(\TYPO3\CMS\Core\TypoScript\TemplateService::class, $GLOBALS['TSFE']->tmpl);
-
     }
+
 
     /**
      * @test
@@ -465,6 +462,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertEquals(1, $settings['frontendContext']);
     }
 
+
     /**
      * @test
      */
@@ -493,7 +491,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertNotEmpty($configurationManager->getContentObject());
 
     }
-
 
     //=============================================
 
@@ -550,7 +547,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertEquals('example.com',  GeneralUtility::getIndpEnv('HTTP_HOST'));
 
     }
-
 
 
     /**
@@ -610,7 +606,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertNotSame($before, $GLOBALS['TSFE']);
         self::assertTrue(FrontendSimulatorUtility::resetFrontendEnvironment());
         self::assertSame($before, $GLOBALS['TSFE']);
-
     }
 
 
@@ -698,6 +693,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
 
     }
 
+
     /**
      * @test
      */
@@ -727,7 +723,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'coreExtended');
         self::assertEquals(1, $settings['backendContext']);
     }
-
 
     //=============================================
 

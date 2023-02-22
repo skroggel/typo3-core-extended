@@ -32,16 +32,15 @@ class ExtensionService extends \TYPO3\CMS\Extbase\Service\ExtensionService
      * @param string $controllerName name of the target controller (UpperCamelCase)
      * @param string $actionName name of the target action (lowerCamelCase)
      * @return string name of the target plugin (UpperCamelCase) or NULL if no matching plugin configuration was found
-     * @throws \TYPO3\CMS\Extbase\Exception
      */
-    public function getPluginNameByAction($extensionName, $controllerName, $actionName)
+    public function getPluginNameByAction($extensionName, $controllerName, $actionName): string
     {
 
         // fixing weird core bug
         try {
             return parent::getPluginNameByAction($extensionName, $controllerName, $actionName);
         } catch (\TYPO3\CMS\Extbase\Exception $e) {
-            return null;
+            return '';
         }
     }
 }

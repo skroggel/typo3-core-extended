@@ -146,7 +146,7 @@ class QueryUtility
      * depending on the context
      *
      * @param string $table
-     * @param integer $languageUid
+     * @param int $languageUid
      * @return string the additional where clause, something like " AND sys_language_uid = X"
      */
     static public function getWhereClauseLanguage(string $table, int $languageUid = 0): string
