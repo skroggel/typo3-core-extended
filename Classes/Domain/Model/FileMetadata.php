@@ -86,13 +86,13 @@ class FileMetadata extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected ?File $file = null;
 
 
-    /***
+    /**
      * @var string
      */
     protected string $txCoreextendedPublisher = '';
 
 
-    /***
+    /**
      * @var \Madj2k\CoreExtended\Domain\Model\MediaSources|null
      */
     protected ?MediaSources $txCoreextendedSource = null;

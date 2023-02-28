@@ -1,4 +1,4 @@
-plugin.tx_rkwregistration  {
+plugin.tx_feregister  {
     persistence {
         // cat=plugin.tx_rkwshop_rkwshop//a; type=string; label=Default storage PID
         storagePid = 1
@@ -9,7 +9,7 @@ plugin.tx_rkwregistration  {
 }
 
 // for cronjob
-module.tx_rkwregistration < plugin.tx_rkwregistration
+module.tx_feregister < plugin.tx_feregister
 
 page = PAGE
 page {
