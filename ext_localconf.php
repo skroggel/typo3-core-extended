@@ -58,6 +58,21 @@ call_user_func(
         ];
 
         //=================================================================
+        // Add TypoScript automatically
+        //=================================================================
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+            'CoreExtended',
+            'constants',
+            '<INCLUDE_TYPOSCRIPT: source="FILE: EXT:core_extended/Configuration/TypoScript/constants.typoscript">'
+        );
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+            'CoreExtended',
+            'setup',
+            '<INCLUDE_TYPOSCRIPT: source="FILE: EXT:core_extended/Configuration/TypoScript/setup.typoscript">'
+        );
+
+        //=================================================================
         // Add Rootline Fields
         //=================================================================
         $rootlineFields = &$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];

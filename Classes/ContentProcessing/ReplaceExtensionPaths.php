@@ -29,10 +29,10 @@ class ReplaceExtensionPaths
     /**
      * replaces extension paths in content
      *
-     * @param string $content content to replace
+     * @param string|null $content content to replace
      * @return string new content
      */
-    public function process(string $content): string
+    public function process(string $content = null): string
     {
 
         // Replace content

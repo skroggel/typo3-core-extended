@@ -1,5 +1,4 @@
 <?php
-
 namespace Madj2k\CoreExtended\Controller;
 
 /*
@@ -16,6 +15,7 @@ namespace Madj2k\CoreExtended\Controller;
  */
 
 use Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository;
+use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
@@ -43,10 +43,10 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * shows all resources
      *
      * @return void
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function listAction()
     {
-
         $pagesList = array();
 
         // get root page of current page
@@ -59,7 +59,7 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
             // now get all pages below the root page
             /** @var \TYPO3\CMS\Core\Database\QueryGenerator $queryGenerator */
-            $queryGenerator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Database\\QueryGenerator');
+            $queryGenerator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(QueryGenerator::class);
             $childPidList = $queryGenerator->getTreeList($rootPage, 999999, 0, 1);
             if ($childPidList) {
                 $pagesList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $childPidList);
@@ -77,6 +77,7 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * shows resources of current page - including those which have been inherited
      *
      * @return void
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function listPageAction()
     {
