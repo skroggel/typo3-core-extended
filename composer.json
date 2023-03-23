@@ -20,8 +20,12 @@
         "php": ">=7.4",
         "ext-json": "*",
         "typo3/cms-core": "~9.5.0",
+		"typo3/cms-seo": "~9.5.0",
 		"typo3/cms-filemetadata": "~9.5.0",
 		"calien/persisted-sanitized-routing" : "^1.0.4"
+	},
+	"suggest": {
+		"sjbr/sr-freecap": "~2.5.0"
 	},
     "autoload": {
         "psr-4": {

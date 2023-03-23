@@ -144,7 +144,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
             }
         }
 
-        return array();
+        return [];
     }
 
 
@@ -172,7 +172,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
         if ($id && $depth > 0) {
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
             $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
-            $statement = $queryBuilder->select('uid', 'tx_coreextended_no_index')
+            $statement = $queryBuilder->select('uid', 'no_index')
                 ->from('pages')
                 ->where(
                     $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)),
@@ -186,7 +186,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
                 }
                 if (
                     ($depth > 1)
-                    && (! $row['tx_coreextended_no_index'])
+                    && (! $row['no_index'])
                 ){
                     $theSubList = self::getTreeList($row['uid'], $depth - 1, $begin - 1, $permClause);
                     if (!empty($theList) && !empty($theSubList) && ($theSubList[0] !== ',')) {

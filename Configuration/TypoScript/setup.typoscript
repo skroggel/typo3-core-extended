@@ -6,6 +6,7 @@ config.tx_extbase {
         classes {
 
             // ==================================================================
+
             TYPO3\CMS\Extbase\Domain\Model\BackendUser {
                 subclasses {
                     Tx_CoreExtended_BackendUser = Madj2k\CoreExtended\Domain\Model\BackendUser
@@ -26,6 +27,7 @@ config.tx_extbase {
             }
 
 		    // ==================================================================
+
             TYPO3\CMS\Extbase\Domain\Model\FrontendUser {
                 subclasses {
                     Tx_CoreExtended_FrontendUser = Madj2k\CoreExtended\Domain\Model\FrontendUser
@@ -61,6 +63,40 @@ config.tx_extbase {
             }
 
             // ==================================================================
+
+            \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup {
+                subclasses {
+                    Tx_CoreExtended_FrontendUserGroup = Madj2k\CoreExtended\Domain\Model\FrontendUserGroup
+                }
+            }
+
+            Madj2k\CoreExtended\Domain\Model\FrontendUserGroup {
+
+                // storage for new records in cross-extension-context
+                newRecordStoragePid = {$plugin.tx_coreextended.persistence.storagePid}
+
+                mapping {
+
+                    # tablename
+                    tableName = fe_groups
+
+                    # if we set an value, we filter by it
+                    # if we do not set anything, all records are found
+                    recordType =
+
+                    # mapping to properties of class
+                    columns {
+                        tstamp.mapOnProperty = tstamp
+                        crdate.mapOnProperty = crdate
+                        hidden.mapOnProperty = hidden
+                        deleted.mapOnProperty = deleted
+                    }
+                }
+            }
+
+
+            // ==================================================================
+
             TYPO3\CMS\Extbase\Domain\Model\File {
                 subclasses {
                     Tx_CoreExtended_File = Madj2k\CoreExtended\Domain\Model\File
@@ -75,6 +111,7 @@ config.tx_extbase {
             }
 
             // ==================================================================
+
             TYPO3\CMS\Extbase\Domain\Model\FileReference {
                 subclasses {
                     Tx_CoreExtended_FileReference = Madj2k\CoreExtended\Domain\Model\FileReference
@@ -92,6 +129,7 @@ config.tx_extbase {
 
 
             // ==================================================================
+
             Madj2k\CoreExtended\Domain\Model\FileMetadata {
                 mapping {
                     tableName = sys_file_metadata
@@ -101,6 +139,7 @@ config.tx_extbase {
 
 
             // ==================================================================
+
             Madj2k\CoreExtended\Domain\Model\Pages {
                 mapping {
                     tableName = pages
@@ -131,6 +170,7 @@ config.tx_extbase {
             }
 
             // ==================================================================
+
             Madj2k\CoreExtended\Domain\Model\PagesLanguageOverlay {
 
                 mapping {
@@ -161,8 +201,6 @@ config.tx_extbase {
                     }
                 }
             }
-
-
         }
     }
 }
@@ -190,9 +228,17 @@ plugin.tx_coreextended {
     # Settings
     #===============================================================
     settings {
-
-        # comma-separated list of fields to look up when searching for images
         includeFieldsList = {$plugin.tx_coreextended.settings.includeFieldsList}
+        openGraph {
+            websiteUrl = {$plugin.tx_coreextended.settings.openGraph.websiteUrl}
+            websiteName = {$plugin.tx_coreextended.settings.openGraph.websiteName}
+            imageWatermark = {$plugin.tx_coreextended.settings.openGraph.imageWatermark}
+            locale = {$plugin.tx_coreextended.settings.openGraph.locale}
+        }
+
+        googleSitemap {
+            ttl =  {$plugin.tx_coreextended.settings.googleSitemap.ttl}
+        }
     }
 }
 

@@ -61,7 +61,7 @@ class PagesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->logicalAnd(
                 $query->in('uid', $uidList),
                 $query->in('doktype', $dokTypes),
-                $query->equals('tx_coreextended_no_index', 0)
+                $query->equals('no_index', 0)
             )
         );
 

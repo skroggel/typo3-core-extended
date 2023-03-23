@@ -1,5 +1,5 @@
 ####################################################################
-# Responsive Images v2.0
+# OpenGraph
 ####################################################################
 lib.txCoreExtended {
 
@@ -106,6 +106,15 @@ lib.txCoreExtended {
                             shadow.blur = 20
                             shadow.opacity = 100
                         }
+
+                        // add watermark
+                        30 = IMAGE
+                        30 {
+                            file = {$plugin.tx_coreextended.settings.openGraph.imageWatermark}
+                            offset = 20,20
+                            height = 40
+                            if.isTrue.data = {$plugin.tx_coreextended.settings.openGraph.imageWatermark}
+                        }
                     }
                 }
 
@@ -113,13 +122,79 @@ lib.txCoreExtended {
             }
         }
 	}
+
+    #=================================================================================
+
+    openGraph = COA
+    openGraph {
+
+        10 = TEXT
+        10.value = <meta property="og:type" content="article" />
+
+        20 = TEXT
+        20 {
+            value = {$plugin.tx_coreextended.settings.openGraph.locale}
+            wrap = <meta property="og:locale" content="|" />
+        }
+
+        30 = COA
+        30 < lib.txCoreExtended.titleTag
+        30 {
+
+            30 >
+            stdWrap.wrap = <meta property="og:title" content="|" />
+            stdWrap.htmlSpecialChars = 1
+        }
+
+        40 = TEXT
+        40 {
+            value = {$plugin.tx_coreextended.settings.openGraph.websiteName}
+            wrap = <meta property="og:site_name" content="|" />
+            stdWrap.htmlSpecialChars = 1
+        }
+
+        50 = TEXT
+        50 {
+            description.data = levelfield:-1, abstract, slide
+            description.override {
+                field = description
+                if.isTrue.field = description
+            }
+            wrap = <meta property="og:description" content="|" />
+            stdWrap.htmlSpecialChars = 1
+        }
+
+        60 = COA
+        60 {
+
+            10 = COA
+            10 < lib.txCoreExtended.openGraphImage
+
+            # We add a timestamp here - maybe this prevents linkedIn from caching old images
+            20 = TEXT
+            20  {
+                data = date:U
+                strftime = %s
+                noTrimWrap = |?t=||
+            }
+
+            stdWrap.wrap = <meta property="og:image" content="{$plugin.tx_coreextended.settings.openGraph.websiteUrl}|">
+            stdWrap.required = 1
+        }
+
+        # 70 = TEXT
+        # 70 {
+        #	value = https://www.facebook.com/EXAMPLE
+        #	wrap = <meta property="article:publisher" content="|" />
+        # }
+    }
 }
 
 
 #=============================================================
 # Additions based on loaded extensions
 #=============================================================
-[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_infographics')]
+[extensionLoaded('rkw_infographics')]
     lib.txCoreExtended {
 
     	openGraphImage = COA
@@ -128,7 +203,6 @@ lib.txCoreExtended {
             10 {
                 references {
 
-                    // addition for rkw_infographics START
                     override.override.cObject = FILES
                     override.override.cObject {
                         references {
@@ -148,9 +222,8 @@ lib.txCoreExtended {
                         }
                         if.isTrue.data = GP:tx_rkwinfographics_infographics|infographic
                     }
-                    // addition for rkw_infographics END
                 }
             }
         }
     }
-[global]
+[END]

@@ -1,57 +1,12 @@
 ####################################################################
-# Canonical
+# Canonical - @deprecated
+# use \Madj2k\CoreExtended\MetaTag\CanonicalGenerator->getPath instead
 ####################################################################
 lib.txCoreExtended {
 
-    canonical = COA_INT
+    canonical = USER_INT
     canonical {
-        10 = COA_INT
-        10 {
-            # Default: Use normal canonical based on current page id
-            10 = TEXT
-            10 {
-                typolink {
-
-                    parameter.data = TSFE:id
-                    forceAbsoluteUrl = 1
-                    returnLast = url
-
-                    additionalParams.cObject = COA
-                    additionalParams.cObject {
-                        10 = TEXT
-                        10 {
-                            dataWrap = &tx_ttnews[tt_news]={GP:tx_ttnews|tt_news}
-                            if.isTrue.data = GP:tx_ttnews|tt_news
-                        }
-
-                        20 = TEXT
-                        20 {
-                            dataWrap = &tx_ttnews[cat]={GP:tx_ttnews|cat}
-                            if.isTrue.data = GP:tx_ttnews|cat
-                        }
-
-                        30 = TEXT
-                        30 {
-                            dataWrap = &tx_rkwevents_pi1[controller]={GP:tx_rkwevents_pi1|controller}&tx_rkwevents_pi1[action]={GP:tx_rkwevents_pi1|action}&tx_rkwevents_pi1[event]={GP:tx_rkwevents_pi1|event}
-                            if.isTrue.data = GP:tx_rkwevents_pi1|event
-                        }
-
-                        40 = TEXT
-                        40 {
-                            dataWrap = &tx_rkwauthors_rkwauthorsdetail[controller]={GP:tx_rkwauthors_rkwauthorsdetail|controller}&tx_rkwauthors_rkwauthorsdetail[action]={GP:tx_rkwauthors_rkwauthorsdetail|action}&tx_rkwauthors_rkwauthorsdetail[author]={GP:tx_rkwauthors_rkwauthorsdetail|author}
-                            if.isTrue.data = GP:tx_rkwauthors_rkwauthorsdetail|author
-                        }
-
-                        50 = TEXT
-                        50 {
-                            dataWrap = &tx_rkwinfographics_infographics[controller]={GP:tx_rkwinfographics_infographics|controller}&tx_rkwinfographics_infographics[action]={GP:tx_rkwinfographics_infographics|action}&tx_rkwinfographics_infographics[infographic]={GP:tx_rkwinfographics_infographics|infographic}
-                            if.isTrue.data = GP:tx_rkwinfographics_infographics|infographic
-                        }
-                    }
-                }
-            }
-        }
-
-        wrap = <link href="|" rel="canonical">
+        userFunc = Madj2k\CoreExtended\MetaTag\CanonicalGenerator->getPath
+        stdWrap.wrap = <link href="|" rel="canonical">
     }
 }

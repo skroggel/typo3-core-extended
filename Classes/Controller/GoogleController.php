@@ -1,5 +1,4 @@
 <?php
-
 namespace Madj2k\CoreExtended\Controller;
 
 /*
@@ -74,14 +73,28 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $sitemap = $this->view->render();
 
             // flush caches
-            $cache->flushByTag(CacheAbstract::TAG_IDENTIFIER_PLUGIN);
+            $cache->flushByTag(CacheAbstract::TAG_PLUGIN);
 
             // save results in cache
-            $cache->setContent($sitemap);
+            $cache->setContent(
+                $sitemap,
+                (
+                    $this->settings['googleSitemap']['ttl']
+                        ? intval($this->settings['googleSitemap']['ttl'])
+                        : 21600
+                )
+            );
 
-            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Successfully rebuilt Google sitemap feed.'));
+            $this->getLogger()->log(
+                \TYPO3\CMS\Core\Log\LogLevel::INFO,
+               'Successfully rebuilt Google sitemap feed.'
+            );
+
         } else {
-            $this->getLogger()->log(\TYPO3\CMS\Core\Log\LogLevel::INFO, sprintf('Successfully loaded Google sitemap from cache.'));
+            $this->getLogger()->log(
+                \TYPO3\CMS\Core\Log\LogLevel::INFO,
+                'Successfully loaded Google sitemap from cache.'
+            );
         }
 
         return $sitemap;
@@ -98,7 +111,7 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
 
         if (!$this->logger instanceof \TYPO3\CMS\Core\Log\Logger) {
-            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+            $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         }
 
         return $this->logger;

@@ -299,6 +299,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
 
     /**
      * @test
+     * @throws \Exception
      */
     public function simulateFrontendEnvironmentGeneratesAspectObjects()
     {
@@ -353,6 +354,35 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         self::assertEquals(0, $backendUserAspect->get('id'));
 
         self::assertNotSame($beforeWorkspaceAspect, GeneralUtility::makeInstance(Context::class)->getAspect('workspace'));
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function simulateFrontendEnvironmentSetsLanguageUid()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a sub-page in the rootline
+         * Given the languageUid with the value 1
+         * When the method is called
+         * Then the method returns the value 1
+         * Then a new languageAspect is generated that is not identical to the original one
+         * Then this object has the languageUid 1
+         */
+
+        $beforeLanguageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+
+        self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3, 1));
+
+        /** @var \TYPO3\CMS\Core\Context\LanguageAspect $languageAspect */
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+        self::assertNotSame($beforeLanguageAspect, $languageAspect);
+        self::assertEquals(1, $languageAspect->get('id'));
+
     }
 
 

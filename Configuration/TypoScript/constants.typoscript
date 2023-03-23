@@ -16,8 +16,29 @@ plugin.tx_coreextended {
 
 	settings {
 
-        # cat=plugin.tx_coreextended//a; type=string; label=comma-separated list of fields to look up when searching for images
+        # cat=plugin.tx_coreextended//a; type=string; label=Comma-separated list of fields to look up when searching for images
         includeFieldsList =
+
+         openGraph {
+
+            # cat=plugin.tx_coreextended//a; type=string; label=Url of the website for openGraph, e.g. example.com
+            websiteUrl =
+
+            # cat=plugin.tx_coreextended//a; type=string; label=Name of the website for openGraph, e.g. Example Inc.
+            websiteName =
+
+            # cat=plugin.tx_coreextended//a; type=string; label=Path to optional watermark on openGraph images
+            imageWatermark =
+
+            # cat=plugin.tx_coreextended//a; type=string; label=Locale for openGraph, e.g. de_DE
+            locale =
+        }
+
+        googleSitemap {
+
+            # cat=plugin.tx_coreextended//a; type=int; label=TTl for caching of sitemap
+            ttl = 21600
+        }
 	}
 }
 
