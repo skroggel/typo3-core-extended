@@ -1,0 +1,12 @@
+[backendLayout() == 'pagets__homePages']
+    page.10.value = pagets__homePages
+[END]
+[backendLayout() == 'pagets__subPages']
+    page.10.value = pagets__subPages
+[END]
+[backendLayout() == 'pagets__specialPage']
+    page.10.value = pagets__specialPage
+[END]
+[! backendLayout()]
+    page.10.value = empty
+[END]

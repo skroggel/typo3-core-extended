@@ -95,7 +95,6 @@ class AssetFileNotFoundTest extends FunctionalTestCase
         }
     }
 
-
     //=============================================
 
     /**
@@ -108,14 +107,16 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * Scenario:
          *
          * Given the url does refer to an image file
-         * Given the the image file has the right path
+         * Given the image file has the right path
          * Given the image file-name has no csm-prefix
          * When searchFile is called
-         * Then false is returned
+         * Then an empty array is returned
          */
         $url = 'https://www.beispiel.de/typo3temp/assets/images/csd_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.jpg';
-        self::assertFalse( $this->subject->searchFile($url));
+        self::assertEmpty( $this->subject->searchFile($url));
     }
+
+
     /**
      * @test
      */
@@ -145,16 +146,17 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * Scenario:
          *
          * Given the url does refer to an image file
-         * Given the the image file has the right path
+         * Given the image file has the right path
          * Given the image file-name has the csm-prefix
          * Given the name of the image file is identical with an existing file
          * Given the existing file has another file extension as the given file
          * When searchFile is called
-         * Then false is returned
+         * Then an empty array is returned
          */
-        $url = 'https://www.beispiel.de/typo3temp/assets/images/csd_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.png';
-        self::assertFalse( $this->subject->searchFile($url));
+        $url = 'https://www.beispiel.de/typo3temp/assets/images/csm_2020-10-08-Unternehmensstandort_e47fb575c0_logo_b44a445e64.png';
+        self::assertEmpty( $this->subject->searchFile($url));
     }
+
 
     /**
      * @test
@@ -166,7 +168,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
          * Scenario:
          *
          * Given the url does refer to an image file
-         * Given the the image file has the right path
+         * Given the image file has the right path
          * Given the image file-name has the csm-prefix
          * Given the name of the image file is identical with an existing file
          * Given the existing file has the same file-extension as the given file
@@ -189,6 +191,7 @@ class AssetFileNotFoundTest extends FunctionalTestCase
         self::assertEquals(0, $result['size']);
         self::assertFileExists($result['absolutePath']);
     }
+
 
     /**
      * @test

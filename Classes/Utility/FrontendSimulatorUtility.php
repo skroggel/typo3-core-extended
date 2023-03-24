@@ -66,9 +66,10 @@ class FrontendSimulatorUtility
      * Sets $GLOBALS['TSFE'] in backend mode
      *
      * @param int $pid
+     * @param int $lid
      * @return int
      */
-    public static function simulateFrontendEnvironment(int $pid = 1): int
+    public static function simulateFrontendEnvironment(int $pid = 1, int $lid = 0): int
     {
         if (!$pid) {
             $pid = 1;
@@ -107,7 +108,7 @@ class FrontendSimulatorUtility
                 // set pid to $_GET - we need this for ConfigurationManager to load the right configuration
                 $_GET['id'] = $_POST['id'] = $pid;
 
-                self::initContextAspects();
+                self::initContextAspects($lid);
                 self::initTypoScriptFrontendController($pid);
 
                 /** @todo do we really need this? Currently we seem to need this for file access **/
@@ -183,10 +184,12 @@ class FrontendSimulatorUtility
 
 
     /**
+     * Init all relevant contextAspects
+     * @param int $lid
      * @return void
      * @throws \Exception
      */
-    protected static function initContextAspects (): void
+    protected static function initContextAspects (int $lid): void
     {
 
         /** @var  \TYPO3\CMS\Core\Context\Context $context */
@@ -198,7 +201,7 @@ class FrontendSimulatorUtility
         $context->setAspect('frontend.user', GeneralUtility::makeInstance(UserAspect::class, self::getFrontendUserAuthentication()));
         $context->setAspect('backend.user', new UserAspect());
         $context->setAspect('workspace', new WorkspaceAspect());
-        $context->setAspect('language', new LanguageAspect());
+        $context->setAspect('language', new LanguageAspect($lid));
 
     }
 

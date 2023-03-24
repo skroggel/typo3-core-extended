@@ -42,15 +42,20 @@ class QueryUtility
      */
     static public function getWhereClauseEnabled(string $table): string
     {
+
         /** @var  \TYPO3\CMS\Core\Context\Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
+
+        /**
+         * @todo Problem with newsletter: hidden elements are included
         $showHidden = (bool)$context->getPropertyFromAspect('visibility',
             $table === 'pages' ? 'includeHiddenPages' : 'includeHiddenContent',
             false
         );
+
         if ($showHidden) {
             return '';
-        }
+        }*/
 
         $ctrl = $GLOBALS['TCA'][$table]['ctrl'] ?? null;
         if (empty($ctrl) || !is_array($ctrl)) {
@@ -115,13 +120,16 @@ class QueryUtility
 
         /** @var  \TYPO3\CMS\Core\Context\Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
+
+        /**
+         * @todo Problem with newsletter: hidden elements are included
         $showHidden = (bool)$context->getPropertyFromAspect('visibility',
             $table === 'pages' ? 'includeHiddenPages' : 'includeHiddenContent',
             false
         );
         if ($showHidden) {
             return '';
-        }
+        }*/
 
         if (empty($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
             return '';

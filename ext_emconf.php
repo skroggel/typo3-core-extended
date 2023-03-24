@@ -26,16 +26,18 @@ $EM_CONF[$_EXTKEY] = [
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '9.5.5',
+	'version' => '9.5.6',
     'constraints' => [
 		'depends' => [
 			'typo3' => '9.5.0-9.5.99',
             'filemetadata' => '9.5.0.0-9.5.99',
+            'seo' => '9.5.0.0-9.5.99',
             'persisted_sanitized_routing' => '1.0.4',
         ],
 		'conflicts' => [
 		],
 		'suggests' => [
-		],
+            'sr_freecap' => '2.5.0-2.5.99',
+        ],
 	],
 ];

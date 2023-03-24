@@ -1,0 +1,6 @@
+[extensionLoaded('core_extended')]
+    page.10.value = true
+[GLOBAL]
+[! extensionLoaded('core_extended')]
+    page.10.value = false
+[GLOBAL]

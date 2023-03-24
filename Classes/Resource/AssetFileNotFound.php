@@ -1,5 +1,4 @@
 <?php
-
 namespace Madj2k\CoreExtended\Resource;
 
 /*

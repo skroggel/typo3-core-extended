@@ -1,10 +1,5 @@
 <?php
-
 namespace Madj2k\CoreExtended\Domain\Repository;
-
-use Madj2k\CoreExtended\Utility\QueryUtility;
-use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,6 +13,10 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use Madj2k\CoreExtended\Utility\QueryUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility as Common;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * Class MediaSourcesRepository
@@ -202,15 +201,8 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function getWhereClauseForEnabledFields(string $table): string
     {
-        if ($this->getEnvironmentMode() === 'FE' && $GLOBALS['TSFE']->sys_page) {
-            // frontend context
-            $whereClause = $GLOBALS['TSFE']->sys_page->enableFields($table);
-            $whereClause .= $GLOBALS['TSFE']->sys_page->deleteClause($table);
-        } else {
-            // backend context
-            $whereClause = QueryUtility::getWhereClauseEnabled($table);
-            $whereClause .= QueryUtility::getWhereClauseDeleted($table);
-        }
+        $whereClause = QueryUtility::getWhereClauseEnabled($table);
+        $whereClause .= QueryUtility::getWhereClauseDeleted($table);
 
         return $whereClause;
     }
