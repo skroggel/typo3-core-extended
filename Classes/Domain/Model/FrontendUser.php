@@ -67,6 +67,11 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      */
     protected $email = '';
 
+    /**
+     * @var string
+     */
+    protected string $captchaResponse = '';
+
 
     /**
      * Sets the crdate value
@@ -300,6 +305,29 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
         } else {
             $this->name = $this->getLastName();
         }
+    }
+
+
+    /**
+     * Sets the captchaResponse
+     *
+     * @param string $captchaResponse
+     * @return void
+     */
+    public function setCaptchaResponse(string $captchaResponse): void
+    {
+        $this->captchaResponse = $captchaResponse;
+    }
+
+
+    /**
+     * Getter for captchaResponse
+     *
+     * @return string
+     */
+    public function getCaptchaResponse(): string
+    {
+        return $this->captchaResponse;
     }
 
 }
