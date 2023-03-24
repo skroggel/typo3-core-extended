@@ -5,6 +5,16 @@
 		<body>
 
             <!-- pages -->
+            <trans-unit id="pages.no_follow">
+                <source>Link-Following by Search Engines (incl. Subpages)</source>
+                <target>Link-Folgen durch Suchmaschinen (inkl. Unterseiten)</target>
+            </trans-unit>
+			<trans-unit id="pages.no_index">
+				<source>Indexing by Search Engines (incl. Subpages)</source>
+				<target>Indexierung durch Suchmaschinen (inkl. Unterseiten)</target>
+			</trans-unit>
+
+
             <trans-unit id="pages.tx_coreextended_alternative_title">
                 <source>Alternative Label for Menu</source>
                 <target>Alternative Beschriftung für Menü (Kurzbeschriftung)</target>
@@ -13,22 +23,6 @@
 				<source>Frontend Layout (for subpages of this page)</source>
 				<target>Frontend Layout (für Unterseiten dieser Seite)</target>
 			</trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_index">
-                <source>Indexing by Search Engines</source>
-                <target>Indexierung durch Suchmaschinen</target>
-            </trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_index.I.enabled">
-                <source>Inactivate (incl. Subpages)</source>
-                <target>Deaktivieren (inkl. Unterseiten)</target>
-            </trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_follow">
-                <source>Link-Following by Search Engines</source>
-                <target>Link-Folgen durch Suchmaschinen</target>
-            </trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_follow.I.enabled">
-                <source>Inactivate (incl. Subpages)</source>
-                <target>Deaktivieren (inkl. Unterseiten)</target>
-            </trans-unit>
             <trans-unit id="pages.tx_coreextended_preview_image">
                 <source>Preview Image</source>
                 <target>Vorschaubild</target>

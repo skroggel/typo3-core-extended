@@ -32,12 +32,14 @@ class StringUtilityTest extends FunctionalTestCase
      */
     const FIXTURE_PATH = __DIR__ . '/StringUtilityTest/Fixtures';
 
+
     /**
      * @var string[]
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/core_extended',
     ];
+
 
     /**
      * Setup
@@ -55,9 +57,8 @@ class StringUtilityTest extends FunctionalTestCase
                 'EXT:core_extended/Configuration/TypoScript/constants.txt',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ],
-            ['rkw-kompetenzzentrum.local' => self::FIXTURE_PATH .  '/Frontend/Configuration/config.yaml']
+            ['example.com' => self::FIXTURE_PATH .  '/Frontend/Configuration/config.yaml']
         );
-
 
     }
 

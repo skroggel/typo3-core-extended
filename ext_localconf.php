@@ -76,10 +76,13 @@ call_user_func(
         // Add Rootline Fields
         //=================================================================
         $rootlineFields = &$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
-        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,tx_coreextended_no_index,tx_coreextended_no_follow,tx_coreextended_preview_image,tx_coreextended_og_image';
+        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,tx_coreextended_preview_image,tx_coreextended_og_image';
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seo')) {
+            $newRootlineFields .= ',no_index,no_follow';
+        }
         $rootlineFields .= (empty($rootlineFields))? $newRootlineFields : ',' . $newRootlineFields;
 
-        //=================================================================
+         //=================================================================
         // Register Hooks
         //=================================================================
         if (TYPO3_MODE !== 'BE') {
@@ -87,7 +90,7 @@ call_user_func(
         }
 
         //=================================================================
-        // Asset for routing
+        // Aspect for routing
         //=================================================================
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['PersistedSlugifiedPatternMapper']
             = \Madj2k\CoreExtended\Routing\Aspect\PersistedSlugifiedPatternMapper::class;
@@ -104,6 +107,43 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\ExtensionService::class] = [
             'className' => Madj2k\CoreExtended\XClasses\Extbase\Service\ExtensionService::class
         ];
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication::class] = [
+            'className' => Madj2k\CoreExtended\XClasses\Frontend\Authentication\FrontendUserAuthentication::class
+        ];
+
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_freecap')) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][SJBR\SrFreecap\Controller\ImageGeneratorController::class] = [
+                'className' => Madj2k\CoreExtended\XClasses\SrFreecap\Controller\ImageGeneratorController::class
+            ];
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][SJBR\SrFreecap\Validation\Validator\CaptchaValidator::class] = [
+                'className' => Madj2k\CoreExtended\XClasses\SrFreecap\Validation\Validator\CaptchaValidator::class
+            ];
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][SJBR\SrFreecap\Domain\Session\SessionStorage::class] = [
+                'className' => Madj2k\CoreExtended\XClasses\SrFreecap\Session\SessionStorage::class
+            ];
+        }
+
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('yoast_seo')) {
+
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][YoastSeoForTypo3\YoastSeo\StructuredData\StructuredDataProviderManager::class] = [
+                'className' => Madj2k\CoreExtended\XClasses\YoastSeo\StructuredData\StructuredDataProviderManager::class
+            ];
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][YoastSeoForTypo3\YoastSeo\Frontend\AdditionalPreviewData::class] = [
+                'className' => Madj2k\CoreExtended\XClasses\YoastSeo\Frontend\AdditionalPreviewData::class
+            ];
+        }
+
+        //=================================================================
+        // Remove some functions from ext:seo we handle ourselves
+        //=================================================================
+        /** @todo write own metaTag-generators instead of using TypoScript! */
+        unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['metatag']);
+        unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['canonical']);
+
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['robots'] =
+            \Madj2k\CoreExtended\MetaTag\RobotsTagGenerator::class . '->generate';
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['metatag'] =
+            \Madj2k\CoreExtended\MetaTag\MetaTagGenerator::class . '->generate';
 
 
         //====================re=============================================
@@ -117,7 +157,7 @@ call_user_func(
                 // add a FileWriter
                 'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
                     // configuration for the writer
-                    'logFile' => 'typo3temp/var/logs/tx_coreextended.log'
+                    'logFile' => \TYPO3\CMS\Core\Core\Environment::getVarPath()  . '/log/tx_coreextended.log'
                 )
             ),
         );

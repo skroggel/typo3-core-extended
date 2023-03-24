@@ -1,0 +1,9 @@
+[backendColPos() == 111]
+    page.10.value = 111
+[END]
+[backendColPos() == 222]
+    page.10.value = 222
+[END]
+[backendColPos() == '']
+    page.10.value = empty
+[END]

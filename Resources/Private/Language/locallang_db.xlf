@@ -6,24 +6,19 @@
 
 
             <!-- pages -->
+            <trans-unit id="pages.no_follow">
+                <source>Link-Following by Search Engines (incl. Subpages)</source>
+            </trans-unit>
+			<trans-unit id="pages.no_index">
+				<source>Indexing by Search Engines (incl. Subpages)</source>
+			</trans-unit>
+
             <trans-unit id="pages.tx_coreextended_alternative_title">
                 <source>Alternative Label for Menu</source>
             </trans-unit>
             <trans-unit id="pages.tx_coreextended_fe_layout_next_level" approved="yes">
 				<source>Frontend Layout (for subpages of this page)</source>
 			</trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_index">
-                <source>Indexing by Search Engines</source>
-            </trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_index.I.enabled">
-                <source>Inactivate (incl. Subpages)</source>
-            </trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_follow">
-                <source>Link-Following by Search Engines</source>
-            </trans-unit>
-            <trans-unit id="pages.tx_coreextended_no_follow.I.enabled">
-                <source>Inactivate (incl. Subpages)</source>
-            </trans-unit>
             <trans-unit id="pages.tx_coreextended_preview_image">
                 <source>Preview Image</source>
             </trans-unit>

@@ -58,7 +58,7 @@ class ClientUtilityTest extends FunctionalTestCase
                 'EXT:core_extended/Configuration/TypoScript/constants.txt',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ],
-            ['rkw-kompetenzzentrum.local' => self::FIXTURE_PATH .  '/Frontend/Configuration/config.yaml']
+            ['example.com' => self::FIXTURE_PATH .  '/Frontend/Configuration/config.yaml']
         );
 
         FrontendSimulatorUtility::simulateFrontendEnvironment(1);

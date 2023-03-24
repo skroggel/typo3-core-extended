@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <pages>
+        <uid>1</uid>
+        <pid>0</pid>
+        <title>Rootpage</title>
+        <doktype>1</doktype>
+        <is_siteroot>1</is_siteroot>
+        <backend_layout>pagets__homePages</backend_layout>
+        <backend_layout_next_level>pagets__subPages</backend_layout_next_level>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+
+    <pages>
+        <uid>2</uid>
+        <pid>1</pid>
+        <title>Sub-Page</title>
+        <doktype>1</doktype>
+        <backend_layout>pagets__specialPage</backend_layout>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+
+    <pages>
+        <uid>3</uid>
+        <pid>2</pid>
+        <title>Sub-Sub-Page</title>
+        <doktype>1</doktype>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+</dataset>

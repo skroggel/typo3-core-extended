@@ -56,7 +56,7 @@ lib.txCoreExtended {
         // get the uid of the first child of current page
         // ============================================
         pageNextSub = CONTENT
-        pageNextSub{
+        pageNextSub {
             table = pages
             select {
                 pidInList = this
@@ -173,6 +173,49 @@ lib.txCoreExtended {
                     // try the prev page on a higher level
                     cObject < lib.txCoreExtended.pageNavigation.pagePrevParent
                 }
+            }
+        }
+
+        // ============================================
+        // get a link to the next page
+        //============================================
+        nextPageLink = TEXT
+        nextPageLink {
+
+            stdWrap {
+                typolink {
+                    parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pageNextRecursive
+                    section = content
+                    returnLast = url
+                }
+            }
+
+            if.isTrue.typolink {
+                parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pageNextRecursive
+                section = content
+                returnLast = url
+            }
+        }
+
+        // ============================================
+        // get a link to the previous page
+        //============================================
+        prevPageLink = TEXT
+        prevPageLink {
+
+            stdWrap {
+                typolink {
+                    parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pagePrevRecursive
+                    section = content
+                    returnLast = url
+                }
+            }
+
+            // if it is set
+            if.isTrue.typolink {
+                parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pagePrevRecursive
+                section = content
+                returnLast = url
             }
         }
 	}

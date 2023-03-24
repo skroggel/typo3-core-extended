@@ -10,6 +10,10 @@ lib.txCoreExtended {
         20 = TEXT
         20 {
             field = title
+            override {
+                field = seo_title
+                if.isTrue.field = seo_title
+            }
         }
 
         // global wrapper
@@ -24,7 +28,7 @@ lib.txCoreExtended {
 #=============================================================
 # Additions based on loaded extensions
 #=============================================================
-[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_pdf2content')]
+[extensionLoaded('rkw_pdf2content')]
     lib.txCoreExtended {
 
         titleTag {
@@ -79,10 +83,9 @@ lib.txCoreExtended {
             }
         }
     }
-[global]
+[END]
 
-
-[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_events')]
+[extensionLoaded('rkw_events')]
     lib.txCoreExtended {
 
         titleTag {
@@ -103,10 +106,9 @@ lib.txCoreExtended {
             }
         }
     }
-[global]
+[END]
 
-
-[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_authors')]
+[extensionLoaded('rkw_authors')]
     lib.txCoreExtended {
 
         titleTag {
@@ -141,9 +143,9 @@ lib.txCoreExtended {
             }
         }
     }
-[global]
+[END]
 
-[userFunc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rkw_infographics')]
+[extensionLoaded('rkw_infographics')]
     lib.txCoreExtended {
 
         titleTag {
@@ -165,4 +167,4 @@ lib.txCoreExtended {
 
         }
     }
-[global]
+[END]

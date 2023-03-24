@@ -9,6 +9,17 @@
                 <source>%s media sources.</source>
             </trans-unit>
 
+            <!-- Partials/CaptchaElement.html-->
+            <trans-unit id="partials_captcha.spam_protection">
+                <source>Spam protection</source>
+            </trans-unit>
+			<trans-unit id="partials_captcha.notice">
+				<source>Please enter here the word that is displayed in the image. This is to reduce spam.</source>
+			</trans-unit>
+            <trans-unit id="partials_captcha.mandatory_field">
+                <source>Mandatory field</source>
+            </trans-unit>
+
             <!-- ===================================================== -->
             <!-- VALIDATOR -->
             <!-- ===================================================== -->

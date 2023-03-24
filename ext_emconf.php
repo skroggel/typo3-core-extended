@@ -31,11 +31,13 @@ $EM_CONF[$_EXTKEY] = [
 		'depends' => [
 			'typo3' => '9.5.0-9.5.99',
             'filemetadata' => '9.5.0.0-9.5.99',
+            'seo' => '9.5.0.0-9.5.99',
             'persisted_sanitized_routing' => '1.0.4',
         ],
 		'conflicts' => [
 		],
 		'suggests' => [
-		],
+            'sr_freecap' => '2.5.0-2.5.99',
+        ],
 	],
 ];

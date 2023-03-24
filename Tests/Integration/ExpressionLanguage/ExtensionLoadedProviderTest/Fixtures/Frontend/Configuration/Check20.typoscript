@@ -1,0 +1,6 @@
+[extensionLoaded('fictive_ext')]
+    page.10.value = true
+[END]
+[! extensionLoaded('fictive_ext')]
+    page.10.value = false
+[END]

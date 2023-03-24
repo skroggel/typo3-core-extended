@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <pages>
+        <uid>2</uid>
+        <pid>1</pid>
+        <title>Page</title>
+        <doktype>1</doktype>
+        <no_index>0</no_index>
+        <no_follow>1</no_follow>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+    <pages>
+        <uid>3</uid>
+        <pid>2</pid>
+        <title>Subpage</title>
+        <doktype>1</doktype>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+</dataset>
