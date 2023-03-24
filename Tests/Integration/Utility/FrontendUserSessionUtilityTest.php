@@ -78,8 +78,6 @@ class FrontendUserSessionUtilityTest extends FunctionalTestCase
             [
                 'EXT:core_extended/Configuration/TypoScript/setup.txt',
                 'EXT:core_extended/Configuration/TypoScript/constants.txt',
-                'EXT:fe_register/Configuration/TypoScript/setup.txt',
-                'EXT:fe_register/Configuration/TypoScript/constants.txt',
                 self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
             ]
         );

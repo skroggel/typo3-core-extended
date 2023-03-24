@@ -1,4 +1,5 @@
 # core_extended
+# core_extended
 
 ## Custom Error Message For Content Rendering <a name="error-messages"></a>
 Using the following configuration you can return a custom message upon an error in the frontend.
@@ -192,7 +193,6 @@ rootPageId: '{rootPageId}'
 routes: {  }
 imports:
   - { resource: "EXT:core_extended/Configuration/Routes/Default.yaml" }
-  - { resource: "EXT:fe_register/Configuration/Routes/Default.yaml" }
 
 routeEnhancers:
   #========================================
@@ -219,7 +219,6 @@ routeEnhancers:
         1,
         [
             'EXT:core_extended/Configuration/TypoScript/setup.txt',
-            'EXT:fe_register/Configuration/TypoScript/setup.txt',
             self::FIXTURE_PATH . '/Frontend/Configuration/Rootpage.typoscript',
         ],
         ['example.com' => self::FIXTURE_PATH .  '/Frontend/Configuration/config.yaml']
