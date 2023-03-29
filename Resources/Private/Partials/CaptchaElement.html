@@ -1,10 +1,8 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-      xmlns:freeCap="http://typo3.org/ns/SJBR/SrFreecap/ViewHelpers"
       xmlns:coreExtended="http://typo3.org/ns/Madj2k/CoreExtended/ViewHelpers\"
       data-namespace-typo3-fluid="true">
 
     <f:if condition="{coreExtended:extension.loaded(key:'sr_freecap')}">
-
         <div class="form__field form__field--captcha flex width100">
             <div class="form__field-item">
                 <label for="sjbr-freecap-captcha-response">
@@ -21,8 +19,8 @@
             </div>
             
             <div class="form__field-item">
-                <freeCap:image />
-                <freeCap:audio />
+                <coreExtended:captcha.image />
+                <coreExtended:captcha.audio />
             </div>
         </div>
     </f:if>
