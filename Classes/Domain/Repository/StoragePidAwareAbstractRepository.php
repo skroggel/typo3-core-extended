@@ -28,6 +28,12 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
 {
 
     /**
+     * @const string
+     */
+    const extensionNameForStoragePid = '';
+
+
+    /**
      * Some important things on init
      *
      * @return void
@@ -42,6 +48,10 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
         $objectNamespace = $this->objectType;
         $namespaceParts = explode('\\', $objectNamespace);
         $extensionName = lcfirst($namespaceParts[1]);
+
+        if (self::extensionNameForStoragePid) {
+            $extensionName = self::extensionNameForStoragePid;
+        }
 
         $settings = GeneralUtility::getTypoScriptConfiguration(
             $extensionName,
