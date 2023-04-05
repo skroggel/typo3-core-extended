@@ -60,7 +60,6 @@ class LoadedViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
 
         $extensionKey = $arguments['key'];
         if ($extensionKey) {
-
             return \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded($extensionKey);
         }
 

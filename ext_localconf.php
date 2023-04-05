@@ -47,7 +47,7 @@ call_user_func(
         //=================================================================
         // Register Caching
         //=================================================================
-        $cacheIdentifier = \Madj2k\CoreExtended\Utility\GeneralUtility::camelize($extKey);
+        $cacheIdentifier = \Madj2k\CoreExtended\Utility\GeneralUtility::underscore($extKey);
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier] = [
             'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
             'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
