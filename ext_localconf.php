@@ -144,7 +144,8 @@ call_user_func(
             \Madj2k\CoreExtended\MetaTag\RobotsTagGenerator::class . '->generate';
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['metatag'] =
             \Madj2k\CoreExtended\MetaTag\MetaTagGenerator::class . '->generate';
-
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['canonical'] =
+            \Madj2k\CoreExtended\MetaTag\CanonicalGenerator::class . '->generate';
 
         //====================re=============================================
         // Configure Logger
