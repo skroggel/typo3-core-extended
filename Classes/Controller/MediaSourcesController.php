@@ -51,7 +51,6 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         // get root page of current page
         $rootlinePages = GeneralUtility::makeInstance(RootlineUtility::class, intval($GLOBALS['TSFE']->id))->get();
-
         if (
             ($rootlinePages[0])
             && ($rootPage = $rootlinePages[0]['uid'])
@@ -67,6 +66,7 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         }
 
         $mediaSources = $this->mediaSourcesRepository->findAllWithPublisher($pagesList, false);
+
         $this->view->assign('mediaSources', $mediaSources);
         $this->view->assign('mediaSourcesSum', count($mediaSources));
 

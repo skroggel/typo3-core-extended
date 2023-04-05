@@ -47,7 +47,7 @@ class ContainsViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewH
     {
         parent::initializeArguments();
         $this->registerArgument('needle', 'string', 'string to search for', true);
-        $this->registerArgument('haystack', 'string', 'string to search in', true);
+        $this->registerArgument('haystack', 'string', 'string to search in', false, '');
     }
 
 
