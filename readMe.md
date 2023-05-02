@@ -44,51 +44,13 @@ imageResources {
     settings =< plugin.tx_coreextended.settings
     settings.includeFieldsList = pages.tx_coreextended_preview_image, pages.media, tt_content.image, tt_content.assets
 }
-
-
-TxCoreExtendedAssetNotFound = PAGE
-TxCoreExtendedAssetNotFound {
-    typeNum = 1605802513
-    config {
-        disableAllHeaderCode = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        no_cache = 0
-        debug = 0
-
-        metaCharset = utf-8
-
-        index_enable = 0
-        index_metatags = 0
-        index_externals = 0
-    }
-
-    10 = USER_INT
-    10 {
-        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-        extensionName = CoreExtended
-        pluginName = AssetNotFound
-        vendorName = Madj2k
-        controller = NotFound
-        switchableControllerActions {
-            # Again: Controller-Name and Action
-            NotFound {
-                1 = assets
-            }
-        }
-
-        view < plugin.tx_coreextended.view
-        persistence < plugin.tx_coreextended.persistence
-        settings < plugin.tx_coreextended.settings
-    }
-}
 ```
 ## Google Sitemap
 This extension includes an automatically updated Google-Sitemap which can be accessed via
 ```
 https://your-domain.com/?type=1453279478
 ```
-## Missing Asset-Files- Handler
+## Missing Asset-Files-  - @deprecated!
 When using rendered images, it may be the case that a clearing of all caches
 results in 404-errors for images that have been shared via SocialMedia - but now have a different hash-value appended.
 The handler tries to find the image by searching for a file that begins with the same filename and setting a symlink to it.
@@ -103,6 +65,14 @@ Implement this directive in your Apache-configuration to activate the handler:
     RewriteCond %{REQUEST_FILENAME} !-l
     RewriteRule ^(typo3temp/assets/images/((csm_.+)\.(gif|png|jpg|jpeg)))$ https://%{HTTP_HOST}/index.php?type=1605802513&file=$2 [R=301,NC,L]
 </IfModule>
+### End: Adding rewrite for missing asset files (e.g. og:image) ###
+```
+Alternatively you can use this configuration for NGINX:
+```
+### Begin: Adding rewrite for missing asset files (e.g. og:image) ###
+location ~* ^/(typo3temp/assets/images/((csm_.+)\.(gif|png|jpg|jpeg)))$ {
+    try_files $uri $scheme://$host/index.php?type=1605802513&file=$2 =404;
+}
 ### End: Adding rewrite for missing asset files (e.g. og:image) ###
 ```
 ## StoragePidAwareAbstractRepository

@@ -13,8 +13,13 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use Madj2k\Postmaster\Cache\RenderCache;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * GeneralUtilityTest
@@ -458,6 +463,96 @@ class GeneralUtilityTest extends FunctionalTestCase
 
         $string = $this->subject::getUniqueRandomString();
         self::assertEquals($this->subject::RANDOM_STRING_LENGTH, strlen($string));
+
+    }
+
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function protectFolderThrowsException()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a relative path
+         * When the method is called
+         * Then an exception-instance of \Madj2k\CoreExtended\Exception is thrown
+         * Then the esception-code is 1682006516
+         */
+        self::expectException(\Madj2k\CoreExtended\Exception::class);
+        self::expectExceptionCode(1682006516);
+
+        $folderPath = '../test';
+        $this->subject::protectFolder($folderPath);
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function protectFolderReturnsTrueAndWritesFiles()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given the path to a folder in the documentRoot
+         * When the method is called
+         * Then true is returned
+         * Then the htaccess-file is written to the given folder
+         * Then the nginx-file is written to the publicWeb-dir
+         * Then the nginx-file contains the relative path to the var-dir as location-directive
+         */
+        $folderPath = DIRECTORY_SEPARATOR . trim(Environment::getPublicPath(), '/') . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR;
+        $publicPath = DIRECTORY_SEPARATOR . trim(Environment::getPublicPath(), '/') . DIRECTORY_SEPARATOR;
+        $folderPathRelative = trim(PathUtility::getRelativePath($publicPath, $folderPath), '/');
+        $hash = substr(md5($folderPath), 0, 12);
+
+        self::assertTrue($this->subject::protectFolder($folderPath));
+
+        self::assertFileExists($folderPath . '.htaccess');
+        self::assertFileExists($publicPath . 'ext_' . $hash . '.nginx');
+
+        $content = file_get_contents($publicPath . 'ext_' . $hash . '.nginx');
+        self::assertStringContainsString('location /' . $folderPathRelative . ' {', $content);
+
+        // remove files again!
+        unlink($folderPath . '.htaccess');
+        unlink($publicPath . 'ext_' . $hash . '.nginx');
+
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function protectFolderReturnsTrueAndWritesNoFiles()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given the path to a folder above in the documentRoot
+         * When the method is called
+         * Then true is returned
+         * Then no htaccess-file is written to the given folder
+         * Then no nginx-file is written to the publicWeb-dir
+         */
+        $explodedPath = GeneralUtility::trimExplode(DIRECTORY_SEPARATOR, Environment::getPublicPath(), true) ;
+        array_pop($explodedPath);
+        $folderPath = DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $explodedPath) . DIRECTORY_SEPARATOR;
+        $publicPath = DIRECTORY_SEPARATOR . trim(Environment::getPublicPath(), '/') . DIRECTORY_SEPARATOR;
+        $hash = substr(md5($folderPath), 0, 12);
+
+        self::assertTrue($this->subject::protectFolder($folderPath));
+
+        self::assertFileDoesNotExist($folderPath . '.htaccess');
+        self::assertFileDoesNotExist($publicPath . 'ext_' . $hash . '.nginx');
 
     }
 
