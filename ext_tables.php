@@ -16,7 +16,6 @@ call_user_func(
         //=================================================================
         // Add CSS style to cache-delete menu according to application context
         //=================================================================
-
         // $GLOBALS['TBE_STYLES'] are allowed here:
         // https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitecture/ConfigurationFiles/Index.html#id4
         if (TYPO3_MODE == "BE") {

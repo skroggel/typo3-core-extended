@@ -32,6 +32,9 @@ call_user_func(
             )
         );
 
+        /**
+         * @deprecated
+         */
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Madj2k.CoreExtended',
             'AssetNotFound',
@@ -76,7 +79,7 @@ call_user_func(
         // Add Rootline Fields
         //=================================================================
         $rootlineFields = &$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
-        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,tx_coreextended_preview_image,tx_coreextended_og_image';
+        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,tx_coreextended_preview_image,tx_coreextended_og_image,tx_coreextended_cover,tx_coreextended_file';
         if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seo')) {
             $newRootlineFields .= ',no_index,no_follow';
         }

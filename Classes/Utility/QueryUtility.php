@@ -32,6 +32,34 @@ class QueryUtility
 {
 
     /**
+     * get active columns for a select query
+     *
+     * @param string $table table name
+     * @return array the active columns
+     * @see \TYPO3\CMS\Frontend\Page::enableFields()
+     */
+    static public function getSelectColumns(string $table): array
+    {
+        $columns = $GLOBALS['TCA'][$table]['columns'] ?? null;
+        if (empty($columns) || !is_array($columns)) {
+            return [];
+        }
+
+        $select = [];
+        foreach ($columns as $column => $config) {
+            if (
+                ($config['config']['type'])
+                && ($config['config']['type'] != 'none')
+            ){
+                $select[] = $column;
+            }
+        }
+
+        return $select;
+    }
+
+
+    /**
      * get the WHERE clause for the enabled fields of this TCA table
      * depending on the context
      *

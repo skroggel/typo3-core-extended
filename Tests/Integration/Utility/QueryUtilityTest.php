@@ -72,6 +72,90 @@ class QueryUtilityTest extends FunctionalTestCase
 
     /**
      * @test
+     */
+    public function getSelectColumnsReturnsEmptyStringIfNoConfig()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a TCA-configuration for a table
+         * Given in this configuration no columns are set
+         * When the method is called
+         * Then an array is returned
+         * Then this array is empty
+         */
+
+        $GLOBALS['TCA'][self::TEST_TABLE]['columns'] = [
+
+        ];
+
+        $result = QueryUtility::getSelectColumns(self::TEST_TABLE);
+
+        self::assertIsArray($result);
+        self::assertEmpty($result);
+
+    }
+
+
+    /**
+     * @test
+     */
+    public function etSelectColumnsReturnsAllFieldsExceptTypeNone()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given TCA-configuration for a table
+         * Given in this configuration there are five columns defined
+         * Given in this configuration one of the columns is of type "none"
+         * When the method is called
+         * Then an array is returned
+         * Then the array has the size of four
+         * Then column of type "none" is not included
+         */
+
+        $GLOBALS['TCA'][self::TEST_TABLE]['columns'] = [
+            'test1' => [
+                'config' => [
+                    'type' => 'select',
+                ],
+            ],
+            'test2' => [
+                'config' => [
+                    'type' => 'inline',
+                ],
+            ],
+            'test3' => [
+                'config' => [
+                    'type' => 'text',
+                ],
+            ],
+            'test4' => [
+                'config' => [
+                    'type' => 'none',
+                ],
+            ],
+            'test5' => [
+                'config' => [
+                    'type' => 'check',
+                ],
+            ],
+        ];
+
+        $result = QueryUtility::getSelectColumns(self::TEST_TABLE);
+
+        self::assertIsArray($result);
+        self::assertCount(4, $result);
+        self::assertNotContains('test4', $result);
+
+    }
+
+    //=============================================
+
+    /**
+     * @test
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function getWhereClauseEnabledReturnsEmptyStringIfNoConfig()
@@ -393,8 +477,8 @@ class QueryUtilityTest extends FunctionalTestCase
          * Given TCA-configuration for a table
          * Given in this configuration a delete-field is defined
          * When the method is called
-         * Then this string starts with " AND"
          * Then a string is returned
+         * Then this string starts with " AND"
          * Then this string is a where-clause which checks for this field
          */
 
@@ -452,8 +536,8 @@ class QueryUtilityTest extends FunctionalTestCase
          * Given TCA-configuration for a table
          * Given in this configuration a delete-field is defined
          * When the method is called
-         * Then this string starts with " AND"
          * Then a string is returned
+         * Then this string starts with " AND"
          * Then this string is a where-clause which checks for this field with the given uid
          */
 
@@ -511,8 +595,8 @@ class QueryUtilityTest extends FunctionalTestCase
          * Given TCA-configuration for a table
          * Given in this configuration the versioning is activated
          * When the method is called
-         * Then this string starts with " AND"
          * Then a string is returned
+         * Then this string starts with " AND"
          * Then this string is a where-clause which checks for the default version-state
          */
 
