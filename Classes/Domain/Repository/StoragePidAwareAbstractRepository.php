@@ -34,12 +34,6 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
 
 
     /**
-     * @var string
-     */
-    protected string $storagePids = '';
-
-
-    /**
      * Some important things on init
      *
      * @return void
@@ -51,6 +45,17 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
         // Fix: always use your own storagePid - even if called through another extension
         // This is important since the calling parameters (e.g. from opt-in) decide which storagePid takes precedence
         // Per default the storagePid of the calling extension is used
+        $this->setStoragePids();
+    }
+
+
+    /**
+     * @param string $storagePids
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     */
+    public function setStoragePids(string $storagePids = ''): void
+    {
         $objectNamespace = $this->objectType;
         $namespaceParts = explode('\\', $objectNamespace);
         $extensionName = lcfirst($namespaceParts[1]);
@@ -59,11 +64,14 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
             $extensionName = self::extensionNameForStoragePid;
         }
 
-        if (intval($this->storagePids) > 0) {
-            $storagePids = GeneralUtility::intExplode(
+        // check if is a string without numbers
+        $storagePidsArray = [];
+        if (intval($storagePids) > 0) {
+            $storagePidsArray = GeneralUtility::intExplode(
                 ',',
-                $this->storagePids
+                $storagePids
             );
+
         } else {
 
             $settings = GeneralUtility::getTypoScriptConfiguration(
@@ -71,15 +79,22 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
                 \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
             );
 
-            $storagePids = GeneralUtility::intExplode(
-                ',',
-                $settings['persistence']['storagePid'] ?? ''
-            );
+            // check if is a string without numbers
+            if (intval($settings['persistence']['storagePid'])) {
+                $storagePidsArray = GeneralUtility::intExplode(
+                    ',',
+                    $settings['persistence']['storagePid'] ?? ''
+                );
+            }
         }
 
         $querySettings = $this->createQuery()->getQuerySettings();
-        $querySettings->setStoragePageIds($storagePids);
+        if (!$storagePidsArray) {
+            $querySettings->setRespectStoragePage(false);
+        } else {
+            $querySettings->setStoragePageIds($storagePidsArray);
+        }
         $this->setDefaultQuerySettings($querySettings);
-
     }
+
 }
