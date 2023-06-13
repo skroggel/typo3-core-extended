@@ -16,12 +16,13 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
 
 use Madj2k\CoreExtended\Utility\QueryUtility;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
-
 
 /**
  * QueryUtilityTest
@@ -56,7 +57,9 @@ class QueryUtilityTest extends FunctionalTestCase
     /**
      * @var string[]
      */
-    protected $coreExtensionsToLoad = [ ];
+    protected $coreExtensionsToLoad = [
+        'seo'
+    ];
 
 
     /**
@@ -599,7 +602,6 @@ class QueryUtilityTest extends FunctionalTestCase
          * Then this string starts with " AND"
          * Then this string is a where-clause which checks for the default version-state
          */
-
         $GLOBALS['TCA'][self::TEST_TABLE]['ctrl'] = [
             'versioningWS' => true
         ];
@@ -613,6 +615,263 @@ class QueryUtilityTest extends FunctionalTestCase
     }
 
     //=============================================
+
+    /**
+     * @test
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     */
+    public function getTreeListReturnsListOfPages()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a complex list of pages
+         * Given the treeList is not cached
+         * When the method is called
+         * Then a string is returned
+         * Then this string is a comma-separated list of these pages
+         */
+
+        $numberOfPages = 30;
+        $expectedList = $this->createRecursivePageStructure($numberOfPages);
+
+        GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('tx_coreextended_treelist')
+            ->flush();
+
+        self::assertEquals(
+            $expectedList,
+            QueryUtility::getTreeList(1)
+        );
+
+        $this->deleteRecursivePageStructure($numberOfPages);
+
+    }
+
+
+    /**
+     * @test
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     */
+    public function getTreeListReturnsListOfPagesIsFasterWhenCached()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a complex list of pages
+         * Given the treeList is not cached
+         * Given the method has been called before
+         * Given the treeList has been cached in that call
+         * When the method is called again with identical params
+         * Then a string is returned
+         * Then this string is a comma-separated list of these pages
+         * Then the strings of both calls are identical
+         * Then the processing time of the second call is less than the processing time of the second call
+         */
+        $numberOfPages = 3000;
+        $expectedList = $this->createRecursivePageStructure($numberOfPages);
+
+        GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('tx_coreextended_treelist')
+            ->flush();
+
+        $startime = microtime(true);
+        $resultFirst = QueryUtility::getTreeList(1,9999, 0);
+        $endtime = microtime(true);
+        $processingTimeFirst = $endtime - $startime;
+
+        self::assertEquals(
+            $expectedList,
+            $resultFirst
+        );
+
+        $startime = microtime(true);
+        $resultSecond = QueryUtility::getTreeList(1,9999, 0);
+        $endtime = microtime(true);
+        $processingTimeSecond = $endtime - $startime;
+
+        self::assertEquals(
+            $resultFirst,
+            $resultSecond
+        );
+
+        self::assertLessThan($processingTimeFirst, $processingTimeSecond);
+
+        $this->deleteRecursivePageStructure($numberOfPages);
+
+    }
+
+    /**
+     * @test
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     */
+    public function getTreeListReturnsUpdatedListOfPagesAfterChangeInPageTree()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a complex list of pages
+         * Given the treeList is not cached
+         * Given the method has been called before
+         * Given the treeList has been cached in that call
+         * Given a new page has been created in the pageTree in the meantime
+         * When the method is called again with identical params
+         * Then a string is returned
+         * Then the strings of both calls are not identical
+         * Then the string of the second call is a comma-separated list of these pages, including the new one
+         */
+        $numberOfPages = 30;
+        $expectedList = $this->createRecursivePageStructure($numberOfPages);
+
+        GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('tx_coreextended_treelist')
+            ->flush();
+
+        $resultFirst = QueryUtility::getTreeList(1,9999, 0);
+        self::assertEquals(
+            $expectedList,
+            $resultFirst
+        );
+
+        sleep(2);
+
+        $this->createRecursivePageStructure(1, $numberOfPages);
+        $resultSecond = QueryUtility::getTreeList(1,9999, 0);
+        self::assertNotEquals(
+            $resultFirst,
+            $resultSecond
+        );
+
+        self::assertEquals(
+            $expectedList . ',31',
+            $resultSecond
+        );
+
+        $this->deleteRecursivePageStructure($numberOfPages);
+
+    }
+
+    /**
+     * @test
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     */
+    public function getTreeListReturnsDifferentListOfPagesBasedOnParams()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a complex list of pages
+         * Given the treeList is not cached
+         * Given the method has been called before
+         * When the method is called again with another begin-parameter
+         * Then a string is returned
+         * Then this string is a comma-separated list of these pages
+         * Then the strings of both calls are not identical
+         * Then the string of the second call begins at one level down
+         */
+        $numberOfPages = 30;
+        $expectedList = $this->createRecursivePageStructure($numberOfPages);
+
+        GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('tx_coreextended_treelist')
+            ->flush();
+
+        $resultFirst = QueryUtility::getTreeList(1,9999, 0);
+        self::assertEquals(
+            $expectedList,
+            $resultFirst
+        );
+
+        $resultSecond = QueryUtility::getTreeList(1,9999, 1);
+        self::assertNotEquals(
+            $resultFirst,
+            $resultSecond
+        );
+
+        self::assertEquals(
+            substr($expectedList, 2),
+            $resultSecond
+        );
+
+        $this->deleteRecursivePageStructure($numberOfPages);
+    }
+
+    //=============================================
+
+    /**
+     * @param int $numberOfPages
+     * @param int $offset
+     * @return string
+     */
+    protected function createRecursivePageStructure (int $numberOfPages, int $offset = 0): string
+    {
+        if ($offset < 0) {
+            $offset = 0;
+        }
+
+        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('pages');
+
+
+        $expectedList = '';
+        if ($offset == 0) {
+
+            $expectedList = '1';
+            $queryBuilder
+                ->insert('pages')
+                ->values([
+                    'title' => 'title',
+                    'uid' => $offset + 1,
+                    'pid' => '0',
+                    'is_siteroot' => '1',
+                    'tstamp' => time(),
+                    'crdate' => time(),
+                ])
+                ->execute();
+
+            $offset++;
+            $numberOfPages--;
+
+            if ($numberOfPages <= 1) {
+                return $expectedList;
+            }
+        }
+
+        foreach (range(($offset + 1), ($offset + $numberOfPages)) as $uid) {
+
+            $queryBuilder
+                ->insert('pages')
+                ->values([
+                    'title' => 'title',
+                    'uid' => $uid,
+                    'pid' => $uid - 1,
+                    'is_siteroot' => '0',
+                    'tstamp' => time(),
+                    'crdate' => time(),
+                ])
+                ->execute();
+
+            $expectedList .= ','. $uid;
+        }
+
+        return trim($expectedList,',');
+    }
+
+    /**
+     * @param int $numberOfPages
+     * @return void
+     */
+    protected function deleteRecursivePageStructure(int $numberOfPages): void
+    {
+
+        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('pages');
+
+        $queryBuilder->delete('pages')
+            ->where('uid <= ' . $numberOfPages);
+    }
 
     /**
      * TearDown

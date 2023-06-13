@@ -39,7 +39,6 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findAllWithPublisher(array $pagesUidList = [], bool $respectFields = true): array
     {
-
         $fileTable = 'sys_file';
         $fileMetaTable = 'sys_file_metadata';
         $fileReferenceTable = 'sys_file_reference';
@@ -153,6 +152,7 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         ';
 
         $query = $this->createQuery();
+
         $query->statement($statement);
 
         return $query->execute(true);
