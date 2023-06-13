@@ -15,8 +15,12 @@ namespace Madj2k\CoreExtended\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryHelper;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
 
@@ -77,12 +81,12 @@ class QueryUtility
         /**
          * @todo Problem with newsletter: hidden elements are included
         $showHidden = (bool)$context->getPropertyFromAspect('visibility',
-            $table === 'pages' ? 'includeHiddenPages' : 'includeHiddenContent',
-            false
+        $table === 'pages' ? 'includeHiddenPages' : 'includeHiddenContent',
+        false
         );
 
         if ($showHidden) {
-            return '';
+        return '';
         }*/
 
         $ctrl = $GLOBALS['TCA'][$table]['ctrl'] ?? null;
@@ -126,7 +130,7 @@ class QueryUtility
                 );
             }
             // if (($ctrl['enablecolumns']['fe_group'] ?? false) && !($ignore_array['fe_group'] ?? false)) {
-                // currently we do not check for the groups here
+            // currently we do not check for the groups here
             // }
         }
 
@@ -152,11 +156,11 @@ class QueryUtility
         /**
          * @todo Problem with newsletter: hidden elements are included
         $showHidden = (bool)$context->getPropertyFromAspect('visibility',
-            $table === 'pages' ? 'includeHiddenPages' : 'includeHiddenContent',
-            false
+        $table === 'pages' ? 'includeHiddenPages' : 'includeHiddenContent',
+        false
         );
         if ($showHidden) {
-            return '';
+        return '';
         }*/
 
         if (empty($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
@@ -232,6 +236,125 @@ class QueryUtility
         );
 
         return empty($constraints) ? '' : ' AND ' . $expressionBuilder->andX(...$constraints);
+    }
+
+
+    /**
+     * Recursively fetch all descendants of a given page - slightly modified version of core-method with applied caching
+     *
+     * @param int $id uid of the page
+     * @param int $depth
+     * @param int $begin
+     * @param string $permClause
+     * @param bool $isSubCall
+     * @return string comma separated list of descendant pages
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @see \TYPO3\CMS\Core\Database\QueryGenerator::getTreeList()
+     */
+    static public function getTreeList(
+        int $id,
+        int $depth = 99999,
+        int $begin = 0,
+        string $permClause = '',
+        bool $isSubCall = false
+    ): string {
+
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('tx_coreextended_treelist');
+        $cacheEntryIdentifier = 'Treelist_' . $id . '_' . md5($depth . '_' . $begin . '_' . $permClause);
+        $queryBuilder = \Madj2k\CoreExtended\Utility\GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('pages');
+
+        if (
+            !$isSubCall
+            && ($cache->has($cacheEntryIdentifier))
+            && ($cacheResult = $cache->get($cacheEntryIdentifier))
+            && is_array($cacheResult)
+            && (! empty($cacheResult['pageUids']))
+            && (! empty($cacheResult['cacheTstamp']))
+        ) {
+
+            // check for new pages in existing page tree, based on timestamp of cache
+            $count = $queryBuilder->count('uid')
+                ->from('pages')
+                ->where(
+                    $queryBuilder->expr()->in(
+                        'pid',
+                        GeneralUtility::trimExplode(
+                            ',',
+                            preg_replace('/[^0-9,]+,/', '', $cacheResult['pageUids']),
+                            true
+                        )
+                    ),
+                    $queryBuilder->expr()->gt(
+                        'crdate',
+                        $queryBuilder->createNamedParameter(
+                            $cacheResult['cacheTstamp'],
+                            \PDO::PARAM_INT
+                        )
+                    ),
+                    QueryHelper::stripLogicalOperatorPrefix($permClause)
+                )
+                ->execute()
+                ->fetchOne();
+
+            if (! $count) {
+                return $cacheResult['pageUids'];
+            }
+        }
+
+        if ($id < 0) {
+            $id = abs($id);
+        }
+
+        if ($begin === 0) {
+            $theList = $id;
+        } else {
+            $theList = '';
+        }
+
+        if ($id && $depth > 0) {
+            $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+            $statement = $queryBuilder->select('uid', 'no_index')
+                ->from('pages')
+                ->where(
+                    $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)),
+                    QueryHelper::stripLogicalOperatorPrefix($permClause)
+                )
+                ->execute();
+
+            while ($row = $statement->fetch()) {
+                if ($begin <= 0) {
+                    $theList .= ',' . $row['uid'];
+                }
+                if (
+                    ($depth > 1)
+                    && (! $row['no_index'])
+                ){
+                    $theSubList = self::getTreeList($row['uid'], $depth - 1, $begin - 1, $permClause, true);
+                    if (!empty($theList) && !empty($theSubList) && ($theSubList[0] !== ',')) {
+                        $theList .= ',';
+                    }
+                    $theList .= $theSubList;
+                }
+            }
+        }
+
+        if (!$isSubCall) {
+            $cache->set(
+                $cacheEntryIdentifier,
+                [
+                    'pageUids' => $theList,
+                    'cacheTstamp' => time(),
+                ],
+                array(
+                    'tx_coreextended_treelist'
+                ),
+                0 // forever
+            );
+        }
+
+        return $theList;
     }
 
 

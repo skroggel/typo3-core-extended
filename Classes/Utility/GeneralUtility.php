@@ -152,59 +152,6 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 
 
     /**
-     * Recursively fetch all descendants of a given page - slightly modified version of core-method
-     *
-     * @param int $id uid of the page
-     * @param int $depth
-     * @param int $begin
-     * @param string $permClause
-     * @return string comma separated list of descendant pages
-     * @see \TYPO3\CMS\Core\Database\QueryGenerator::getTreeList()
-     */
-    static public function getTreeList(int $id, int $depth, int $begin = 0, string $permClause = ''): string
-    {
-
-        if ($id < 0) {
-            $id = abs($id);
-        }
-        if ($begin === 0) {
-            $theList = $id;
-        } else {
-            $theList = '';
-        }
-        if ($id && $depth > 0) {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-            $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
-            $statement = $queryBuilder->select('uid', 'no_index')
-                ->from('pages')
-                ->where(
-                    $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)),
-                    QueryHelper::stripLogicalOperatorPrefix($permClause)
-                )
-                ->execute();
-
-            while ($row = $statement->fetch()) {
-                if ($begin <= 0) {
-                    $theList .= ',' . $row['uid'];
-                }
-                if (
-                    ($depth > 1)
-                    && (! $row['no_index'])
-                ){
-                    $theSubList = self::getTreeList($row['uid'], $depth - 1, $begin - 1, $permClause);
-                    if (!empty($theList) && !empty($theSubList) && ($theSubList[0] !== ',')) {
-                        $theList .= ',';
-                    }
-                    $theList .= $theSubList;
-                }
-            }
-        }
-
-        return $theList;
-    }
-
-
-    /**
      * Allows multiple delimiter replacement for explode
      *
      * @param array  $delimiters

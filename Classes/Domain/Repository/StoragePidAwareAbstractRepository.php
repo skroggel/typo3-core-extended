@@ -34,6 +34,12 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
 
 
     /**
+     * @var string
+     */
+    protected string $storagePids = '';
+
+
+    /**
      * Some important things on init
      *
      * @return void
@@ -53,15 +59,23 @@ abstract class StoragePidAwareAbstractRepository extends \TYPO3\CMS\Extbase\Pers
             $extensionName = self::extensionNameForStoragePid;
         }
 
-        $settings = GeneralUtility::getTypoScriptConfiguration(
-            $extensionName,
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
-        );
+        if (intval($this->storagePids) > 0) {
+            $storagePids = GeneralUtility::intExplode(
+                ',',
+                $this->storagePids
+            );
+        } else {
 
-        $storagePids = GeneralUtility::intExplode(
-            ',',
-            $settings['persistence']['storagePid'] ?? ''
-        );
+            $settings = GeneralUtility::getTypoScriptConfiguration(
+                $extensionName,
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
+            );
+
+            $storagePids = GeneralUtility::intExplode(
+                ',',
+                $settings['persistence']['storagePid'] ?? ''
+            );
+        }
 
         $querySettings = $this->createQuery()->getQuerySettings();
         $querySettings->setStoragePageIds($storagePids);

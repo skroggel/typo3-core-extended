@@ -60,6 +60,16 @@ call_user_func(
             ],
         ];
 
+        $cacheIdentifier = \Madj2k\CoreExtended\Utility\GeneralUtility::underscore($extKey). '_treelist';
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier] = [
+            'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+            'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
+            'groups' => [
+                'all',
+                'pages',
+            ],
+        ];
+
         //=================================================================
         // Add TypoScript automatically
         //=================================================================
@@ -166,7 +176,7 @@ call_user_func(
             ),
         );
     },
-    'tx_accelerator'
+    'tx_coreextended'
 );
 
 

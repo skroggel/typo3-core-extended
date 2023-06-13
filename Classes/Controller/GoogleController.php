@@ -17,6 +17,7 @@ namespace Madj2k\CoreExtended\Controller;
 use Madj2k\Accelerator\Cache\CacheAbstract;
 use Madj2k\CoreExtended\Cache\SitemapCache;
 use Madj2k\CoreExtended\Domain\Repository\PagesRepository;
+use Madj2k\CoreExtended\Utility\QueryUtility;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -61,11 +62,9 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         if (!$sitemap = $cache->getContent()) {
 
             $currentPid = $GLOBALS['TSFE']->id;
-            $depth = 999999;
-
             $treeList = explode(
                 ',',
-                \Madj2k\CoreExtended\Utility\GeneralUtility::getTreeList($currentPid , $depth, 0, 1)
+                QueryUtility::getTreeList($currentPid)
             );
 
             $pages = $this->pagesRepository->findByUidListAndDokTypes($treeList);

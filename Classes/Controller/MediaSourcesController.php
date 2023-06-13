@@ -15,8 +15,8 @@ namespace Madj2k\CoreExtended\Controller;
  */
 
 use Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository;
-use TYPO3\CMS\Core\Database\QueryGenerator;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\GeneralUtility;
+use Madj2k\CoreExtended\Utility\QueryUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
 /**
@@ -44,6 +44,7 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @return void
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
     public function listAction()
     {
@@ -57,11 +58,9 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         ) {
 
             // now get all pages below the root page
-            /** @var \TYPO3\CMS\Core\Database\QueryGenerator $queryGenerator */
-            $queryGenerator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(QueryGenerator::class);
-            $childPidList = $queryGenerator->getTreeList($rootPage, 999999, 0, 1);
+            $childPidList = QueryUtility::getTreeList($rootPage);
             if ($childPidList) {
-                $pagesList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $childPidList);
+                $pagesList = GeneralUtility::trimExplode(',', $childPidList);
             }
         }
 
