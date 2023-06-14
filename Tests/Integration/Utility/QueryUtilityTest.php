@@ -620,7 +620,7 @@ class QueryUtilityTest extends FunctionalTestCase
      * @test
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
-    public function getTreeListReturnsListOfPages()
+    public function getTreeListReturnsListOfPagesIncludingNoIndex()
     {
         /**
          * Scenario:
@@ -630,6 +630,7 @@ class QueryUtilityTest extends FunctionalTestCase
          * When the method is called
          * Then a string is returned
          * Then this string is a comma-separated list of these pages
+         * Then all pages are returned
          */
 
         $numberOfPages = 30;
@@ -639,15 +640,55 @@ class QueryUtilityTest extends FunctionalTestCase
             ->getCache('tx_coreextended_treelist')
             ->flush();
 
+        $result = QueryUtility::getTreeList(1);
         self::assertEquals(
             $expectedList,
-            QueryUtility::getTreeList(1)
+            $result
         );
+
+        self::assertCount(30, explode(',', $result ));
 
         $this->deleteRecursivePageStructure($numberOfPages);
 
     }
 
+    /**
+     * @test
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     */
+    public function getTreeListReturnsListOfPagesExcludingNoIndex()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a complex list of pages
+         * Given half of the pages is marked as no_index
+         * Given the treeList is not cached
+         * When the method is called with excludeNoInde =true
+         * Then a string is returned
+         * Then this string is a comma-separated list of these pages
+         * Then only the pages with no_index=0 are returned
+         */
+
+        $numberOfPages = 30;
+        $expectedList = $this->createRecursivePageStructure($numberOfPages, 0,false);
+        $expectedListTwo = $this->createRecursivePageStructure($numberOfPages, $numberOfPages,true);
+
+        GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('tx_coreextended_treelist')
+            ->flush();
+
+        $result = QueryUtility::getTreeList(1, 99999, 0, '', true);
+        self::assertEquals(
+            $expectedList,
+            $result
+        );
+
+        self::assertCount(30 , explode(',', $result ));
+
+        $this->deleteRecursivePageStructure($numberOfPages);
+
+    }
 
     /**
      * @test
@@ -801,10 +842,15 @@ class QueryUtilityTest extends FunctionalTestCase
     /**
      * @param int $numberOfPages
      * @param int $offset
+     * @param bool $excludeNoIndex
      * @return string
      */
-    protected function createRecursivePageStructure (int $numberOfPages, int $offset = 0): string
-    {
+    protected function createRecursivePageStructure (
+        int $numberOfPages,
+        int $offset = 0,
+        bool $noIndex = false
+    ): string {
+
         if ($offset < 0) {
             $offset = 0;
         }
@@ -825,6 +871,7 @@ class QueryUtilityTest extends FunctionalTestCase
                     'uid' => $offset + 1,
                     'pid' => '0',
                     'is_siteroot' => '1',
+                    'no_index' => intval($noIndex),
                     'tstamp' => time(),
                     'crdate' => time(),
                 ])
@@ -847,6 +894,7 @@ class QueryUtilityTest extends FunctionalTestCase
                     'uid' => $uid,
                     'pid' => $uid - 1,
                     'is_siteroot' => '0',
+                    'no_index' => intval($noIndex),
                     'tstamp' => time(),
                     'crdate' => time(),
                 ])
