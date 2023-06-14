@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class QueryUtility
@@ -246,6 +247,7 @@ class QueryUtility
      * @param int $depth
      * @param int $begin
      * @param string $permClause
+     * @param bool $excludeNoIndex
      * @param bool $isSubCall
      * @return string comma separated list of descendant pages
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
@@ -256,6 +258,7 @@ class QueryUtility
         int $depth = 99999,
         int $begin = 0,
         string $permClause = '',
+        bool $excludeNoIndex = false,
         bool $isSubCall = false
     ): string {
 
@@ -286,7 +289,7 @@ class QueryUtility
                         )
                     ),
                     $queryBuilder->expr()->gt(
-                        'crdate',
+                        'tstamp',
                         $queryBuilder->createNamedParameter(
                             $cacheResult['cacheTstamp'],
                             \PDO::PARAM_INT
@@ -319,19 +322,27 @@ class QueryUtility
                 ->from('pages')
                 ->where(
                     $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)),
-                    QueryHelper::stripLogicalOperatorPrefix($permClause)
+                    $queryBuilder->expr()->eq('sys_language_uid', 0)
                 )
-                ->execute();
+                ->orderBy('uid');
 
+            if ($permClause !== '') {
+                $queryBuilder->andWhere(QueryHelper::stripLogicalOperatorPrefix($permClause));
+            }
+
+            $statement = $queryBuilder->execute();
             while ($row = $statement->fetch()) {
+
+                if (($row['no_index']) && $excludeNoIndex) {
+                    continue;
+                }
+
                 if ($begin <= 0) {
                     $theList .= ',' . $row['uid'];
                 }
-                if (
-                    ($depth > 1)
-                    && (! $row['no_index'])
-                ){
-                    $theSubList = self::getTreeList($row['uid'], $depth - 1, $begin - 1, $permClause, true);
+
+                if ($depth > 1) {
+                    $theSubList = self::getTreeList($row['uid'], $depth - 1, $begin - 1, $permClause, $excludeNoIndex, true);
                     if (!empty($theList) && !empty($theSubList) && ($theSubList[0] !== ',')) {
                         $theList .= ',';
                     }

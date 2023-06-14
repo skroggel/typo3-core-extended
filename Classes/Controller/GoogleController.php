@@ -64,7 +64,7 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $currentPid = $GLOBALS['TSFE']->id;
             $treeList = explode(
                 ',',
-                QueryUtility::getTreeList($currentPid)
+                QueryUtility::getTreeList($currentPid, 99999, 0, '', true)
             );
 
             $pages = $this->pagesRepository->findByUidListAndDokTypes($treeList);
