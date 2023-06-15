@@ -41,16 +41,17 @@ call_user_func(
         // replace default fields with ours
         foreach ($GLOBALS['TCA']['sys_file_metadata']['types'] as $type => &$config) {
 
-            // remove spaces
-            $config = str_replace(' ', '', $config);
-
             // replace old ones
             foreach (['creator', 'creator_tool', 'publisher', 'source', 'copyright'] as $field) {
                 $config = str_replace($field . ',', '', $config);
             }
 
             // insert new ones
-            $config = str_replace('LLL:EXT:filemetadata/Resources/Private/Language/locallang_tca.xlf:tabs.metadata,', 'LLL:EXT:filemetadata/Resources/Private/Language/locallang_tca.xlf:tabs.metadata,' . implode(',', array_keys($tempColumnsMedia['columns'])) . ',', $config);
+            $config = str_replace(
+                'LLL:EXT:filemetadata/Resources/Private/Language/locallang_tca.xlf:tabs.metadata,',
+                'LLL:EXT:filemetadata/Resources/Private/Language/locallang_tca.xlf:tabs.metadata,' . implode(',', array_keys($tempColumnsMedia['columns'])) . ',',
+                $config
+            );
         }
 
     },
