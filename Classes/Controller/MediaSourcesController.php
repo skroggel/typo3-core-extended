@@ -17,6 +17,7 @@ namespace Madj2k\CoreExtended\Controller;
 use Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use Madj2k\CoreExtended\Utility\QueryUtility;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
 /**
@@ -77,49 +78,56 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      *
      * @return void
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @todo has no good performance. For the time being we just display a link to the list-page
      */
     public function listPageAction()
     {
 
-        // set page list - include current page
-        $pagesList = array();
+        $this->view->assign('pid', $GLOBALS['TSFE']->id);
 
-        // check if some other fields are to be included, too
-        if ($fieldList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->settings['includeFieldsList'], true)) {
+        if (! $this->settings['resources']['listPid']) {
 
-            // get PageRepository and rootline
-            $rootlinePages = GeneralUtility::makeInstance(RootlineUtility::class, intval($GLOBALS['TSFE']->id))->get();
+            // set page list - include current page
+            $pagesList = array();
 
-            // go through all defined fields
-            foreach ($fieldList as $includeField) {
-                $cleanedIncludeField = str_replace('pages.', '', $includeField);
+            // check if some other fields are to be included, too
+            if ($fieldList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->settings['resources']['includeFieldsList'], true)) {
 
-                // if the field refers to tt_content we take the current page
-                if ((strpos($includeField, 'tt_content.') === 0)) {
-                    $pagesList[intval($GLOBALS['TSFE']->id)][] = $includeField;
+                // get PageRepository and rootline
+                $rootlinePages = GeneralUtility::makeInstance(RootlineUtility::class, intval($GLOBALS['TSFE']->id))->get();
 
-                } else {
+                // go through all defined fields
+                foreach ($fieldList as $includeField) {
+                    $cleanedIncludeField = str_replace('pages.', '', $includeField);
 
-                    // go through the pageTree and check for values in this field
-                    // if there is a value we take this page and continue to the next field
-                    // otherwise we at least take the rootpage for this field
-                    foreach ($rootlinePages as $page => $values) {
-                        if (
-                            ($values[$cleanedIncludeField] > 0)
-                            || ($values['is_siteroot'])
-                        ) {
+                    // if the field refers to tt_content we take the current page
+                    if ((strpos($includeField, 'tt_content.') === 0)) {
+                        $pagesList[intval($GLOBALS['TSFE']->id)][] = $includeField;
 
-                            $pagesList[intval($values['uid'])][] = $includeField;
-                            continue 2;
-                            //===
+                    } else {
+
+                        // go through the pageTree and check for values in this field
+                        // if there is a value we take this page and continue to the next field
+                        // otherwise we at least take the rootpage for this field
+                        foreach ($rootlinePages as $page => $values) {
+                            if (
+                                ($values[$cleanedIncludeField] > 0)
+                                || ($values['is_siteroot'])
+                            ) {
+
+                                $pagesList[intval($values['uid'])][] = $includeField;
+                                continue 2;
+                                //===
+                            }
                         }
                     }
                 }
             }
+
+            $mediaSources = $this->mediaSourcesRepository->findAllWithPublisher($pagesList);
+            $this->view->assign('mediaSources', $mediaSources);
         }
 
-        $mediaSources = $this->mediaSourcesRepository->findAllWithPublisher($pagesList);
-        $this->view->assign('mediaSources', $mediaSources);
     }
 
 }

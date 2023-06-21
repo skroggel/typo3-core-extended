@@ -10,6 +10,14 @@
                 <target>%s Bildquellen.</target>
             </trans-unit>
 
+
+            <!-- Templates/MediaSources/List -->
+            <trans-unit id="templates.mediaSources.listPage.labelClick">
+                <source>Click here for overview-page</source>
+                <target>Hier klicken, um zur Übersicht zu gelangen</target>
+            </trans-unit>
+
+
 			<!-- Partials/CaptchaElement.html-->
 			<trans-unit id="partials_captcha.spam_protection">
 				<source>Spam protection</source>
