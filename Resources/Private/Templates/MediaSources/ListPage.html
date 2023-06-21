@@ -9,25 +9,32 @@
         <f:render partial="FlashMessages" arguments="{_all}" />
 
         <f:if condition="{mediaSources}">
-            <f:for each="{mediaSources}" as="mediaSource" iteration="iterator">
-                <f:if condition="{mediaSource.imageTitle}">
-                    <f:then>
-                        {mediaSource.imageTitle}
-                    </f:then>
-                    <f:else>
-                        <f:if condition="{mediaSource.imageDescription}">
-                            <f:then>
-                                {mediaSource.imageDescription}:
-                            </f:then>
-                            <f:else>
-                                {mediaSource.fileName}:
-                            </f:else>
-                        </f:if>
-                    </f:else>
+            <f:then>
+                <f:for each="{mediaSources}" as="mediaSource" iteration="iterator">
+                    <f:if condition="{mediaSource.imageTitle}">
+                        <f:then>
+                            {mediaSource.imageTitle}
+                        </f:then>
+                        <f:else>
+                            <f:if condition="{mediaSource.imageDescription}">
+                                <f:then>
+                                    {mediaSource.imageDescription}:
+                                </f:then>
+                                <f:else>
+                                    {mediaSource.fileName}:
+                                </f:else>
+                            </f:if>
+                        </f:else>
+                    </f:if>
+                    <coreExtended:mediaCopyright originator="{mediaSource.publisher}" source="{mediaSource.distributerName}" />
+                    <f:if condition="{iterator.isLast} != 1"> &ndash; </f:if>
+                </f:for>
+            </f:then>
+            <f:else>
+                <f:if condition="{settings.resources.listPid}">
+                    <f:link.page pageUid="{settings.resources.listPid}" section="pid-{pid}"><f:translate key="templates.mediaSources.listPage.labelClick" /></f:link.page>
                 </f:if>
-                <coreExtended:mediaCopyright originator="{mediaSource.publisher}" source="{mediaSource.distributerName}" />
-                <f:if condition="{iterator.isLast} != 1"> &ndash; </f:if>
-            </f:for>
+            </f:else>
         </f:if>
     </f:section>
 </html>

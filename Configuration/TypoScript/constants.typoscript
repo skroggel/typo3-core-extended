@@ -16,8 +16,13 @@ plugin.tx_coreextended {
 
 	settings {
 
-        # cat=plugin.tx_coreextended//a; type=string; label=Comma-separated list of fields to look up when searching for images
-        includeFieldsList =
+        resources {
+            # cat=plugin.tx_coreextended//a; type=string; label=Comma-separated list of fields to look up when searching for images
+            includeFieldsList =
+
+            #  cat=plugin.tx_coreextended//a; type=integer; label=PageUid of resource-list plugin
+            listPid =
+        }
 
          openGraph {
 

@@ -229,6 +229,10 @@ plugin.tx_coreextended {
     #===============================================================
     settings {
         includeFieldsList = {$plugin.tx_coreextended.settings.includeFieldsList}
+        resources {
+            includeFieldsList = {$plugin.tx_coreextended.settings.resources.includeFieldsList}
+            listPid = {$plugin.tx_coreextended.settings.resources.listPid}
+        }
         openGraph {
             websiteUrl = {$plugin.tx_coreextended.settings.openGraph.websiteUrl}
             websiteName = {$plugin.tx_coreextended.settings.openGraph.websiteName}

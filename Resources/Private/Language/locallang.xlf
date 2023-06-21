@@ -9,6 +9,14 @@
                 <source>%s media sources.</source>
             </trans-unit>
 
+
+            <!-- Templates/MediaSources/List -->
+            <trans-unit id="templates.mediaSources.listPage.labelClick">
+                <source>Click here for overview-page</source>
+            </trans-unit>
+
+
+
             <!-- Partials/CaptchaElement.html-->
             <trans-unit id="partials_captcha.spam_protection">
                 <source>Spam protection</source>

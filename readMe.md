@@ -42,7 +42,7 @@ imageResources {
     view =< plugin.tx_coreextended.view
     persistence =< plugin.tx_coreextended.persistence
     settings =< plugin.tx_coreextended.settings
-    settings.includeFieldsList = pages.tx_coreextended_preview_image, pages.media, tt_content.image, tt_content.assets
+    settings.resources.includeFieldsList = pages.tx_coreextended_preview_image, pages.media, tt_content.image, tt_content.assets
 }
 ```
 ## Google Sitemap
