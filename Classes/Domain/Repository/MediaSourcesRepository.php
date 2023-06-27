@@ -144,8 +144,13 @@ class MediaSourcesRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 ' . $this->getWhereClauseForEnabledFields($fileReferenceTable) .
             ((is_array($whereQuery) && count($whereQuery) > 0) ? ' AND (' . implode(' OR ', $whereQuery) . ')' : '') . '
 
-            GROUP BY ' . $fileReferenceTable . '.uid_local
-
+            GROUP BY ' . $fileReferenceTable . '.uid_local,
+                ' . $mediaSourcesTable . '.name,
+                ' . $mediaSourcesTable . '.url,
+                ' . $fileMetaTable . '.tx_coreextended_publisher,
+                ' . $fileMetaTable . '.title,
+                ' . $fileMetaTable . '.description,
+                ' . $fileTable . '.name
             ORDER BY
                 ' . $mediaSourcesTable . '.name ' . \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING . ',
                 ' . $fileMetaTable . '.tx_coreextended_publisher ' . \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING . '
