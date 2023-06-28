@@ -18,6 +18,8 @@ use Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use Madj2k\CoreExtended\Utility\QueryUtility;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
 /**
@@ -30,7 +32,6 @@ use TYPO3\CMS\Core\Utility\RootlineUtility;
  */
 class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-
     /**
      * mediaSourcesRepository
      *
@@ -38,6 +39,12 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected MediaSourcesRepository $mediaSourcesRepository;
+
+
+    /**
+     * @var \TYPO3\CMS\Core\Log\Logger|null
+     */
+    protected ?Logger $logger = null;
 
 
     /**
@@ -122,12 +129,38 @@ class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                         }
                     }
                 }
+
+                $this->getLogger()->log(
+                    \TYPO3\CMS\Core\Log\LogLevel::INFO,
+                    'Showing referenced images of page.'
+                );
+
+
+            } else {
+                $this->getLogger()->log(
+                    \TYPO3\CMS\Core\Log\LogLevel::INFO,
+                    'Showing only link to site-wide image list.'
+                );
             }
 
             $mediaSources = $this->mediaSourcesRepository->findAllWithPublisher($pagesList);
             $this->view->assign('mediaSources', $mediaSources);
         }
+    }
 
+    /**
+     * Returns logger instance
+     *
+     * @return \TYPO3\CMS\Core\Log\Logger
+     */
+    protected function getLogger(): Logger
+    {
+
+        if (!$this->logger instanceof \TYPO3\CMS\Core\Log\Logger) {
+            $this->logger = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+        }
+
+        return $this->logger;
     }
 
 }
