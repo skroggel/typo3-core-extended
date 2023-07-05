@@ -637,7 +637,7 @@ class QueryUtilityTest extends FunctionalTestCase
         $expectedList = $this->createRecursivePageStructure($numberOfPages);
 
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('tx_coreextended_treelist')
+            ->getCache('core_extended_treelist')
             ->flush();
 
         $result = QueryUtility::getTreeList(1);
@@ -675,7 +675,7 @@ class QueryUtilityTest extends FunctionalTestCase
         $expectedListTwo = $this->createRecursivePageStructure($numberOfPages, $numberOfPages,true);
 
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('tx_coreextended_treelist')
+            ->getCache('core_extended_treelist')
             ->flush();
 
         $result = QueryUtility::getTreeList(1, 99999, 0, '', true);
@@ -713,7 +713,7 @@ class QueryUtilityTest extends FunctionalTestCase
         $expectedList = $this->createRecursivePageStructure($numberOfPages);
 
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('tx_coreextended_treelist')
+            ->getCache('core_extended_treelist')
             ->flush();
 
         $startime = microtime(true);
@@ -765,7 +765,7 @@ class QueryUtilityTest extends FunctionalTestCase
         $expectedList = $this->createRecursivePageStructure($numberOfPages);
 
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('tx_coreextended_treelist')
+            ->getCache('core_extended_treelist')
             ->flush();
 
         $resultFirst = QueryUtility::getTreeList(1,9999, 0);
@@ -814,7 +814,7 @@ class QueryUtilityTest extends FunctionalTestCase
         $expectedList = $this->createRecursivePageStructure($numberOfPages);
 
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('tx_coreextended_treelist')
+            ->getCache('core_extended_treelist')
             ->flush();
 
         $resultFirst = QueryUtility::getTreeList(1,9999, 0);
