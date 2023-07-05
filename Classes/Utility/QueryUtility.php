@@ -262,7 +262,7 @@ class QueryUtility
         bool $isSubCall = false
     ): string {
 
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('tx_coreextended_treelist');
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('core_extended_treelist');
         $cacheEntryIdentifier = 'Treelist_' . $id . '_' . md5($depth . '_' . $begin . '_' . $permClause);
         $queryBuilder = \Madj2k\CoreExtended\Utility\GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('pages');
@@ -359,7 +359,7 @@ class QueryUtility
                     'cacheTstamp' => time(),
                 ],
                 array(
-                    'tx_coreextended_treelist'
+                    'core_extended_treelist'
                 ),
                 0 // forever
             );

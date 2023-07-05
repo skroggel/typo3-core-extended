@@ -176,7 +176,7 @@ call_user_func(
             ),
         );
     },
-    'tx_coreextended'
+    'core_extended'
 );
 
 
