@@ -1,0 +1,17 @@
+plugin.tx_coreextended {
+    persistence {
+        storagePid = 1
+    }
+
+    settings {
+    }
+}
+
+// for cronjob
+module.tx_coreextended< plugin.tx_coreextended
+
+page = PAGE
+page {
+    10 = TEXT
+    10.value = Hallo Welt!
+}
