@@ -11,7 +11,6 @@
 		<f:if condition="{mediaSources}">
 			<ul class="media-sources-list">
 				<f:for each="{mediaSources}" as="mediaSource">
-                    <f:debug>{mediaSource}</f:debug>
 					<f:for each="{coreExtended:pageListExplode(list:'{mediaSource.pagesList}', delimiter:'|' delimiterTwo:'###')}" as="pageTitle" key="pageUid">
 						<li id="pid-{pageUid}">
 							<f:link.page pageUid="{pageUid}" rel="nofollow">{pageTitle}</f:link.page>:
