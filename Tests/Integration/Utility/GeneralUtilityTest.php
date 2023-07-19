@@ -468,6 +468,26 @@ class GeneralUtilityTest extends FunctionalTestCase
     }
 
     //=============================================
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getUniqueRandomNumberThrowsException ()
+    {
+        /**
+         * Scenario:
+         *
+         * When the method is called with a number that is too big
+         * Then an exception-instance of \Madj2k\CoreExtended\Exception is thrown
+         * Then the exception-code is 1689765905
+         */
+        self::expectException(\Madj2k\CoreExtended\Exception::class);
+        self::expectExceptionCode(1689765905);
+
+        $string = $this->subject::getUniqueRandomNumber(25);
+        self::assertEquals(8, strlen(strval($string)));
+
+    }
 
     /**
      * @test
@@ -527,7 +547,7 @@ class GeneralUtilityTest extends FunctionalTestCase
          * Given a relative path
          * When the method is called
          * Then an exception-instance of \Madj2k\CoreExtended\Exception is thrown
-         * Then the esception-code is 1682006516
+         * Then the exception-code is 1682006516
          */
         self::expectException(\Madj2k\CoreExtended\Exception::class);
         self::expectExceptionCode(1682006516);
