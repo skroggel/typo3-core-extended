@@ -14,6 +14,7 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\CoreExtended\Utility\StringUtility;
 use Madj2k\Postmaster\Cache\RenderCache;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
@@ -463,6 +464,51 @@ class GeneralUtilityTest extends FunctionalTestCase
 
         $string = $this->subject::getUniqueRandomString();
         self::assertEquals($this->subject::RANDOM_STRING_LENGTH, strlen($string));
+
+    }
+
+    //=============================================
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getUniqueRandomNumberGeneratesRandomNumbers ()
+    {
+        /**
+         * Scenario:
+         *
+         * When the method is called multiple times
+         * Then each time a number is returned
+         * Then every number is unique
+         */
+
+        $arrayOfNumbers = [];
+        for ($i = 1; $i <= 10; $i++) {
+
+            $number = $this->subject::getUniqueRandomNumber();
+            self::assertNotContains($number, $arrayOfNumbers);
+            $arrayOfNumbers[] = $number;
+        }
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getUniqueRandomNumberReturnsNumberOfDefinedLength ()
+    {
+        /**
+         * Scenario:
+         *
+         * When the method is called with a defined length-parameter
+         * Then a number is returned
+         * Then the number has the given length
+         */
+
+        $string = $this->subject::getUniqueRandomNumber(8);
+        self::assertEquals(8, strlen(strval($string)));
 
     }
 
