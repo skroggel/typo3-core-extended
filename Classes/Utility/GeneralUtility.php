@@ -316,6 +316,22 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
 
 
     /**
+     * Generate a random number
+     *
+     * @param int $length
+     * @return int
+     * @throws \Exception
+     */
+    public static function getUniqueRandomNumber(int $length = 10): int
+    {
+        $min = pow(10, $length-1);
+        $max = pow(10, $length) -1;
+
+        return random_int($min, $max);
+    }
+
+
+    /**
      * .htaccess-based protection for SimpleFileBackend-Cache
      *
      * @param string $folderToProtect
