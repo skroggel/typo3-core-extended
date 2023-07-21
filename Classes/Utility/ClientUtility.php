@@ -45,4 +45,18 @@ class ClientUtility
 
         return $remoteAddress ?: '127.0.0.1';
     }
+
+
+    /**
+     * Returns a client-based hash for the current day
+     *
+     * @return string
+     */
+    public static function getClientHash(): string
+    {
+        $clientIp = self::getIp();
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+        return md5($clientIp . '-' . $userAgent);
+    }
 }

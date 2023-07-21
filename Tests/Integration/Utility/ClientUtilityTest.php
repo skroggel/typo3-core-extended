@@ -125,6 +125,30 @@ class ClientUtilityTest extends FunctionalTestCase
     #==============================================================================
 
     /**
+     * @test
+     */
+    public function getClientHashReturnsMd5 ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given REMOTE_ADDR is set in globalVar $_SERVER
+         * Given HTTP_USER_AGENT is set in globalVar $_SERVER
+         * When the method is called
+         * Then a md5-value is returned that consists of both globalVar-settings
+         */
+
+        $_SERVER['REMOTE_ADDR'] = '1.1.2.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7) Gecko/20040803 Firefox/0.9.3';
+
+        $expected = md5($_SERVER['REMOTE_ADDR'] . '-' . $_SERVER['HTTP_USER_AGENT']);
+
+        self::assertEquals($expected, ClientUtility::getClientHash());
+    }
+
+    #==============================================================================
+
+    /**
      * TearDown
      */
     protected function teardown(): void
