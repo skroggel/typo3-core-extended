@@ -38,13 +38,15 @@ class CsvUtility
      * @param \Iterator $iteratable
      * @param string $fileName
      * @param string $separator The CSV file separator. Default is ";"
+     * @param array $excludeProperties
      * @return void
-     * @throws \Madj2k\CoreExtended\Exception
+     * @throws Exception
      */
     public static function createCsv(
         \Iterator $iteratable,
         string $fileName = '',
-        string $separator = ';'
+        string $separator = ';',
+        array $excludeProperties = []
     ): void {
 
         if (! $iteratable instanceof \Countable) {
@@ -76,7 +78,10 @@ class CsvUtility
             // get some primary properties in the order we define
             foreach ($primaryProperties as $property) {
                 $getter = 'get' . ucfirst($property);
-                if (method_exists($firstModel, $getter)) {
+                if (
+                    (method_exists($firstModel, $getter))
+                    && (! in_array($property, $excludeProperties))
+                ){
                     $primaryPropertyGetterMap[$property] = $getter ;
                 }
             }
@@ -85,7 +90,10 @@ class CsvUtility
             foreach ($allMethods as $method) {
                 if (strpos($method, 'get') === 0) {
                     $property = lcfirst(str_replace('get', '', $method));
-                    if (! in_array($property, $primaryProperties)) {
+                    if (
+                        (! in_array($property, $primaryProperties))
+                        && (! in_array($property, $excludeProperties))
+                    ){
                         $secondaryPropertyGetterMap[$property] = $method;
                     }
                 }

@@ -146,6 +146,43 @@ class CsvUtilityTest extends FunctionalTestCase
         self::assertEquals($expected, $fileContent);
     }
 
+    /**
+     * @test
+     */
+    public function createCsvBuildsFileWithDataAndExcludesSomeProperties ()
+    {
+        /**
+         * Scenario:
+         *
+         * Given an objectStorage
+         * Given that objectStorage contains two objects
+         * Given two properties to exclude
+         * When the method is called
+         * Then a CSV-file with the content of the two objects is generated
+         * Then the two properties to exclude are not part of the csv
+         */
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage $objectStorage*/
+        $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
+        $fileName = Environment::getPublicPath() .'/typo3temp/test.csv';
+
+        $pages = $this->pagesRepository->findAll();
+
+        /** @var \Madj2k\CoreExtended\Domain\Model\Pages $page */
+        foreach ($pages as $page) {
+            $objectStorage->attach($page);
+        }
+
+        CsvUtility::createCsv($objectStorage, $fileName, ';', ['tstamp', 'txCoreextendedAlternativeTitle']);
+        $fileContent = file_get_contents($fileName);
+
+        $expected = 'uid;pid;crdate;hidden;deleted;sysLanguageUid;sorting;doktype;title;subtitle;abstract;description;noSearch;lastUpdated;txCoreextendedFeLayoutNextLevel;txCoreextendedPreviewImage;txCoreextendedOgImage;txCoreextendedFile;txCoreextendedCover' . "\n" .
+            '1;0;0;;0;0;0;1;Rootpage;;;;;0;0;;;;' . "\n" .
+            '2;1;0;;0;0;0;1;"Sub Page";;;;;0;0;;;;' . "\n";
+
+        self::assertEquals($expected, $fileContent);
+    }
+
 
     #==============================================================================
 
