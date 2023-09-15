@@ -184,14 +184,14 @@ lib.txCoreExtended {
 
             stdWrap {
                 typolink {
-                    parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pageNextRecursive
+                    parameter.cObject < lib.txCoreExtended.pageNavigation.pageNextRecursive
                     section = content
                     returnLast = url
                 }
             }
 
             if.isTrue.typolink {
-                parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pageNextRecursive
+                parameter.cObject < lib.txCoreExtended.pageNavigation.pageNextRecursive
                 section = content
                 returnLast = url
             }
@@ -205,7 +205,7 @@ lib.txCoreExtended {
 
             stdWrap {
                 typolink {
-                    parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pagePrevRecursive
+                    parameter.cObject < lib.txCoreExtended.pageNavigation.pagePrevRecursive
                     section = content
                     returnLast = url
                 }
@@ -213,7 +213,7 @@ lib.txCoreExtended {
 
             // if it is set
             if.isTrue.typolink {
-                parameter.cObject < lib.txRkwTemplate.navigation.readMore.variables.pagePrevRecursive
+                parameter.cObject < lib.txCoreExtended.pageNavigation.pagePrevRecursive
                 section = content
                 returnLast = url
             }
