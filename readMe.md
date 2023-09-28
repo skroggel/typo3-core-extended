@@ -102,6 +102,248 @@ routeEnhancers:
         routeFieldPattern: '^(.*)-(?P<uid>\d+)$'
         routeFieldResult: '{first_name|sanitized}-{last_name|sanitized}-{uid}'
 ```
+## CSV-Importer
+The CSV importer uses the TCA settings and can therefore be used for all tables in the context of TYPO3.
+The special feature is that the CSV importer also automatically takes over the TypeCasting and also supports the import into sub-tables within an import process.
+This makes it possible to import relationships between data records in different tables directly.
+The CSV importer automatically recognises whether an update or insert must take place when a uid is passed in the data records.
+By specifying search fields, it is also possible to search for existing data records based on defined table columns independently of specifying a uid. This prevents duplicate entries.
+In addition, standard values for fields can be transferred and restrictions can be set.
+### Usage
+First you have to initialize the CSV-Importer and also define the primary table for the import.
+```
+/** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+/** @var \Madj2k\CoreExtended\Transfer\CsvImporter $csvImporter */
+$csvImporter = $objectManager->get(
+            CsvImporter::class,
+            'fe_users' // your primary table
+        );
+```
+Then you set the file or string to be read. The data can be read in either via a file or a string:
+```
+$csvImporter->readCsv($stringOrFile);
+```
+Now you have to tell the CSV-Importer which tables it is allowed to import. This is important because it can also import related sub-tables.
+Make sure at least your primary table is included in the list. Otherwise nothing will be imported at all:
+```
+$csvImporter->setAllowedTables(['fe_users'])
+```
+After that you can add some additional settings described below.
+Finally you do the import by calling:
+```
+$csvImporter->import();
+```
+### Feature: Import relations
+Let's assume that for a table-field that creates a relation to another table, you want to import the corresponding data of the second table directly.
+This can be done by providing the header of the CSV data with a prefix that corresponds to the field name in the primary table. The CSV importer then automatically resolves the relation using the TCA configuration and imports both data sets.
+This is possible with unlimited nesting.
+
+#### Example: Insert only
+Example of a CSV-File for an import to `fe_users`:
+```
++------------+------------+-----------------+-----------------------+--------------------------+--------------------------------+
+| first_name | last_name  | usergroup.title | usergroup.description | usergroup.subgroup.title | usergroup.subgroup.description |
++------------+------------+-----------------+-----------------------+--------------------------+--------------------------------+
+| Sabine     | Mustermann | Usergroup 1     | Ipsum Bibsum          | Subgroup 1               | Sub-Ipsum Bibsum               |
+| Matthias   | Musterfrau | Usergroup 2     | Ipsum Lorem           | Subgroup 2               | Sub Ipsum Lorem                |
+| Sam        | Person     | Usergroup 3     | Lorem Ipsum           | Subgroup 3               | Sub Lorem Ipsum                |
++------------+------------+-----------------+-----------------------+--------------------------+--------------------------------+
+```
+It is important that the tables concerned are also permitted for the relations AND they have to be permitted for import:
+```
+$csvImporter->setAllowedTables(['fe_users', 'fe_groups']); // allows both tables for import
+$csvImporter->setAllowedRelationTables(
+[
+    'fe_users' => ['fe_groups'], // allows all realtions from fe_users to fe_groups
+    'fe_groups' => ['fe_groups'] // allows all relation from fe_groups to fe_groups (used for subgroups-property)
+]
+);
+```
+The import then results in three records per row that are directly linked to each other.
+1) A record in the table `fe_users` will be inserted and related via the field `usergroup` to
+2) a record "Usergroup X" in the table `fe_groups`, that will be inserted and which in turn will be related via the field `subgroup` to
+3) a record "Subgroup X" in the table `fe_groups`, that will be inserted and which represents the subgroup.
+
+This works because the TCA contains the relevant information about the relations of the relevant fields and it is automatically interpreted by the CSV-Importer
+
+fe_users:
+```
+return [
+    'columns' => [
+        'usergroup' => [
+            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:fe_users.usergroup',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'fe_groups',
+                'foreign_table_where' => 'ORDER BY fe_groups.title',
+                'enableMultiSelectFilterTextfield' => true,
+                'size' => 6,
+                'minitems' => 1,
+                'maxitems' => 50
+            ]
+        ],
+```
+
+fe_groups:
+```
+return [
+    'columns' => [
+        'subgroup' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:fe_groups.subgroup',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'fe_groups',
+                'foreign_table_where' => 'AND NOT(fe_groups.uid = ###THIS_UID###) ORDER BY fe_groups.title',
+                'enableMultiSelectFilterTextfield' => true,
+                'size' => 6,
+                'autoSizeMax' => 10,
+                'minitems' => 0,
+                'maxitems' => 20
+            ]
+        ],
+```
+
+#### Example: Insert and Update
+If you include e. g. the uid for the usergroup, then the CSV-Importer will work as described above, but will check if it can find the given uids and do an update instead of an insert for the corresponding record.
+
+Example of a CSV-File for an import to `fe_users`:
+```
++------------+------------+---------------+-----------------+-----------------------+--------------------------+--------------------------------+
+| first_name | last_name  | usergroup.uid | usergroup.title | usergroup.description | usergroup.subgroup.title | usergroup.subgroup.description |
++------------+------------+---------------+-----------------+-----------------------+--------------------------+--------------------------------+
+| Sabine     | Mustermann |             1 | Usergroup 1     | Ipsum Bibsum          | Subgroup 1               | Sub-Ipsum Bibsum               |
+| Matthias   | Musterfrau |             2 | Usergroup 2     | Ipsum Lorem           | Subgroup 2               | Sub Ipsum Lorem                |
+| Sam        | Person     |             3 | Usergroup 3     | Lorem Ipsum           | Subgroup 3               | Sub Lorem Ipsum                |
++------------+------------+---------------+-----------------+-----------------------+--------------------------+--------------------------------+
+```
+Assuming that the usergroups 1,2 and 3 exist in the database, the following will happen:
+
+The import results in two records per row that are directly linked to each other.
+1) A record in the table `fe_users` will be inserted and related via the field `usergroup` to
+2) the existing record "Usergroup X" (identified via the given uid) in the table `fe_groups`, that will be updated and which in turn will be related via the field `subgroup` to
+3) a record "Subgroup X" in the table `fe_groups`, that will be inserted and which represents the subgroup.
+
+You can do that in every combination possible.
+
+### Feature: Avoid duplicates
+By specifying search fields, it is also possible to search for existing data records based on defined table columns independently of specifying an uid. This prevents duplicate entries.
+```
+$csvImporter->setUniqueSelectColumns(['fe_users' => ['address', 'email']]);
+```
+Using the setting above the CSV-importer will search the table `fe_user` using the two fields `address` and `email` and comparing it to the values of this two columns you are about to import via CSV.
+If they match, the CSV-Importer will neither insert nor update the record, but set all relevant relations (if any). Existing relations are kept.
+
+Please note: The CSV-Importer will update a record if he finds them by using the search-fields.
+
+### Feature: Import and reference last imported row
+It may be the case that you want to add two records to the same imported record.
+Let's take a look at the following fictive example
+```
++------------+------------+----------------------+---------------+-----------------+-----------------------+
+| first_name | last_name  |        email         | usergroup.uid | usergroup.title | usergroup.description |
++------------+------------+----------------------+---------------+-----------------+-----------------------+
+| Sabine     | Mustermann | mustermann@muster.de |             1 | Usergroup 1     | Ipsum Bibsum          |
+| Sabine     | Mustermann | mustermann@muster.de |             2 | Usergroup 2     | Ipsum Lorem           |
++------------+------------+----------------------+---------------+-----------------+-----------------------+
+```
+Obviously the first two rows refer to the same person that simply belongs to two seperate usergroups.
+But if you import the above example without any changes, it will result in two records for Mrs. Mustermann, each with one related usergroup
+In order to achieve what we want, we can tell the CSV-Importer to refer the second row to the first by using the keyword `LAST` in an added uid-column.
+```
++------+------------+------------+----------------------+---------------+-----------------+-----------------------+
+| uid  | first_name | last_name  |        email         | usergroup.uid | usergroup.title | usergroup.description |
++------+------------+------------+----------------------+---------------+-----------------+-----------------------+
+| 0    | Sabine     | Mustermann | mustermann@muster.de |             1 | Usergroup 1     | Ipsum Bibsum          |
+| LAST | Sabine     | Mustermann | mustermann@muster.de |             2 | Usergroup 2     | Ipsum Lorem           |
++------+------------+------------+----------------------+---------------+-----------------+-----------------------+
+```
+The result of that import will be
+1) One record in fe_users for "Sabine Mustermann" will be inserted and related via the field `usergroup` to
+2) two inserted records in fe_usergroup ("Usergroup 1" and "Usergroup 2")
+
+Please note that:
+- `LAST` only works on the first level and not on sub-tables. This is because the sub-tables can only refer to one record and thus LAST makes no sense here
+- `LAST` can be used several times. It always refers to the uid of the last executed insert to a table
+
+### Setting: Exclude fields from import
+If you want to exclude some fields from the import for some reasons, you can define for each importable table (and subtable) which fields will be ignored during an import:
+```
+$csvImporter->setExcludeColumns(
+        [
+            'fe_users' => [
+                'hidden', 'deleted', 'tstamp', 'crdate', 'tx_extbase_type', 'TSconfig'
+            ],
+            'fe_groups' => [
+                'hidden', 'deleted', 'tstamp', 'crdate'
+            ]
+        ],
+    );
+```
+
+### Setting: Include fields in import
+If you want to include some fields in the import for some reasons, that are not part of the TCA (e.g. `pid`), you can define for each importable table (and subtable) which fields will be added during an import.
+
+Please note: There is no check if the fields exist in the database!
+```
+$csvImporter->setIncludeColumns(
+        [
+            'fe_users' => [
+                'pid'
+            ],
+            'fe_groups' => [
+                'pid', 'newly_included'
+            ]
+        ],
+    );
+```
+
+### Setting: Add data explicitly to import
+If you want to make sure that some fields of your CSV-import are filled with predefined values no matter what value is set via CSV, you can use the following method.
+This will override the values of the CSV-data for the defined columns and also add columns that may be missing in the CSV-data.
+If you want to set the values for a sub-table, you can also do this by adding the column-name as prefix
+
+Please note: The call of `applyAdditionData()` is obligatory because this feature changes the raw imported data. This way you have to confirm the changes twice.
+```
+$additionalData = [
+    'zip' => 'Override Value!',
+    'not_included_in_csv' => 'New Column And Value!',
+    'usergroup.description => 'Description override!'
+];
+$csvImporter->setAdditionalData($additionalData);
+$csvImporter->applyAdditionalData();
+```
+
+### Setting: Set default values
+If you want to set default values for some columns you can use the following method.
+It will set the defined values, but the values will be overridden by the CSV-data if it contains a non-empty value (0 is interpreted as empty).
+It will also add columns that may be missing in the CSV-data.
+
+Please note: The call of `applyDefaultValues()` is obligatory because this feature changes the raw imported data. This way you have to confirm the changes twice.
+```
+$defaultValues = [
+    'zip' => 'Default value',
+    'no_included_incsv' => 'New Column and Value!',
+    'usergroup.description => 'Description default value!'
+];
+$csvImporter->setDefaultValues($defaultValues);
+$csvImporter->applyDefaultValues();
+```
+
+### Feature: TypeCasting and Sanitizing
+Type-Casting and Sanitizing are done automatically based on the TCA-configuration of a column.
+This includes:
+- TypeCast for DateTime to timestamp based on eval
+- TypeCast for Float based on eval/type
+- TypeCast for Integer based on eval/type
+- TypeCast based on RenderType Checkboxes (1/0)
+- Fix for Links based on RenderType Links
+- nl2br and wrapping P-Tag for columns with RTE-enabled
+- trim for all values
 
 ## Simulate Frontend in Backend Context
 This is extremely useful when working with CLI-commands or UnitTests and you need TYPO3 to behave like in frontend-context.

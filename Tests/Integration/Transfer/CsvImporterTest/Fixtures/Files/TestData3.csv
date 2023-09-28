@@ -1,0 +1,4 @@
+uid;lastlogin;gender;hidden;title;first_name;last_name;company;address;city;zip;useless;telephone;email;www;tx_extbase_type;deleted;usergroup.uid;usergroup.title;usergroup.description
+100;01.06.2016 03:04;0;0;Dr.;Sabine;Mustermann;SPD;Wilhelmstraße 141;Berlin;10963;1;030 - 25991 - 500;parteivorstand@spd.de;testen.de;donotimport;1;50;Schöne Welt;Bla Bla
+LAST;10.01.2018 20:30;1;0;Prof. Dr.;Matthias;Musterfrau;BÜNDNIS 90/DIE GRÜNEN;Platz vor dem Neuen Tor 1;Berlin;10115;2;49 (0)30/28442-0;info@gruene.de;http://www.example.de;donotimport;2;51;Dunkles Zimmer;Ipsum Lorem
+LAST;16.04.1983 15:45:00;2;0;;Sam;Person;FDP;Reinhardtstraße 14;Berlin-Charottenburg;10117;3;+49 30 28 49 58-0;michael.zimmermann@fdp.de;t3://uid=16;donotimport;99;99;Lange Zeit;Lorem Ipsum 
