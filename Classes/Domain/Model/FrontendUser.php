@@ -67,6 +67,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      */
     protected $email = '';
 
+
     /**
      * @var string
      */

@@ -546,7 +546,7 @@ class GeneralUtilityTest extends FunctionalTestCase
          *
          * Given a relative path
          * When the method is called
-         * Then an exception-instance of \Madj2k\CoreExtended\Exception is thrown
+        * Then an exception-instance of \Madj2k\CoreExtended\Exception is thrown
          * Then the exception-code is 1682006516
          */
         self::expectException(\Madj2k\CoreExtended\Exception::class);

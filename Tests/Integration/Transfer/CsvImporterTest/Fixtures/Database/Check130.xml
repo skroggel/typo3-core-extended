@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <fe_users>
+        <uid>101</uid>
+        <pid>1</pid>
+        <first_name>Samson</first_name>
+        <last_name>Sesam</last_name>
+        <crdate>1111</crdate>
+    </fe_users>
+    <fe_users>
+        <uid>102</uid>
+        <pid>1</pid>
+        <first_name>Krümmel</first_name>
+        <last_name>Monster</last_name>
+        <crdate>2222</crdate>
+    </fe_users>
+    <fe_groups>
+        <uid>1</uid>
+        <pid>1</pid>
+        <title>Testgruppe 1</title>
+    </fe_groups>
+    <fe_groups>
+        <uid>2</uid>
+        <pid>1</pid>
+        <title>Testgruppe 2</title>
+    </fe_groups>
+</dataset>
