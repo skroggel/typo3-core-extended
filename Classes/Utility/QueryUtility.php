@@ -18,6 +18,7 @@ namespace Madj2k\CoreExtended\Utility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -145,7 +146,6 @@ class QueryUtility
      *
      * @param string $table table name
      * @return string the additional where clause, something like " AND deleted=0 AND hidden=0"
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * @see \TYPO3\CMS\Core\Resource\AbstractRepository
      */
     static public function getWhereClauseDeleted(string $table): string
@@ -369,4 +369,26 @@ class QueryUtility
     }
 
 
+    /**
+     * Get full SQL query for debugging
+     *
+     * @param \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder
+     * @return string
+     * @todo write a test
+     */
+    public static function getFullSql (QueryBuilder $queryBuilder): string
+    {
+        $sql = $queryBuilder->getSQL();
+        $parameters = $queryBuilder->getParameters();
+
+        $search = array();
+        $replace = array();
+        krsort($parameters);
+
+        foreach ($parameters as $k => $v) {
+            $search[] = ':' . $k;
+            $replace[] = '\'' . $v . '\'';
+        }
+        return str_replace($search, $replace, $sql);
+    }
 }

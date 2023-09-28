@@ -1,5 +1,5 @@
 <?php
-namespace Madj2k\CoreExtended\Tests\Integration\Utility;
+namespace Madj2k\CoreExtended\Tests\Integration\Transfer;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,7 +15,7 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
  */
 
 use Madj2k\CoreExtended\Domain\Repository\PagesRepository;
-use Madj2k\CoreExtended\Utility\CsvUtility;
+use Madj2k\CoreExtended\Transfer\CsvExporter;
 use Madj2k\CoreExtended\Utility\GeneralUtility;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Core\Environment;
@@ -23,19 +23,19 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * CsvUtilityTest
+ * CsvExporterTest
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class CsvUtilityTest extends FunctionalTestCase
+class CsvExporterTest extends FunctionalTestCase
 {
     /**
      * @const
      */
-    const FIXTURE_PATH = __DIR__ . '/CsvUtilityTest/Fixtures';
+    const FIXTURE_PATH = __DIR__ . '/CsvExporterTest/Fixtures';
 
 
     /**
@@ -56,6 +56,12 @@ class CsvUtilityTest extends FunctionalTestCase
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      */
     private ?ObjectManager $objectManager = null;
+
+
+    /**
+     * @var \Madj2k\CoreExtended\Transfer\CsvExporter|null
+     */
+    private ?CsvExporter $fixture = null;
 
 
     /**
@@ -80,6 +86,9 @@ class CsvUtilityTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class);
 
+        /** @var \Madj2k\CoreExtended\Transfer\CsvExporter $fixture */
+        $this->fixture = $this->objectManager->get(CsvExporter::class);
+
         /** @var \Madj2k\CoreExtended\Domain\Repository\PagesRepository pagesRepository */
         $this->pagesRepository = $this->objectManager->get(PagesRepository::class);
 
@@ -89,6 +98,7 @@ class CsvUtilityTest extends FunctionalTestCase
 
     /**
      * @test
+     * @throws \Exception
      */
     public function createCsvBuildsEmptyFileIfNoDataGiven ()
     {
@@ -104,7 +114,7 @@ class CsvUtilityTest extends FunctionalTestCase
         $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
         $fileName = Environment::getPublicPath() .'/typo3temp/test.csv';
 
-        CsvUtility::createCsv($objectStorage, $fileName);
+        $this->fixture->export($objectStorage, $fileName);
         $fileContent = file_get_contents($fileName);
 
         self::assertEquals('', $fileContent);
@@ -113,6 +123,7 @@ class CsvUtilityTest extends FunctionalTestCase
 
     /**
      * @test
+     * @throws \Exception
      */
     public function createCsvBuildsFileWithData ()
     {
@@ -136,7 +147,7 @@ class CsvUtilityTest extends FunctionalTestCase
             $objectStorage->attach($page);
         }
 
-        CsvUtility::createCsv($objectStorage, $fileName);
+        $this->fixture->export($objectStorage, $fileName);
         $fileContent = file_get_contents($fileName);
 
         $expected = 'uid;pid;crdate;tstamp;hidden;deleted;sysLanguageUid;sorting;doktype;title;subtitle;abstract;description;noSearch;lastUpdated;txCoreextendedAlternativeTitle;txCoreextendedFeLayoutNextLevel;txCoreextendedPreviewImage;txCoreextendedOgImage;txCoreextendedFile;txCoreextendedCover' . "\n" .
@@ -146,8 +157,10 @@ class CsvUtilityTest extends FunctionalTestCase
         self::assertEquals($expected, $fileContent);
     }
 
+
     /**
      * @test
+     * @throws \Exception
      */
     public function createCsvBuildsFileWithDataAndExcludesSomeProperties ()
     {
@@ -173,7 +186,7 @@ class CsvUtilityTest extends FunctionalTestCase
             $objectStorage->attach($page);
         }
 
-        CsvUtility::createCsv($objectStorage, $fileName, ';', ['tstamp', 'txCoreextendedAlternativeTitle']);
+        $this->fixture->export($objectStorage, $fileName, ';', ['tstamp', 'txCoreextendedAlternativeTitle']);
         $fileContent = file_get_contents($fileName);
 
         $expected = 'uid;pid;crdate;hidden;deleted;sysLanguageUid;sorting;doktype;title;subtitle;abstract;description;noSearch;lastUpdated;txCoreextendedFeLayoutNextLevel;txCoreextendedPreviewImage;txCoreextendedOgImage;txCoreextendedFile;txCoreextendedCover' . "\n" .

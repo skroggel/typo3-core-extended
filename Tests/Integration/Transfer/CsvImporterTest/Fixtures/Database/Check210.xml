@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <fe_users>
+        <uid>1</uid>
+        <pid>1</pid>
+        <city>Hamburg</city>
+        <zip>44335</zip>
+    </fe_users>
+    <fe_users>
+        <uid>2</uid>
+        <pid>1</pid>
+        <city>Köln</city>
+        <zip>34456</zip>
+    </fe_users>
+    <fe_users>
+        <uid>3</uid>
+        <pid>1</pid>
+        <city>Berlin</city>
+        <zip>10963</zip>
+    </fe_users>
+    <fe_users>
+        <uid>4</uid>
+        <pid>1</pid>
+        <city>Berlin</city>
+        <zip>10963</zip>
+    </fe_users>
+</dataset>

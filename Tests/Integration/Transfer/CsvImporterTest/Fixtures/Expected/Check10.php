@@ -1,0 +1,27 @@
+<?php
+return [
+    0 => 'username',
+    1 => 'password',
+    2 => 'usergroup',
+    3 => 'lockToDomain',
+    4 => 'name',
+    5 => 'first_name',
+    6 => 'middle_name',
+    7 => 'last_name',
+    8 => 'address',
+    9 => 'telephone',
+    10 => 'fax',
+    11 => 'email',
+    12 => 'title',
+    13 => 'zip',
+    14 => 'city',
+    15 => 'country',
+    16 => 'www',
+    17 => 'company',
+    18 => 'image',
+    19 => 'disable',
+    20 => 'starttime',
+    21 => 'endtime',
+    22 => 'description',
+    23 => 'lastlogin'
+];

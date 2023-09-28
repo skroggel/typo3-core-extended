@@ -1,5 +1,5 @@
 <?php
-namespace Madj2k\CoreExtended\Utility;
+namespace Madj2k\CoreExtended\Transfer;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -17,19 +17,19 @@ namespace Madj2k\CoreExtended\Utility;
 use Madj2k\CoreExtended\Exception;
 
 /**
- * CsvUtility
+ * CsvExporter
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class CsvUtility
+class CsvExporter
 {
     /**
      * @var resource $csv
      */
-    private static $csv;
+    protected $csv;
 
 
     /**
@@ -42,7 +42,7 @@ class CsvUtility
      * @return void
      * @throws Exception
      */
-    public static function createCsv(
+    public function export(
         \Iterator $iteratable,
         string $fileName = '',
         string $separator = ';',
@@ -54,7 +54,7 @@ class CsvUtility
         }
 
         if ($fileName) {
-            self::$csv = fopen($fileName, 'w');
+            $this->csv = fopen($fileName, 'w');
 
         } else {
 
@@ -63,7 +63,7 @@ class CsvUtility
             header("Pragma: no-cache");
 
             $fileName = date('Y-m-d', time()) . '.csv';
-            self::$csv = fopen('php://output', 'w');
+            $this->csv = fopen('php://output', 'w');
         }
 
         if (count($iteratable)) {
@@ -103,7 +103,7 @@ class CsvUtility
 
             // create CSV header based on first object
             $headings = array_keys($fullPropertyGetterMap);
-            fputcsv(self::$csv, $headings, $separator);
+            fputcsv($this->csv, $headings, $separator);
 
             // now add the data
             /** @var \TYPO3\CMS\Extbase\DomainObject\AbstractEntity $model */
@@ -121,11 +121,11 @@ class CsvUtility
                     }
                 }
 
-                fputcsv(self::$csv, $row, $separator);
+                fputcsv($this->csv, $row, $separator);
             }
         }
 
-        fclose(self::$csv);
+        fclose($this->csv);
     }
 }
 
