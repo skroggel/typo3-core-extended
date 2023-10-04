@@ -168,13 +168,14 @@ class CsvImporter
 
     /**
      * @param string $pathOrString
-     * @param bool $isExcel
+     * @param bool $isExcel Important: this parameter also overrides $delimiter if true
+     * @param string $delimiter
      * @return void
      * @throws \League\Csv\Exception
      * @throws \League\Csv\InvalidArgument
      * @throws \League\Csv\UnavailableFeature
      */
-    public function readCsv (string $pathOrString, bool $isExcel = true)
+    public function readCsv (string $pathOrString, bool $isExcel = true, string $delimiter = ',')
     {
         // load the CSV document from a file path or from string
         if (file_exists($pathOrString)) {
@@ -185,6 +186,7 @@ class CsvImporter
 
         // special settings for f***ing MS Excel
         $csvReader->setOutputBOM(Reader::BOM_UTF8);
+        $csvReader->setDelimiter($delimiter);
 
         if ($isExcel) {
             $csvReader->addStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
@@ -369,8 +371,10 @@ class CsvImporter
                 && ($config['config']['type'])
                 && (! $config['config']['mm'])
             ) {
-                // add type
+                // add type and number of items
                 $result[$column]['type'] = $config['config']['type'];
+                $result[$column]['minitems'] = $config['config']['minitems'];
+                $result[$column]['maxitems'] = $config['config']['maxitems'];
 
                 // and all fields beginning with "foreign_"
                 foreach ($config['config'] as $key => $value) {
@@ -833,22 +837,25 @@ class CsvImporter
 
                 $this->logSqlStatement($queryBuilder);
 
-                // set subUidList-records as comma-separated list into column of current record
+            // set subUidList-records as comma-separated list into column of current record
             } else {
 
-                // get existing values in relation-field
-                $statement = $queryBuilder->select($column)
-                    ->from($this->tableName)
-                    ->where(
-                        $queryBuilder->expr()->eq(
-                            'uid',
-                            $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                $currentRelations = [];
+                if ($columnConfiguration['maxitems'] != 1) {
+                    // get existing values in relation-field
+                    $statement = $queryBuilder->select($column)
+                        ->from($this->tableName)
+                        ->where(
+                            $queryBuilder->expr()->eq(
+                                'uid',
+                                $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                            )
                         )
-                    )
-                    ->execute();
+                        ->execute();
 
-                $currentRelations = GeneralUtility::trimExplode(',', $statement->fetchColumn(), true);
-                $this->logSqlStatement($queryBuilder);
+                    $currentRelations = GeneralUtility::trimExplode(',', $statement->fetchColumn(), true);
+                    $this->logSqlStatement($queryBuilder);
+                }
 
                 $queryBuilder
                     ->update($this->tableName)

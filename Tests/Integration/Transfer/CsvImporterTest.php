@@ -953,7 +953,7 @@ class CsvImporterTest extends FunctionalTestCase
          * Given an existing relation to objects 2, 3 and 4 in column 1
          * When the method is called
          * Then true is returned
-         * Then the objects 1 are added to the column of table W as comma-separated list
+         * Then the object 1 is added to the column of table W as comma-separated list
          */
         $this->initFixtureFromFile();
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Check170.xml');
@@ -963,6 +963,38 @@ class CsvImporterTest extends FunctionalTestCase
 
         $databaseResultParent = $this->getDatabaseConnection()->selectSingleRow('usergroup', 'fe_users','uid = 1');
         self::assertEquals('2,3,4,1', $databaseResultParent['usergroup']);
+
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function persistTableRelationsOverridesInlineRelationWithCommaList()
+    {
+        /**
+         * Scenario:
+         *
+         * Given a persisted object A with a defined 1:n-relation in a column of table W
+         * Given the object 1 table U ist to be related to that column of table W
+         * Given an existing relation to object 2 in column 1
+         * Given the column has maxitems=1 set in TCA
+         * When the method is called
+         * Then true is returned
+         * Then the object 1 is set to the column of table W as comma-separated list
+         */
+        $this->initFixtureFromFile();
+        $this->importDataSet(self::FIXTURE_PATH . '/Database/Check260.xml');
+
+        // Fake TCA
+        $GLOBALS['TCA']['fe_users']['columns']['usergroup']['config']['maxitems'] = 1;
+
+        $result = $this->fixture->persistTableRelations(1, 'usergroup', [1]);
+        self::assertTrue($result);
+
+        $databaseResultParent = $this->getDatabaseConnection()->selectSingleRow('usergroup', 'fe_users','uid = 1');
+        self::assertEquals('1', $databaseResultParent['usergroup']);
 
     }
 
