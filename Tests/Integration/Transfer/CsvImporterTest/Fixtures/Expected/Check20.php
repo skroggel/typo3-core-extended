@@ -3,7 +3,9 @@ return [
     'usergroup' => [
         'type' => 'select',
         'foreign_table' => 'fe_groups',
-        'foreign_table_where' => 'ORDER BY fe_groups.title'
+        'foreign_table_where' => 'ORDER BY fe_groups.title',
+        'minitems' => 1,
+        'maxitems' => 50
     ],
     'image' => [
         'type' => 'inline',
@@ -15,6 +17,8 @@ return [
             'fieldname' => 'image'
         ],
         'foreign_label' => 'uid_local',
-        'foreign_selector' => 'uid_local'
+        'foreign_selector' => 'uid_local',
+        'minitems' => 0,
+        'maxitems' => 6
     ]
 ];
