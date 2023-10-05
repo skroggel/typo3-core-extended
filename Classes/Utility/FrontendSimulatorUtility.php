@@ -174,6 +174,7 @@ class FrontendSimulatorUtility
         $configurationManager->setConfiguration([]);
 
         // set contentObjectRenderer if not set
+        // @extensionScannerIgnoreLine
         if (! $configurationManager->getContentObject()) {
 
             /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $contentObject */

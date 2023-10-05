@@ -86,11 +86,13 @@ class MetaTagGenerator
 
         if (!empty($description)) {
             $manager = $metaTagManagerRegistry->getManagerForProperty('description');
+            // @extensionScannerIgnoreLine
             $manager->addProperty('description', $description);
         }
 
         if (!empty($keywords)) {
             $manager = $metaTagManagerRegistry->getManagerForProperty('keywords');
+            // @extensionScannerIgnoreLine
             $manager->addProperty('keywords', $keywords);
         }
     }

@@ -230,10 +230,12 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         //  self::assertEquals(1, $GLOBALS['TSFE']->domainStartPage);
 
         /** @deprecated since TYPO3 9.x - instead we use the Aspect-Version below */
+        // @extensionScannerIgnoreLine
         self::assertEquals(0,$GLOBALS['TSFE']->sys_language_uid);
 
         self::assertEquals(0, $GLOBALS['TSFE']->pageNotFound);
 
+        // @extensionScannerIgnoreLine
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Page\PageRepository::class, $GLOBALS['TSFE']->sys_page);
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication::class, $GLOBALS['TSFE']->fe_user);
         self::assertInstanceOf(\TYPO3\CMS\Core\TypoScript\TemplateService::class, $GLOBALS['TSFE']->tmpl);
@@ -286,10 +288,12 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         //  self::assertEquals(1, $GLOBALS['TSFE']->domainStartPage);
 
         /** @deprecated since TYPO3 9.x - instead we use the Aspect-Version below */
+        // @extensionScannerIgnoreLine
         self::assertEquals(0,$GLOBALS['TSFE']->sys_language_uid);
 
         self::assertEquals(0, $GLOBALS['TSFE']->pageNotFound);
 
+        // @extensionScannerIgnoreLine
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Page\PageRepository::class, $GLOBALS['TSFE']->sys_page);
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication::class, $GLOBALS['TSFE']->fe_user);
         self::assertInstanceOf(\TYPO3\CMS\Core\TypoScript\TemplateService::class, $GLOBALS['TSFE']->tmpl);
@@ -515,9 +519,11 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
 
+        // @extensionScannerIgnoreLine
         self::assertEmpty($configurationManager->getContentObject());
         self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
 
+        // @extensionScannerIgnoreLine
         self::assertNotEmpty($configurationManager->getContentObject());
 
     }
