@@ -29,9 +29,9 @@ $EM_CONF[$_EXTKEY] = [
 	'version' => '9.5.27',
     'constraints' => [
 		'depends' => [
-			'typo3' => '9.5.0-9.5.99',
-            'filemetadata' => '9.5.0.0-9.5.99',
-            'seo' => '9.5.0.0-9.5.99',
+			'typo3' => '9.5.0-10.4.99',
+            'filemetadata' => '9.5.0.0-10.4.99',
+            'seo' => '9.5.0.0-10.4.99',
             'persisted_sanitized_routing' => '1.0.4',
         ],
 		'conflicts' => [
