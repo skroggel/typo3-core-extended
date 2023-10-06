@@ -71,6 +71,7 @@ class RobotsTagGenerator
             $noFollow = $noFollow ? 'nofollow' : 'follow';
 
             $manager = $metaTagManagerRegistry->getManagerForProperty('robots');
+            // @extensionScannerIgnoreLine
             $manager->addProperty('robots', implode(',', [$noIndex, $noFollow, 'noodp', 'noydir']));
         }
     }

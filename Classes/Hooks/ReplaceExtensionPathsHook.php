@@ -45,6 +45,7 @@ class ReplaceExtensionPathsHook
         $replaceExtensionPaths = GeneralUtility::makeInstance(ReplaceExtensionPaths::class);
 
         // Replace content
+        // @extensionScannerIgnoreLine
         $obj->content = $replaceExtensionPaths->process($obj->content);
 
     }
