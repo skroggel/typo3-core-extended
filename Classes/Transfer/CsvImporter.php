@@ -799,9 +799,9 @@ class CsvImporter
                 $queryBuilderForeign
                     ->update($foreignTable)
                     ->where(
-                        $queryBuilder->expr()->in(
+                        $queryBuilderForeign->expr()->in(
                             'uid',
-                            $queryBuilder->createNamedParameter(
+                            $queryBuilderForeign->createNamedParameter(
                                 $subUidList,
                                 Connection::PARAM_INT_ARRAY
                             )
