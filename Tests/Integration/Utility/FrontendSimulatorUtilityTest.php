@@ -17,6 +17,9 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Http\Uri;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -81,33 +84,12 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
                 'EXT:core_extended/Configuration/TypoScript/setup.txt',
                 self::REL_BASE_PATH  .'/Fixtures/Frontend/Configuration/Rootpage.typoscript',
             ],
-            [11 => self::REL_BASE_PATH  .'/Fixtures/Sites/config.yaml']
+            [21 => self::REL_BASE_PATH  .'/Fixtures/Sites/config.yaml']
         );
 
     }
 
     //=============================================
-
-    /**
-     * @test
-     */
-    public function simulateFrontendEnvironmentRemovesPageNotFoundHandler()
-    {
-
-        /**
-         * Scenario:
-         *
-         * Given a sub-page in the rootline
-         * When the method is called
-         * Then the method returns the value 1
-         * Then the page-not-found-handler is deleted
-         */
-
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFound_handling'] = 'Test';
-        self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
-        self::assertEmpty($GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFound_handling']);
-    }
-
 
     /**
      * @test
@@ -207,7 +189,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
          * Then this array has the key 'title' with the title of the given sub-page
          * Then this TyposcriptFrontendController-Object has the property 'domainStartPage' set to root-page id (=1)
          * Then this TyposcriptFrontendController-Object has the property 'sys_language_uid' / language-aspect set to zero
-         * Then this TyposcriptFrontendController-Object has the property 'pageNotFound' set to zero
+         * Then this TyposcriptFrontendController-Object has the property 'pageNotFound' set to zero - obsolet in TYPO3 v10!!!
          * Then this TyposcriptFrontendController-Object has the property 'sys_page' set to a TYPO3\CMS\Frontend\Page\PageRepository-object
          * Then this TyposcriptFrontendController-Object has the property 'fe_user' set to a TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication-object
          * Then this TyposcriptFrontendController-Object has the property 'tmpl' set to a TYPO3\CMS\Core\TypoScript\TemplateService-object
@@ -233,7 +215,10 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         // @extensionScannerIgnoreLine
         self::assertEquals(0,$GLOBALS['TSFE']->sys_language_uid);
 
-        self::assertEquals(0, $GLOBALS['TSFE']->pageNotFound);
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
+            // obsolet in TYPO3 v10
+            self::assertEquals(0, $GLOBALS['TSFE']->pageNotFound);
+        }
 
         // @extensionScannerIgnoreLine
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Page\PageRepository::class, $GLOBALS['TSFE']->sys_page);
@@ -266,7 +251,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
          * Then this array has the key 'title' with the title of the given sub-page
          * Then this TyposcriptFrontendController-Object has the property 'domainStartPage' set to root-page id (=1)
          * Then this TyposcriptFrontendController-Object has the property 'sys_language_uid' / language-aspect set to zero
-         * Then this TyposcriptFrontendController-Object has the property 'pageNotFound' set to zero
+         * Then this TyposcriptFrontendController-Object has the property 'pageNotFound' set to zero - obsolet in TYPO3 v10!!!
          * Then this TyposcriptFrontendController-Object has the property 'sys_page' set to a TYPO3\CMS\Frontend\Page\PageRepository-object
          * Then this TyposcriptFrontendController-Object has the property 'fe_user' set to a TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication-object
          * Then this TyposcriptFrontendController-Object has the property 'tmpl' set to a TYPO3\CMS\Core\TypoScript\TemplateService-object
@@ -291,7 +276,10 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         // @extensionScannerIgnoreLine
         self::assertEquals(0,$GLOBALS['TSFE']->sys_language_uid);
 
-        self::assertEquals(0, $GLOBALS['TSFE']->pageNotFound);
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
+            // obsolet in TYPO3 v10
+            self::assertEquals(0, $GLOBALS['TSFE']->pageNotFound);
+        }
 
         // @extensionScannerIgnoreLine
         self::assertInstanceOf(\TYPO3\CMS\Frontend\Page\PageRepository::class, $GLOBALS['TSFE']->sys_page);
@@ -530,30 +518,6 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
 
     //=============================================
 
-    /**
-     * @test
-     */
-    public function resetFrontendEnvironmentRestoresPageNotFoundHandler()
-    {
-
-        /**
-         * Scenario:
-         *
-         * Given we were in FE-Mode
-         * Given a sub-page in the rootline
-         * Given simulateFrontendEnvironment was called before
-         * When the method is called
-         * Then the method returns true
-         * Then the page-not-found-handler is restored
-         */
-
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFound_handling'] = 'Test';
-
-        FrontendSimulatorUtility::simulateFrontendEnvironment(3);
-        self::assertTrue(FrontendSimulatorUtility::resetFrontendEnvironment());
-        self::assertEquals('Test', $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFound_handling']);
-    }
-
 
     /**
      * @test
@@ -629,15 +593,50 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
          * Then the method returns true
          * Then the $GLOBALS['TSFE']-object is restored
          */
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
+            /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $GLOBALS ['TSFE'] */
+            $before = $GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::class,
+                $GLOBALS['TYPO3_CONF_VARS'],
+                11,
+                0
+            );
+        } else {
 
-        /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $GLOBALS ['TSFE'] */
-        $before = $GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::class,
-            $GLOBALS['TYPO3_CONF_VARS'],
-            11,
-            0
-        );
+            /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            $site = $siteFinder->getSiteByPageId(11);
+            $language = $site->getDefaultLanguage();
 
+            /** @var  \TYPO3\CMS\Core\Context\Context $context */
+            $context = GeneralUtility::makeInstance(Context::class);
+
+            // Fake a Request-Object
+            // Not needed in TYPO3 v11.0 anymore.
+            $uri = new Uri((string) $site->getBase());
+
+            /** @var $request \TYPO3\CMS\Core\Http\ServerRequest */
+            $GLOBALS['TYPO3_REQUEST'] = new ServerRequest(
+                $uri,
+                'GET',
+                'php://input',
+                [],
+                [
+                    'HTTP_HOST' => $uri->getHost(),
+                    'SERVER_NAME' => $uri->getHost(),
+                    'HTTPS' => $uri->getScheme() === 'https',
+                    'SCRIPT_FILENAME' => __FILE__,
+                    'SCRIPT_NAME' => rtrim($uri->getPath(), '/') . '/'
+                ]
+            );
+
+            $before = $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
+                \Madj2k\CoreExtended\Frontend\Controller\TypoScriptFrontendController::class,
+                $context,
+                $site,
+                $language
+            );
+        }
         FrontendSimulatorUtility::simulateFrontendEnvironment(3);
         self::assertNotSame($before, $GLOBALS['TSFE']);
         self::assertTrue(FrontendSimulatorUtility::resetFrontendEnvironment());
@@ -757,6 +756,7 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         $configurationManager = $objectManager->get(ConfigurationManager::class);
 
         $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'coreExtended');
+
         self::assertEquals(1, $settings['backendContext']);
     }
 

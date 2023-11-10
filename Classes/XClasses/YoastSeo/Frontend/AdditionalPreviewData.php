@@ -40,4 +40,17 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('yoast_seo')) {
         }
 
     }
+} else {
+    /**
+     * Class AdditionalPreviewData
+     *
+     * @author Steffen Kroggel <developer@steffenkroggel.de>
+     * @copyright Steffen Kroggel
+     * @package Madj2k_CoreExtended
+     * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+     */
+    class AdditionalPreviewData
+    {
+       // empty class to avoid errors
+    }
 }

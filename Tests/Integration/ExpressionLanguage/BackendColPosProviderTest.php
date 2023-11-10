@@ -19,6 +19,9 @@ use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use PHPUnit\Util\PHP\DefaultPhpProcess;
 use SebastianBergmann\Template\Template;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 
 /**
  * BackendColPosProviderTest
@@ -65,6 +68,10 @@ class BackendColPosProviderTest extends FunctionalTestCase
     {
 
         parent::setUp();
+
+        // do not validate cHash because we need to add some parameters for testing
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['disableNoCacheParameter'] = true;
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFoundOnCHashError'] = -1;
 
         $this->importDataSet(self::FIXTURE_PATH . '/Database/Global.xml');
 
@@ -176,6 +183,8 @@ class BackendColPosProviderTest extends FunctionalTestCase
         $response = $this->getFrontendResponse(1);
 
         self::assertStringContainsString('empty', $response->getContent());
+
+
     }
 
     //=============================================
@@ -220,9 +229,17 @@ class BackendColPosProviderTest extends FunctionalTestCase
             $additionalParameter .= '&' . $this->frontendResponseParams;
         }
 
+        $queryString = 'id=' . $pageId . '&L=' . $languageId . $additionalParameter;
+
+        /** Since TYPO3 10 we have to add a valid cHash, so we need to generate it */
+        /** @var \TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator */
+        $cacheHashCalculator = GeneralUtility::makeInstance(CacheHashCalculator::class);
+        $relevantParameters = $cacheHashCalculator->getRelevantParameters($queryString);
+        $calculatedCacheHash = $cacheHashCalculator->calculateCacheHash($relevantParameters);
+
         $arguments = [
             'documentRoot' => $this->getInstancePath(),
-            'requestUrl' => 'http://localhost/?id=' . $pageId . '&L=' . $languageId . $additionalParameter,
+            'requestUrl' => 'http://localhost/?' . $queryString . '&cHash=' . $calculatedCacheHash,
         ];
 
         $textTemplateClass = class_exists(Template::class) ? Template::class : \Text_Template::class;

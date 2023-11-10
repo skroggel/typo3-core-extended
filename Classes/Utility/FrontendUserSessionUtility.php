@@ -18,8 +18,10 @@ use Madj2k\CoreExtended\Domain\Model\FrontendUser;
 use Madj2k\CoreExtended\Domain\Model\FrontendUserGroup;
 use Madj2k\CoreExtended\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Frontend\Aspect\PreviewAspect;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 /**
@@ -58,7 +60,12 @@ class FrontendUserSessionUtility
         /** @var \TYPO3\CMS\Core\Context\Context $context */
         $context = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Context::class);
 
-        $GLOBALS['TSFE']->fePreview = 1;
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
+            // @extensionScannerIgnoreLine
+            $GLOBALS['TSFE']->fePreview = 1;
+        } else {
+            $context->setAspect('frontend.preview', new PreviewAspect(1));
+        }
         $GLOBALS['TSFE']->clear_preview();
         $GLOBALS['TSFE']->simUserGroup = $frontendUserGroup->getUid();
 

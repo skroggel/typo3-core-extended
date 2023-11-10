@@ -117,11 +117,17 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\EnvironmentService::class] = [
             'className' => Madj2k\CoreExtended\XClasses\Extbase\Service\EnvironmentService::class
         ];
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class] = [
+            'className' => Madj2k\CoreExtended\XClasses\Extbase\Configuration\ConfigurationManager::class
+        ];
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Service\ExtensionService::class] = [
             'className' => Madj2k\CoreExtended\XClasses\Extbase\Service\ExtensionService::class
         ];
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication::class] = [
             'className' => Madj2k\CoreExtended\XClasses\Frontend\Authentication\FrontendUserAuthentication::class
+        ];
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Mvc\Controller\ActionController::class] = [
+            'className' =>Madj2k\CoreExtended\XClasses\Extbase\Mvc\ActionController::class
         ];
 
         if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_freecap')) {
@@ -145,6 +151,70 @@ call_user_func(
                 'className' => Madj2k\CoreExtended\XClasses\YoastSeo\Frontend\AdditionalPreviewData::class
             ];
         }
+
+        //=================================================================
+        // Add XClasses for extending existing classes
+        //=================================================================
+        // for TYPO3 12+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\BackendUser::class] = [
+            'className' => \Madj2k\CoreExtended\Domain\Model\BackendUser::class
+        ];
+
+        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+            ->registerImplementation(
+                \TYPO3\CMS\Extbase\Domain\Model\BackendUser::class,
+                \Madj2k\CoreExtended\Domain\Model\BackendUser::class
+            );
+
+        // for TYPO3 12+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class] = [
+            'className' => \Madj2k\CoreExtended\Domain\Model\FrontendUser::class
+        ];
+
+        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+            ->registerImplementation(
+                \TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class,
+                \Madj2k\CoreExtended\Domain\Model\FrontendUser::class
+            );
+
+        // for TYPO3 12+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class] = [
+            'className' => \Madj2k\CoreExtended\Domain\Model\FrontendUserGroup::class
+        ];
+
+        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+            ->registerImplementation(
+                \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class,
+                \Madj2k\CoreExtended\Domain\Model\FrontendUserGroup::class
+            );
+
+        // for TYPO3 12+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\File::class] = [
+            'className' => \Madj2k\CoreExtended\Domain\Model\File::class
+        ];
+
+        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+            ->registerImplementation(
+                \TYPO3\CMS\Extbase\Domain\Model\File::class,
+                \Madj2k\CoreExtended\Domain\Model\File::class
+            );
+
+        // for TYPO3 12+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FileReference::class] = [
+            'className' => \Madj2k\CoreExtended\Domain\Model\FileReference::class
+        ];
+
+        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+            ->registerImplementation(
+                \TYPO3\CMS\Extbase\Domain\Model\FileReference::class,
+                \Madj2k\CoreExtended\Domain\Model\FileReference::class
+            );
+
 
         //=================================================================
         // Remove some functions from ext:seo we handle ourselves

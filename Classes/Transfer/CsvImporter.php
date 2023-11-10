@@ -127,10 +127,10 @@ class CsvImporter
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected ObjectManager $objectManager;
+    protected ?ObjectManager $objectManager = null;
 
 
     /**
@@ -147,24 +147,14 @@ class CsvImporter
 
 
     /**
-     * Initializes the Reader based on the given path or content
-     *
-     * @param string $tableName
-     * @throws Exception
-     */
-    public function __construct ( string $tableName)
+     * @param ObjectManager $objectManager
+     * @return void
+
+    public function injectObjectManager (ObjectManager $objectManager)
     {
-        // if there is no configuration for the given table, kill it here
-        if (! $GLOBALS['TCA'][$tableName]) {
-            throw new Exception(
-                'No TCA-configuration available for the given table.',
-                1695272455
-            );
-        }
-
-        $this->tableName = $tableName;
+        $this->objectManager = $objectManager;
     }
-
+     */
 
     /**
      * @param string $pathOrString
@@ -196,6 +186,38 @@ class CsvImporter
         $csvReader->setHeaderOffset(0);
         $this->setHeader($csvReader->getHeader());
         $this->records = iterator_to_array($csvReader->getRecords($this->header));
+    }
+
+
+    /**
+     * Gets the tableName
+     *
+     * @return string
+     */
+    public function getTableName(): string
+    {
+        return $this->tableName;
+    }
+
+
+    /**
+     * Sets the tableName
+     *
+     * @param string $tableName
+     * @return void
+     * @throws Exception
+     */
+    public function setTableName(string $tableName): void
+    {
+        // if there is no configuration for the given table, kill it here
+        if (! $GLOBALS['TCA'][$tableName]) {
+            throw new Exception(
+                'No TCA-configuration available for the given table.',
+                1695272455
+            );
+        }
+
+        $this->tableName = $tableName;
     }
 
 
@@ -571,7 +593,7 @@ class CsvImporter
      */
     public function filterRecordByImportableColumns(array $record): array
     {
-        $filteredHeader = array_values(array_intersect($this->getHeader(), $this->getImportableColumns($this->tableName)));
+        $filteredHeader = array_values(array_intersect($this->getHeader(), $this->getImportableColumns($this->getTableName())));
         return array_intersect_key($record, array_flip($filteredHeader));
     }
 
@@ -585,13 +607,13 @@ class CsvImporter
     public function searchExistingRecord (array $record): int
     {
         //  check for existing data based on defined keys and try to get an uid
-        if ($selectColumns = $this->getUniqueSelectColumns($this->tableName)) {
+        if ($selectColumns = $this->getUniqueSelectColumns($this->getTableName())) {
 
             /** @var \TYPO3\CMS\Core\Database\ConnectionPool $connectionPool */
             $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
 
             /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+            $queryBuilder = $connectionPool->getQueryBuilderForTable($this->getTableName());
             $queryBuilder->getRestrictions()->removeAll();
 
             $conditions = [];
@@ -607,7 +629,7 @@ class CsvImporter
             if ($conditions) {
                 // get existing values in relation-field
                 $statement = $queryBuilder->select('uid')
-                    ->from($this->tableName)
+                    ->from($this->getTableName())
                     ->where(...$conditions)
                     ->execute();
 
@@ -632,11 +654,11 @@ class CsvImporter
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
 
         /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->getTableName());
         $queryBuilder->getRestrictions()->removeAll();
 
         $statement = $queryBuilder->select('uid')
-            ->from($this->tableName)
+            ->from($this->getTableName())
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
@@ -661,7 +683,7 @@ class CsvImporter
     {
 
         // check if table is in allowed tables
-        if (in_array($this->tableName, $this->getAllowedTables())) {
+        if (in_array($this->getTableName(), $this->getAllowedTables())) {
 
             // do some basic filtering
             $record = $this->filterRecordByImportableColumns($recordRaw);
@@ -701,11 +723,11 @@ class CsvImporter
                 ){
 
                     /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-                    $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+                    $queryBuilder = $connectionPool->getQueryBuilderForTable($this->getTableName());
                     $queryBuilder->getRestrictions()->removeAll();
 
                     $queryBuilder
-                        ->update($this->tableName)
+                        ->update($this->getTableName())
                         ->where(
                             $queryBuilder->expr()->eq(
                                 'uid',
@@ -734,11 +756,11 @@ class CsvImporter
                 unset($record['uid']);
 
                 /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-                $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+                $queryBuilder = $connectionPool->getQueryBuilderForTable($this->getTableName());
                 $queryBuilder->getRestrictions()->removeAll();
 
                 $queryBuilder
-                    ->insert($this->tableName)
+                    ->insert($this->getTableName())
                     ->values($record)
                     ->execute();
 
@@ -772,7 +794,7 @@ class CsvImporter
      */
     public function persistTableRelations(int $uid, string $column, array $subUidList): bool
     {
-        $tableRelations = $this->getTableRelations($this->tableName);
+        $tableRelations = $this->getTableRelations($this->getTableName());
         $columnConfiguration = $tableRelations[$column];
 
         if (
@@ -784,7 +806,7 @@ class CsvImporter
             $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
 
             /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-            $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+            $queryBuilder = $connectionPool->getQueryBuilderForTable($this->getTableName());
             $queryBuilder->getRestrictions()->removeAll();
 
             /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilderForeign */
@@ -811,7 +833,7 @@ class CsvImporter
 
                 // check if the foreign_table_field is set
                 if ($foreignTableField = $columnConfiguration['foreign_table_field']) {
-                    $queryBuilderForeign->set($foreignTableField, $this->tableName);
+                    $queryBuilderForeign->set($foreignTableField, $this->getTableName());
                 }
 
                 // check if the foreign_match_fields is set
@@ -825,7 +847,7 @@ class CsvImporter
                 $this->logSqlStatement($queryBuilderForeign);
 
                 $queryBuilder
-                    ->update($this->tableName)
+                    ->update($this->getTableName())
                     ->where(
                         $queryBuilder->expr()->eq(
                             'uid',
@@ -844,7 +866,7 @@ class CsvImporter
                 if ($columnConfiguration['maxitems'] != 1) {
                     // get existing values in relation-field
                     $statement = $queryBuilder->select($column)
-                        ->from($this->tableName)
+                        ->from($this->getTableName())
                         ->where(
                             $queryBuilder->expr()->eq(
                                 'uid',
@@ -858,7 +880,7 @@ class CsvImporter
                 }
 
                 $queryBuilder
-                    ->update($this->tableName)
+                    ->update($this->getTableName())
                     ->where(
                         $queryBuilder->expr()->eq(
                             'uid',
@@ -923,7 +945,7 @@ class CsvImporter
                 // check for relations. If there are some, call import recursively with matching table and rootColumn
                 // this can also be done if only an uid is given!
                 $tempResult = [];
-                if ($columnRelation = $this->getTableRelations($this->tableName)) {
+                if ($columnRelation = $this->getTableRelations($this->getTableName())) {
                     foreach ($columnRelation as $column => $config) {
 
                         if ($foreignTable = $config['foreign_table']) {
@@ -992,9 +1014,9 @@ class CsvImporter
     public function typeCast(string $property, $value)
     {
 
-        $evalArray = GeneralUtility::trimExplode(',', $GLOBALS['TCA'][$this->tableName]['columns'][$property]['config']['eval'], true);
-        $type = $GLOBALS['TCA'][$this->tableName]['columns'][$property]['config']['type'] ?: '';
-        $format = $GLOBALS['TCA'][$this->tableName]['columns'][$property]['config']['format'] ?: '';
+        $evalArray = GeneralUtility::trimExplode(',', $GLOBALS['TCA'][$this->getTableName()]['columns'][$property]['config']['eval'], true);
+        $type = $GLOBALS['TCA'][$this->getTableName()]['columns'][$property]['config']['type'] ?: '';
+        $format = $GLOBALS['TCA'][$this->getTableName()]['columns'][$property]['config']['format'] ?: '';
 
         // datetime
         if (in_array(self::EVAL_DATETIME, $evalArray)) {
@@ -1043,7 +1065,7 @@ class CsvImporter
      */
     public function typeCastByRenderType (string $property, $value)
     {
-        $renderType = $GLOBALS['TCA'][$this->tableName]['columns'][$property]['config']['renderType'] ?: '';
+        $renderType = $GLOBALS['TCA'][$this->getTableName()]['columns'][$property]['config']['renderType'] ?: '';
         switch ($renderType) {
             // links
             case self::RENDERTYPE_LINK:
@@ -1081,7 +1103,7 @@ class CsvImporter
      */
     public function sanitize(string $property, $value)
     {
-        $parseHtml = $GLOBALS['TCA'][$this->tableName]['columns'][$property]['config']['enableRichtext'];
+        $parseHtml = $GLOBALS['TCA'][$this->getTableName()]['columns'][$property]['config']['enableRichtext'];
         if (
             ($value)
             && ($parseHtml)

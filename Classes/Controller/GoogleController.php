@@ -125,7 +125,7 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function getCache(): SitemapCache
     {
         $cache = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(SitemapCache::class);
-        $cache->setIdentifier($this->extensionName);
+        $cache->setIdentifier('core_extended');
         $cache->setRequest($this->request);
         return $cache;
     }
