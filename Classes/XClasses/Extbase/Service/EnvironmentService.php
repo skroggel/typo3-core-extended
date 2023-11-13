@@ -17,7 +17,7 @@ namespace Madj2k\CoreExtended\XClasses\Extbase\Service;
 
 /**
  * Utility to simulate a frontend in backend context
- * This class is need as addition to Madj2k\CoreExtended\Utility\FrontendSimulatorUtility
+ * This class is needed as addition to Madj2k\CoreExtended\Utility\FrontendSimulatorUtility
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Steffen Kroggel
@@ -26,7 +26,6 @@ namespace Madj2k\CoreExtended\XClasses\Extbase\Service;
  */
 class EnvironmentService extends \TYPO3\CMS\Extbase\Service\EnvironmentService
 {
-
 
     /**
      * Detects if TYPO3_MODE is defined and its value is "FE"

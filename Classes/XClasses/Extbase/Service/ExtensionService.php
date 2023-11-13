@@ -15,8 +15,10 @@ namespace Madj2k\CoreExtended\XClasses\Extbase\Service;
  */
 
 /**
- * Service for determining basic extension params
- * @internal only to be used within Extbase, not part of TYPO3 Core API.
+ * @author Steffen Kroggel <developer@steffenkroggel.de>
+ * @copyright Steffen Kroggel
+ * @package Madj2k_CoreExtended
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class ExtensionService extends \TYPO3\CMS\Extbase\Service\ExtensionService
 {

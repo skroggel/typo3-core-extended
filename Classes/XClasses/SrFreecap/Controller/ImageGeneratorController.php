@@ -50,4 +50,18 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_freecap')) 
             return true;
         }
     }
+} else {
+
+    /**
+     * Class ImageGeneratorController
+     *
+     * @author Steffen Kroggel <developer@steffenkroggel.de>
+     * @copyright Steffen Kroggel
+     * @package Madj2k_CoreExtended
+     * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+     */
+    class ImageGeneratorController
+    {
+        // empty class to avoid errors
+    }
 }

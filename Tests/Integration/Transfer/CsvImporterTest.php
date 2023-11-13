@@ -91,10 +91,6 @@ class CsvImporterTest extends FunctionalTestCase
         $GLOBALS['TCA']['fe_users']['columns']['www']['config']['renderType'] = 'inputLink';
     }
 
-    /**
-
-
-*/
 
 
     #==============================================================================
@@ -141,10 +137,8 @@ class CsvImporterTest extends FunctionalTestCase
          * Then getRecords returns a non-empty array
          */
         /** \Madj2k\CoreExtended\Transfer\CsvImporter $fixture */
-        $this->fixture = $this->objectManager->get(
-            CsvImporter::class,
-            'fe_users'
-        );
+        $this->fixture = $this->objectManager->get(CsvImporter::class);
+        $this->fixture->setTableName('fe_users');
 
         $this->fixture->readCsv(self::FIXTURE_PATH . '/Files/TestData.csv');
 
@@ -173,10 +167,8 @@ class CsvImporterTest extends FunctionalTestCase
          * Then getRecords returns a non-empty array
          */
         /** \Madj2k\CoreExtended\Transfer\CsvImporter $fixture */
-        $this->fixture = $this->objectManager->get(
-            CsvImporter::class,
-            'fe_users'
-        );
+        $this->fixture = $this->objectManager->get(CsvImporter::class);
+        $this->fixture->setTableName('fe_users');
 
         $this->fixture->readCsv(file_get_contents(self::FIXTURE_PATH . '/Files/TestData.csv'));
 
@@ -1992,6 +1984,7 @@ class CsvImporterTest extends FunctionalTestCase
      * @throws \League\Csv\Exception
      * @throws \League\Csv\InvalidArgument
      * @throws \League\Csv\UnavailableFeature
+     * @throws \Madj2k\CoreExtended\Exception
      */
     protected function initFixtureFromFile (
         string $table = 'fe_users',
@@ -1999,10 +1992,8 @@ class CsvImporterTest extends FunctionalTestCase
     ): void {
 
         /** \Madj2k\CoreExtended\Transfer\CsvImporter $fixture */
-        $this->fixture = $this->objectManager->get(
-            CsvImporter::class,
-            $table
-        );
+        $this->fixture = $this->objectManager->get(CsvImporter::class,);
+        $this->fixture->setTableName($table);
 
         $this->fixture->readCsv($file);
         $this->fixture->setAllowedTables(['fe_users', 'fe_groups']);
@@ -2035,6 +2026,7 @@ class CsvImporterTest extends FunctionalTestCase
      * @throws \League\Csv\Exception
      * @throws \League\Csv\InvalidArgument
      * @throws \League\Csv\UnavailableFeature
+     * @throws \Madj2k\CoreExtended\Exception
      */
     protected function initFixtureFromString (
         string $table = 'fe_users',
@@ -2042,10 +2034,8 @@ class CsvImporterTest extends FunctionalTestCase
     ): void {
 
         /** \Madj2k\CoreExtended\Transfer\CsvImporter $fixture */
-        $this->fixture = $this->objectManager->get(
-            CsvImporter::class,
-            $table
-        );
+        $this->fixture = $this->objectManager->get(CsvImporter::class,);
+        $this->fixture->setTableName($table);
 
         $this->fixture->readCsv(file_get_contents($file));
         $this->fixture->setAllowedTables(['fe_users', 'fe_groups']);

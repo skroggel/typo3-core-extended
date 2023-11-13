@@ -324,14 +324,14 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
      */
     public static function getUniqueRandomNumber(int $length = 10): int
     {
-        $min = intval(pow(10, $length-1));
-        $max = intval(pow(10, $length) -1);
+        $min = number_format(pow(10, $length-1), 0, '', '');
+        $max = number_format(pow(10, $length) -1, 0, '', '');
 
         if ($max > PHP_INT_MAX) {
-            throw new \Exception('Number is too big.', 1689765905);
+            throw new Exception('Number is too big.', 1689765905);
         }
 
-        return random_int($min, $max);
+        return random_int(intval($min), intval($max));
     }
 
 
