@@ -973,6 +973,8 @@ class CsvImporter
      * @return array
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException
      * @throws \TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     * @throws \Madj2k\CoreExtended\Exception
      */
     protected function importRecursive (int $uid, string $column, string $foreignTable, array $recordRaw): array
     {
@@ -982,7 +984,8 @@ class CsvImporter
         if ($subRecordRaw = $this->filterRecordByRootColumn($recordRaw, $column)) {
 
             // init importer with relevant setup
-            $csvImporter = $this->objectManager->get(self::class, $foreignTable);
+            $csvImporter = $this->objectManager->get(self::class);
+            $csvImporter->setTableName($foreignTable);
             $csvImporter->setAllowedTables($this->getAllowedTables());
             $csvImporter->setExcludeColumns($this->getExcludeColumns());
             $csvImporter->setIncludeColumns($this->getIncludeColumns());
