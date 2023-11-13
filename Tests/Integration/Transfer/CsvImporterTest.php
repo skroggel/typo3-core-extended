@@ -1999,10 +1999,15 @@ class CsvImporterTest extends FunctionalTestCase
     ): void {
 
         /** \Madj2k\CoreExtended\Transfer\CsvImporter $fixture */
+<<<<<<< Updated upstream
         $this->fixture = $this->objectManager->get(
             CsvImporter::class,
             $table
         );
+=======
+        $this->fixture = $this->objectManager->get(CsvImporter::class);
+        $this->fixture->setTableName($table);
+>>>>>>> Stashed changes
 
         $this->fixture->readCsv($file);
         $this->fixture->setAllowedTables(['fe_users', 'fe_groups']);
