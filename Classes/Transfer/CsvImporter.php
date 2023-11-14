@@ -127,13 +127,6 @@ class CsvImporter
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager|null
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected ?ObjectManager $objectManager = null;
-
-
-    /**
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
@@ -147,12 +140,12 @@ class CsvImporter
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     * @param \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
      * @return void
-    */
-    public function injectObjectManager (ObjectManager $objectManager)
+     */
+    public function injectSignalSlotDispatcher (Dispatcher $signalSlotDispatcher)
     {
-        $this->objectManager = $objectManager;
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
     }
 
 
@@ -945,6 +938,7 @@ class CsvImporter
                 // check for relations. If there are some, call import recursively with matching table and rootColumn
                 // this can also be done if only an uid is given!
                 $tempResult = [];
+
                 if ($columnRelation = $this->getTableRelations($this->getTableName())) {
                     foreach ($columnRelation as $column => $config) {
 
@@ -984,7 +978,7 @@ class CsvImporter
         if ($subRecordRaw = $this->filterRecordByRootColumn($recordRaw, $column)) {
 
             // init importer with relevant setup
-            $csvImporter = $this->objectManager->get(self::class);
+            $csvImporter = clone $this;
             $csvImporter->setTableName($foreignTable);
             $csvImporter->setAllowedTables($this->getAllowedTables());
             $csvImporter->setExcludeColumns($this->getExcludeColumns());

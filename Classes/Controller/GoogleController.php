@@ -18,6 +18,7 @@ use Madj2k\Accelerator\Cache\CacheAbstract;
 use Madj2k\CoreExtended\Cache\SitemapCache;
 use Madj2k\CoreExtended\Domain\Repository\PagesRepository;
 use Madj2k\CoreExtended\Utility\QueryUtility;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -40,12 +41,19 @@ class GoogleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 
     /**
-     * pagesRepository
-     *
-     * @var \Madj2k\CoreExtended\Domain\Repository\PagesRepository
+     * @var \Madj2k\CoreExtended\Domain\Repository\PagesRepository|null
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected PagesRepository $pagesRepository;
+    protected ?PagesRepository $pagesRepository = null;
+
+
+    /**
+     * @param \Madj2k\CoreExtended\Domain\Repository\PagesRepository $pagesRepository
+     */
+    public function injectPagesRepository(PagesRepository $pagesRepository)
+    {
+        $this->pagesRepository = $pagesRepository;
+    }
 
 
     /**

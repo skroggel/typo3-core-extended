@@ -33,12 +33,19 @@ use TYPO3\CMS\Core\Utility\RootlineUtility;
 class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
-     * mediaSourcesRepository
-     *
      * @var \Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected MediaSourcesRepository $mediaSourcesRepository;
+
+
+    /**
+     * @param \Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository $mediaSourcesRepository
+     */
+    public function injectPagesRepository(MediaSourcesRepository $mediaSourcesRepository)
+    {
+        $this->mediaSourcesRepository = $mediaSourcesRepository;
+    }
 
 
     /**
