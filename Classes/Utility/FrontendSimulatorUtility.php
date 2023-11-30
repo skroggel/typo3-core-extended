@@ -14,6 +14,7 @@ namespace Madj2k\CoreExtended\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Madj2k\CoreExtended\Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Context\Context;
@@ -73,6 +74,7 @@ class FrontendSimulatorUtility
      * @param int $lid
      * @return int
      * @throws \TYPO3\CMS\Extbase\Object\Exception
+     * @throws \Madj2k\CoreExtended\Exception
      */
     public static function simulateFrontendEnvironment(int $pid = 1, int $lid = 0): int
     {
@@ -128,7 +130,7 @@ class FrontendSimulatorUtility
                 return 1;
 
             } catch (\Exception $e) {
-
+                throw new Exception('Could not initialize frontend. Maybe page-configuration is missing.', 1701363001);
             }
         }
 
@@ -270,7 +272,6 @@ class FrontendSimulatorUtility
             $GLOBALS['TSFE']->absRefPrefix = $GLOBALS['TSFE']->config['config']['absRefPrefix'] = '/';
 
         } else {
-
             /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
             $site = $siteFinder->getSiteByPageId($pid);

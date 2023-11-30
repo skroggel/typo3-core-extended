@@ -127,7 +127,7 @@ class CsvImporter
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher|null
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected Dispatcher $signalSlotDispatcher;

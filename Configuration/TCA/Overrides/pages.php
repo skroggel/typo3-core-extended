@@ -5,7 +5,37 @@ call_user_func(
     function (string $extKey) {
 
         $tempColumnsPages = [
-
+            // we have to define the system-fields in order to access them!
+            'pid' => [
+                'config' => [
+                    'type' => 'passthrough',
+                ]
+            ],
+            'sorting' => [
+                'config' => [
+                    'type' => 'passthrough',
+                ]
+            ],
+            'tstamp' => [
+                'config' => [
+                    'type' => 'passthrough',
+                ]
+            ],
+            'crdate' => [
+                'config' => [
+                    'type' => 'passthrough',
+                ]
+            ],
+            'hidden' => [
+                'config' => [
+                    'type' => 'passthrough',
+                ]
+            ],
+            'deleted' => [
+                'config' => [
+                    'type' => 'passthrough',
+                ]
+            ],
             'tx_coreextended_alternative_title' => [
                 'exclude' => 0,
                 'label' => 'LLL:EXT:core_extended/Resources/Private/Language/locallang_db.xlf:pages.tx_coreextended_alternative_title',
