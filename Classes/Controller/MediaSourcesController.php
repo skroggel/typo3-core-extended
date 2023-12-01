@@ -33,7 +33,7 @@ use TYPO3\CMS\Core\Utility\RootlineUtility;
 class MediaSourcesController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
-     * @var \Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository|null
+     * @var \Madj2k\CoreExtended\Domain\Repository\MediaSourcesRepository
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected ?MediaSourcesRepository $mediaSourcesRepository = null;

@@ -39,21 +39,21 @@ class FakeRequest
 {
 
     /**
-     * @var \TYPO3\CMS\Core\Context\Context|null
+     * @var \TYPO3\CMS\Core\Context\Context
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected ?Context $context = null;
 
 
     /**
-     * @var \TYPO3\CMS\Core\Routing\SiteMatcher|null
+     * @var \TYPO3\CMS\Core\Routing\SiteMatcher
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected ?SiteMatcher $siteMatcher = null;
 
 
     /**
-     * @var \TYPO3\CMS\Core\Site\SiteFinder|null
+     * @var \TYPO3\CMS\Core\Site\SiteFinder
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected ?SiteFinder $siteFinder = null;
