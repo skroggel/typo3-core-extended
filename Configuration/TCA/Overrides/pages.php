@@ -113,7 +113,12 @@ call_user_func(
             ],
             'tx_coreextended_cover' => [
                 'exclude' => 0,
-                'displayCond' => 'FIELD:tx_coreextended_file:=:1',
+                'displayCond' => [
+                    'OR' => [
+                        'FIELD:tx_coreextended_file:>:0',
+                        'FIELD:tx_coreextended_cover:>:0'
+                    ],
+                ],
                 'label' => 'LLL:EXT:core_extended/Resources/Private/Language/locallang_db.xlf:pages.tx_coreextended_cover',
                 'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                     'txCoreextendedCover',
