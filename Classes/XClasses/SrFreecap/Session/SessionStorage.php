@@ -41,7 +41,7 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_freecap')) 
          *
          * @return \SJBR\SrFreecap\Domain\Model\Word
          */
-        public function restoreFromSession():? Word
+        public function restoreFromSession(): ?Word
         {
             if (
                 ($cookieValue = $_COOKIE[self::SESSIONNAMESPACE])
