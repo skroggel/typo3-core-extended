@@ -316,7 +316,7 @@ class FileMetadata extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Madj2k\CoreExtended\Domain\Model\File|null
      */
-    public function getFile():? File
+    public function getFile(): ?File
     {
         return $this->file;
     }
@@ -350,7 +350,7 @@ class FileMetadata extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Madj2k\CoreExtended\Domain\Model\MediaSources|null
      */
-    public function getTxCoreextendedSource():? MediaSources
+    public function getTxCoreextendedSource(): ?MediaSources
     {
         return $this->txCoreextendedSource;
     }

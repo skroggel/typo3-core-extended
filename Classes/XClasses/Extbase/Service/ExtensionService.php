@@ -35,7 +35,7 @@ class ExtensionService extends \TYPO3\CMS\Extbase\Service\ExtensionService
      * @param string $actionName name of the target action (lowerCamelCase)
      * @return string name of the target plugin (UpperCamelCase) or NULL if no matching plugin configuration was found
      */
-    public function getPluginNameByAction($extensionName, $controllerName, $actionName):? string
+    public function getPluginNameByAction($extensionName, $controllerName, $actionName): ?string
     {
 
         // fixing weird core bug

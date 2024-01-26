@@ -161,7 +161,7 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
      *
      * @return \Madj2k\CoreExtended\Domain\Model\File|null
      */
-    public function getFile():? File
+    public function getFile(): ?File
     {
         return $this->file;
     }

@@ -501,7 +501,7 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Madj2k\CoreExtended\Domain\Model\FileReference
      */
-    public function getTxCoreextendedPreviewImage():? FileReference
+    public function getTxCoreextendedPreviewImage(): ?FileReference
     {
         return $this->txCoreextendedPreviewImage;
     }
@@ -524,7 +524,7 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Madj2k\CoreExtended\Domain\Model\FileReference
      */
-    public function getTxCoreextendedOgImage():? FileReference
+    public function getTxCoreextendedOgImage(): ?FileReference
     {
         return $this->txCoreextendedOgImage;
     }
@@ -558,7 +558,7 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Madj2k\CoreExtended\Domain\Model\FileReference
      */
-    public function getTxCoreextendedFile():? FileReference
+    public function getTxCoreextendedFile(): ?FileReference
     {
         return $this->txCoreextendedFile;
     }
@@ -569,7 +569,7 @@ class Pages extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Madj2k\CoreExtended\Domain\Model\FileReference
      */
-    public function getTxCoreextendedCover():? FileReference
+    public function getTxCoreextendedCover(): ?FileReference
     {
         return $this->txCoreextendedCover;
     }

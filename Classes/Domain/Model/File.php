@@ -66,7 +66,7 @@ class File extends \TYPO3\CMS\Extbase\Domain\Model\File
      *
      * @return \Madj2k\CoreExtended\Domain\Model\FileMetadata|null $metadata
      */
-    public function getMetadata():? FileMetadata
+    public function getMetadata(): ?FileMetadata
     {
         return $this->metadata;
     }

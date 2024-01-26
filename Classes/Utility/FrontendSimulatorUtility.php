@@ -125,12 +125,18 @@ class FrontendSimulatorUtility
                 if (!is_object($GLOBALS['BE_USER'])) {
                     $GLOBALS['BE_USER'] = self::getBackendUserAuthentication();
                 }
+
                 self::initConfigurationManager();
 
                 return 1;
 
             } catch (\Exception $e) {
-                throw new Exception('Could not initialize frontend. Maybe page-configuration is missing.', 1701363001);
+                throw new Exception(
+                    sprintf(
+                        'Could not initialize frontend. Maybe page-configuration is missing. Error: %s',
+                        $e->getMessage()
+                    ),
+                    1701363001);
             }
         }
 
@@ -274,6 +280,7 @@ class FrontendSimulatorUtility
         } else {
             /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            $siteFinder->getAllSites(false);
             $site = $siteFinder->getSiteByPageId($pid);
             $language = $site->getDefaultLanguage();
 
@@ -332,8 +339,11 @@ class FrontendSimulatorUtility
             // set absRefPrefix and baseURL accordingly
             $GLOBALS['TSFE']->config['config']['absRefPrefix'] = $GLOBALS['TSFE']->config['config']['baseURL'] = self::getHostname($pid);
             $GLOBALS['TSFE']->absRefPrefix = $GLOBALS['TSFE']->config['config']['absRefPrefix'] = '/';
+
         }
     }
+
+
 
 
     /**
@@ -368,11 +378,9 @@ class FrontendSimulatorUtility
      */
     protected static function getBackendUserAuthentication(): BackendUserAuthentication
     {
-
         return GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Authentication\BackendUserAuthentication::class
         );
-
     }
 
 

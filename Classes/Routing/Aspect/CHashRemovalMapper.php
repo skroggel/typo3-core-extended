@@ -35,7 +35,7 @@ class CHashRemovalMapper implements StaticMappableAspectInterface
      * @param string $value
      * @return string
      */
-    public function generate(string $value):? string
+    public function generate(string $value): ?string
     {
         return $value ?: null;
     }
@@ -45,7 +45,7 @@ class CHashRemovalMapper implements StaticMappableAspectInterface
      * @param string $value
      * @return string|null
      */
-    public function resolve(string $value):? string
+    public function resolve(string $value): ?string
     {
         return $value ?: null;
     }
