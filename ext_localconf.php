@@ -153,67 +153,68 @@ call_user_func(
         }
 
         //=================================================================
+        // ATTENTION: deactivated due to faulty mapping in TYPO3 9.5
         // Add XClasses for extending existing classes
         //=================================================================
-        // for TYPO3 12+
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\BackendUser::class] = [
-            'className' => \Madj2k\CoreExtended\Domain\Model\BackendUser::class
-        ];
-
-        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
-            ->registerImplementation(
-                \TYPO3\CMS\Extbase\Domain\Model\BackendUser::class,
-                \Madj2k\CoreExtended\Domain\Model\BackendUser::class
-            );
-
-        // for TYPO3 12+
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class] = [
-            'className' => \Madj2k\CoreExtended\Domain\Model\FrontendUser::class
-        ];
-
-        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
-            ->registerImplementation(
-                \TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class,
-                \Madj2k\CoreExtended\Domain\Model\FrontendUser::class
-            );
-
-        // for TYPO3 12+
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class] = [
-            'className' => \Madj2k\CoreExtended\Domain\Model\FrontendUserGroup::class
-        ];
-
-        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
-            ->registerImplementation(
-                \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class,
-                \Madj2k\CoreExtended\Domain\Model\FrontendUserGroup::class
-            );
-
-        // for TYPO3 12+
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\File::class] = [
-            'className' => \Madj2k\CoreExtended\Domain\Model\File::class
-        ];
-
-        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
-            ->registerImplementation(
-                \TYPO3\CMS\Extbase\Domain\Model\File::class,
-                \Madj2k\CoreExtended\Domain\Model\File::class
-            );
-
-        // for TYPO3 12+
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FileReference::class] = [
-            'className' => \Madj2k\CoreExtended\Domain\Model\FileReference::class
-        ];
-
-        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
-            ->registerImplementation(
-                \TYPO3\CMS\Extbase\Domain\Model\FileReference::class,
-                \Madj2k\CoreExtended\Domain\Model\FileReference::class
-            );
+//        // for TYPO3 12+
+//        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\BackendUser::class] = [
+//            'className' => \Madj2k\CoreExtended\Domain\Model\BackendUser::class
+//        ];
+//
+//        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+//        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+//            ->registerImplementation(
+//                \TYPO3\CMS\Extbase\Domain\Model\BackendUser::class,
+//                \Madj2k\CoreExtended\Domain\Model\BackendUser::class
+//            );
+//
+//        // for TYPO3 12+
+//        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class] = [
+//            'className' => \Madj2k\CoreExtended\Domain\Model\FrontendUser::class
+//        ];
+//
+//        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+//        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+//            ->registerImplementation(
+//                \TYPO3\CMS\Extbase\Domain\Model\FrontendUser::class,
+//                \Madj2k\CoreExtended\Domain\Model\FrontendUser::class
+//            );
+//
+//        // for TYPO3 12+
+//        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class] = [
+//            'className' => \Madj2k\CoreExtended\Domain\Model\FrontendUserGroup::class
+//        ];
+//
+//        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+//        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+//            ->registerImplementation(
+//                \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup::class,
+//                \Madj2k\CoreExtended\Domain\Model\FrontendUserGroup::class
+//            );
+//
+//        // for TYPO3 12+
+//        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\File::class] = [
+//            'className' => \Madj2k\CoreExtended\Domain\Model\File::class
+//        ];
+//
+//        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+//        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+//            ->registerImplementation(
+//                \TYPO3\CMS\Extbase\Domain\Model\File::class,
+//                \Madj2k\CoreExtended\Domain\Model\File::class
+//            );
+//
+//        // for TYPO3 12+
+//        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Domain\Model\FileReference::class] = [
+//            'className' => \Madj2k\CoreExtended\Domain\Model\FileReference::class
+//        ];
+//
+//        // for TYPO3 9.5 - 11.5 only, not required for TYPO3 12
+//        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+//            ->registerImplementation(
+//                \TYPO3\CMS\Extbase\Domain\Model\FileReference::class,
+//                \Madj2k\CoreExtended\Domain\Model\FileReference::class
+//            );
 
 
         //=================================================================
