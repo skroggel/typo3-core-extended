@@ -116,10 +116,8 @@ First you have to initialize the CSV-Importer and also define the primary table 
 $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
 /** @var \Madj2k\CoreExtended\Transfer\CsvImporter $csvImporter */
-$csvImporter = $objectManager->get(
-            CsvImporter::class,
-            'fe_users' // your primary table
-        );
+$csvImporter = $objectManager->get(CsvImporter::class);
+$csvImporter->setTableName('your_table');
 ```
 Then you set the file or string to be read. The data can be read in either via a file or a string:
 ```
