@@ -39,18 +39,33 @@ class TypoScriptFrontendController extends \TYPO3\CMS\Frontend\Controller\TypoSc
     protected function resolveTranslatedPageId(): void
     {
         $this->page = $this->sys_page->getPage($this->id, true); // the only change is here - disableGroupAccessCheck!
-        // Accessed a default language page record, nothing to resolve
-        if (empty($this->page) || (int)$this->page[$GLOBALS['TCA']['pages']['ctrl']['languageField']] === 0) {
-            return;
-        }
-        $languageId = (int)$this->page[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
-        $this->page = $this->sys_page->getPage($this->page[$GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField']]);
-        $this->context->setAspect('language', GeneralUtility::makeInstance(LanguageAspect::class, $languageId));
-        $this->id = $this->page['uid'];
-        // For common best-practice reasons, this is set, however, will be optional for new routing mechanisms
-        if (!$this->getCurrentSiteLanguage()) {
-            $_GET['L'] = $languageId;
-            $GLOBALS['HTTP_GET_VARS']['L'] = $languageId;
+
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
+
+            // Accessed a default language page record, nothing to resolve
+            if (empty($this->page) || (int)$this->page[$GLOBALS['TCA']['pages']['ctrl']['languageField']] === 0) {
+                return;
+            }
+            $languageId = (int)$this->page[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
+            $this->page = $this->sys_page->getPage($this->page[$GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField']]);
+            $this->context->setAspect('language', GeneralUtility::makeInstance(LanguageAspect::class, $languageId));
+            $this->id = $this->page['uid'];
+            // For common best-practice reasons, this is set, however, will be optional for new routing mechanisms
+            if (!$this->getCurrentSiteLanguage()) {
+                $_GET['L'] = $languageId;
+                $GLOBALS['HTTP_GET_VARS']['L'] = $languageId;
+            }
+
+        } else {
+
+            // Accessed a default language page record, nothing to resolve
+            if (empty($this->page) || (int)$this->page[$GLOBALS['TCA']['pages']['ctrl']['languageField']] === 0) {
+                return;
+            }
+            $languageId = (int)$this->page[$GLOBALS['TCA']['pages']['ctrl']['languageField']];
+            $this->page = $this->sys_page->getPage($this->page[$GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField']]);
+            $this->context->setAspect('language', GeneralUtility::makeInstance(LanguageAspect::class, $languageId));
+            $this->id = $this->page['uid'];
         }
     }
 }

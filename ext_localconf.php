@@ -142,16 +142,6 @@ call_user_func(
             ];
         }
 
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('yoast_seo')) {
-
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][YoastSeoForTypo3\YoastSeo\StructuredData\StructuredDataProviderManager::class] = [
-                'className' => Madj2k\CoreExtended\XClasses\YoastSeo\StructuredData\StructuredDataProviderManager::class
-            ];
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][YoastSeoForTypo3\YoastSeo\Frontend\AdditionalPreviewData::class] = [
-                'className' => Madj2k\CoreExtended\XClasses\YoastSeo\Frontend\AdditionalPreviewData::class
-            ];
-        }
-
         //=================================================================
         // ATTENTION: deactivated due to faulty mapping in TYPO3 9.5
         // Add XClasses for extending existing classes
