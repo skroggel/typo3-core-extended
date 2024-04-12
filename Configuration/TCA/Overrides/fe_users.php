@@ -22,11 +22,6 @@ call_user_func(
                     'type' => 'passthrough',
                 ]
             ],
-            'disable' => [
-                'config' => [
-                    'type' => 'passthrough',
-                ]
-            ],
             'deleted' => [
                 'config' => [
                     'type' => 'passthrough',

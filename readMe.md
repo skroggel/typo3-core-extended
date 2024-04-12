@@ -452,7 +452,7 @@ The main difference is, that both attributes are inherited to the corresponding 
 This way you are able to set keywords and/or description to a whole page-tree.
 
 ## Meta-Tag-Generator: Canonical-Path
-Use `Madj2k\CoreExtended\MetaTag\CanonicalGenerator->getPath()` to get the current canonical path which is generated
+Use `Madj2k\DrSeo\MetaTag\CanonicalGenerator->getPath()` to get the current canonical path which is generated
 by ext:seo which is part of the TYPO3 Core.
 This is e.g useful for generating share-links.
 
@@ -462,7 +462,7 @@ lib.txYourExtension {
 
     socialMedia {
         shareUrl = USER_INT
-        shareUrl.userFunc = Madj2k\CoreExtended\MetaTag\CanonicalGenerator->getPath
+        shareUrl.userFunc = Madj2k\DrSeo\MetaTag\CanonicalGenerator->getPath
         shareUrl.stdWrap.rawUrlEncode = 1
     }
 }

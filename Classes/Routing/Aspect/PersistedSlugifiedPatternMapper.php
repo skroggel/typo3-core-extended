@@ -25,10 +25,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-04-12 - use \Madj2k\DrSeo\Routing\Aspect\PersistedSlugifiedPatternMapper instead
  */
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('persisted_sanitized_routing')) {
 
-    class PersistedSlugifiedPatternMapper extends \Calien\PersistedSanitizedRouting\Routing\Aspect\PersistedSanitizedPatternMapper
+    class PersistedSlugifiedPatternMapper extends \Madj2k\DrSeo\Routing\Aspect\PersistedSlugifiedPatternMapper
     {
 
         /**
@@ -36,6 +37,7 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('persisted_sani
          */
         protected function getSlugHelper(): SlugHelper
         {
+            trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
             if ($this->slugHelper === null) {
                 $this->slugHelper = GeneralUtility::makeInstance(
                     SlugHelper::class,

@@ -18,9 +18,6 @@ namespace Madj2k\CoreExtended\Utility;
 use Madj2k\CoreExtended\Exception;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Database\Query\QueryHelper;
-use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -268,9 +265,12 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
      * @param string $separator
      * @return string
      * @see \TYPO3\CMS\Core\DataHandling\SlugHelper
+     * @deprecated use \Madj2k\DrSeo\Utility\SlugUtility::slugify() instead, deprecated since 2024-04-05
      */
     static public function slugify(string $slug, string $separator = '-'): string
     {
+
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
         // use "mb_strtolower" instead of "strtolower" for ÄÜÖ
         $slug = mb_strtolower($slug, 'utf-8');
         $slug = strip_tags($slug);

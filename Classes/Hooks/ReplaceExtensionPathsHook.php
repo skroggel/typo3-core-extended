@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @copyright Steffen Kroggel
  * @package core_extended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated will be removed soon, deprecated since 2024-04-05
  */
 class ReplaceExtensionPathsHook
 {

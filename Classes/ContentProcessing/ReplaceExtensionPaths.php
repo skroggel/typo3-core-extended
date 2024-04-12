@@ -21,6 +21,7 @@ namespace Madj2k\CoreExtended\ContentProcessing;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-04-12 - do not use this anymore
  */
 class ReplaceExtensionPaths
 {
@@ -33,7 +34,7 @@ class ReplaceExtensionPaths
      */
     public function process(string $content = null): string
     {
-
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
         // Replace content
         $callback = function ($matches) {
 

@@ -89,10 +89,7 @@ call_user_func(
         // Add Rootline Fields
         //=================================================================
         $rootlineFields = &$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
-        $newRootlineFields = 'keywords,abstract,description,tx_coreextended_fe_layout_next_level,tx_coreextended_preview_image,tx_coreextended_og_image,tx_coreextended_cover,tx_coreextended_file';
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seo')) {
-            $newRootlineFields .= ',no_index,no_follow';
-        }
+        $newRootlineFields = 'tx_coreextended_fe_layout_next_level,tx_coreextended_preview_image,tx_coreextended_og_image,tx_coreextended_cover,tx_coreextended_file';
         $rootlineFields .= (empty($rootlineFields))? $newRootlineFields : ',' . $newRootlineFields;
 
          //=================================================================
@@ -101,15 +98,6 @@ call_user_func(
         if (TYPO3_MODE !== 'BE') {
             $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'Madj2k\\CoreExtended\\Hooks\\ReplaceExtensionPathsHook->hook_contentPostProc';
         }
-
-        //=================================================================
-        // Aspect for routing
-        //=================================================================
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['PersistedSlugifiedPatternMapper']
-            = \Madj2k\CoreExtended\Routing\Aspect\PersistedSlugifiedPatternMapper::class;
-
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['CHashRemovalMapper'] =
-            \Madj2k\CoreExtended\Routing\Aspect\CHashRemovalMapper::class;
 
         //=================================================================
         // XClasses
@@ -206,20 +194,6 @@ call_user_func(
 //                \Madj2k\CoreExtended\Domain\Model\FileReference::class
 //            );
 
-
-        //=================================================================
-        // Remove some functions from ext:seo we handle ourselves
-        //=================================================================
-        /** @todo write own metaTag-generators instead of using TypoScript! */
-        unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['metatag']);
-        unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['canonical']);
-
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['robots'] =
-            \Madj2k\CoreExtended\MetaTag\RobotsTagGenerator::class . '->generate';
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['metatag'] =
-            \Madj2k\CoreExtended\MetaTag\MetaTagGenerator::class . '->generate';
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Frontend\Page\PageGenerator']['generateMetaTags']['canonical'] =
-            \Madj2k\CoreExtended\MetaTag\CanonicalGenerator::class . '->generate';
 
         //====================re=============================================
         // Configure Logger

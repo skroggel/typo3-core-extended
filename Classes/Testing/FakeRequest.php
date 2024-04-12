@@ -34,6 +34,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @todo write a test for it
+ * @deprecated since 2024-04-12 - do not use it anymore.
  */
 class FakeRequest
 {
