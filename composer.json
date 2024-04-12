@@ -20,9 +20,8 @@
         "php": ">=7.4",
         "ext-json": "*",
 		"typo3/cms-core": "~9.5.0 || ~10.4.0",
-		"typo3/cms-seo": "~9.5.0 || ~10.4.0",
 		"typo3/cms-filemetadata": "~9.5.0 || ~10.4.0",
-		"calien/persisted-sanitized-routing" : "^1.0.4",
+		"madj2k/t3-dr-seo": "~9.5.0 || ~10.4.0 || ~11.5.0 || ~12.4.0",
 		"league/csv": "^9.5"
 	},
 	"suggest": {

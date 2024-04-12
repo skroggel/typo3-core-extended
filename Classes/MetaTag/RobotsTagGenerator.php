@@ -14,10 +14,6 @@ namespace Madj2k\CoreExtended\MetaTag;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
-
 /**
  * Class RobotsTagGenerator
  *
@@ -25,8 +21,9 @@ use TYPO3\CMS\Core\Utility\RootlineUtility;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-04-12 - use  \Madj2k\DrSeo\MetaTag\RobotsTagGenerator instead
  */
-class RobotsTagGenerator
+class RobotsTagGenerator extends \Madj2k\DrSeo\MetaTag\RobotsTagGenerator
 {
     /**
      * Generate the meta tags that can be set in backend and add them to frontend by using the MetaTag API
@@ -36,43 +33,7 @@ class RobotsTagGenerator
      */
     public function generate(array $params): void
     {
-        $metaTagManagerRegistry = GeneralUtility::makeInstance(MetaTagManagerRegistry::class);
-
-        $noIndex = false;
-        $noFollow = false;
-
-        if ($pageId = $params['page']['uid']) {
-
-            // get rootLine based on given id
-            /** @var \TYPO3\CMS\Core\Utility\RootlineUtility $rootLineUtility */
-            $rootLineUtility = new RootlineUtility($pageId);
-            $pages = $rootLineUtility->get();
-
-            foreach ($pages as $page) {
-                if (
-                    isset($page['no_index'])
-                    && ($page['no_index'])
-                ){
-                    $noIndex = true;
-                }
-                if (
-                    isset($page['no_follow'])
-                    && ($page['no_follow'])
-                ){
-                    $noFollow = true;
-                }
-
-                if (($noIndex) && ($noFollow)) {
-                    break;
-                }
-            }
-
-            $noIndex = $noIndex ? 'noindex' : 'index';
-            $noFollow = $noFollow ? 'nofollow' : 'follow';
-
-            $manager = $metaTagManagerRegistry->getManagerForProperty('robots');
-            // @extensionScannerIgnoreLine
-            $manager->addProperty('robots', implode(',', [$noIndex, $noFollow, 'noodp', 'noydir']));
-        }
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
+        parent::generate($params);
     }
 }

@@ -14,10 +14,6 @@ namespace Madj2k\CoreExtended\MetaTag;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
-
 /**
  * Class MetaTagGenerator
  *
@@ -25,8 +21,9 @@ use TYPO3\CMS\Core\Utility\RootlineUtility;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-04-12 - use \Madj2k\DrSeo\MetaTag\MetaTagGenerator instead
  */
-class MetaTagGenerator
+class MetaTagGenerator extends \Madj2k\DrSeo\MetaTag\MetaTagGenerator
 {
     /**
      * Generate the meta tags that can be set in backend and add them to frontend by using the MetaTag API
@@ -36,64 +33,7 @@ class MetaTagGenerator
      */
     public function generate(array $params): void
     {
-        $metaTagManagerRegistry = GeneralUtility::makeInstance(MetaTagManagerRegistry::class);
-
-        $description = '';
-        $keywords = '';
-        if (!empty($params['page']['description'])) {
-          $description = $params['page']['description'];
-        }
-
-        if (!empty($params['page']['keywords'])) {
-            $keywords = $params['page']['keywords'];
-        }
-
-        if (
-            (
-               (empty($description))
-               || (empty($keywords))
-            )
-            && ($pageId = $params['page']['uid'])
-        ){
-
-            // get rootLine based on given id
-            /** @var \TYPO3\CMS\Core\Utility\RootlineUtility $rootLineUtility */
-            $rootLineUtility = new RootlineUtility($pageId);
-            $pages = $rootLineUtility->get();
-
-            foreach ($pages as $page) {
-                if (
-                    empty($description)
-                    && isset($page['description'])
-                    && ($page['description'])
-                ){
-                    $description = $page['description'];
-                }
-
-                if (
-                    (empty($keywords))
-                    && isset($page['keywords'])
-                    && ($page['keywords'])
-                ){
-                    $keywords = $page['keywords'];
-                }
-
-                if (!empty($description) && !empty($keywords)) {
-                    break;
-                }
-            }
-        }
-
-        if (!empty($description)) {
-            $manager = $metaTagManagerRegistry->getManagerForProperty('description');
-            // @extensionScannerIgnoreLine
-            $manager->addProperty('description', $description);
-        }
-
-        if (!empty($keywords)) {
-            $manager = $metaTagManagerRegistry->getManagerForProperty('keywords');
-            // @extensionScannerIgnoreLine
-            $manager->addProperty('keywords', $keywords);
-        }
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
+        parent::generate($params);
     }
 }

@@ -21,30 +21,9 @@ namespace Madj2k\CoreExtended\MetaTag;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-04-12 - use  \Madj2k\DrSeo\MetaTag\CanonicalGenerator instead
  */
-class CanonicalGenerator extends \TYPO3\CMS\Seo\Canonical\CanonicalGenerator
+class CanonicalGenerator extends \Madj2k\DrSeo\MetaTag\CanonicalGenerator
 {
 
-    /**
-     * @return string
-     */
-    public function getPath(): string
-    {
-        // 1) Check if page show content from other page
-        $href = $this->checkContentFromPid();
-
-        if (empty($href)) {
-            // 2) Check if page has canonical URL set
-            $href = $this->checkForCanonicalLink();
-        }
-        if (empty($href)) {
-            // 3) Fallback, create canonical URL
-            $href = $this->checkDefaultCanonical();
-        }
-
-        if (!empty($href)) {
-            return $href;
-        }
-        return '';
-    }
 }

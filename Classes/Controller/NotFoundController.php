@@ -25,6 +25,7 @@ use Madj2k\CoreExtended\Resource\AssetFileNotFound;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated will be removed soon, deprecated since 2024-04-05
  */
 class NotFoundController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {

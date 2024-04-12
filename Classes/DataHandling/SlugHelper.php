@@ -21,8 +21,9 @@ namespace Madj2k\CoreExtended\DataHandling;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated use \Madj2k\DrSeo\DataHandling\SlugHelper::slugify() instead, deprecated since 2024-04-12
  */
-class SlugHelper extends \TYPO3\CMS\Core\DataHandling\SlugHelper
+class SlugHelper extends \Madj2k\DrSeo\DataHandling\SlugHelper
 {
 
     /**
@@ -33,7 +34,8 @@ class SlugHelper extends \TYPO3\CMS\Core\DataHandling\SlugHelper
      */
     public function sanitize(string $slug): string
     {
-        return \Madj2k\CoreExtended\Utility\GeneralUtility::slugify($slug);
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
+        return parent::sanitize($slug);
     }
 
 }

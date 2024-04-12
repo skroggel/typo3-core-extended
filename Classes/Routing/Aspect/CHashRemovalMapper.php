@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Site\SiteLanguageAwareTrait;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-04-12 - do not use it anymore!
  */
 class CHashRemovalMapper implements StaticMappableAspectInterface
 {
@@ -37,6 +38,7 @@ class CHashRemovalMapper implements StaticMappableAspectInterface
      */
     public function generate(string $value): ?string
     {
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
         return $value ?: null;
     }
 
@@ -47,6 +49,7 @@ class CHashRemovalMapper implements StaticMappableAspectInterface
      */
     public function resolve(string $value): ?string
     {
+        trigger_error(__CLASS__ . '::' . __METHOD__ . '(): Please do not use this method any more.', E_USER_DEPRECATED);
         return $value ?: null;
     }
 
