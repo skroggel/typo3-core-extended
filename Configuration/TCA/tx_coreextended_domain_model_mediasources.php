@@ -21,9 +21,6 @@ return [
 		'searchFields' => 'name,url,',
 		'iconfile' => 'EXT:core_extended/Resources/Public/Icons/tx_coreextended_domain_model_mediasources.gif'
 	],
-	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, url, internal',
-	],
 	'types' => [
 		'1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, --palette--;;1, name, url, internal, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
 	],
@@ -48,7 +45,6 @@ return [
 		],
 		'l10n_parent' => [
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
-			'exclude' => 0,
 			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
 			'config' => [
 				'type' => 'select',
