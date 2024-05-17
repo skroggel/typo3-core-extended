@@ -17,6 +17,7 @@ namespace Madj2k\CoreExtended\Tests\Integration\Utility;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Madj2k\CoreExtended\Utility\FrontendSimulatorUtility;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -516,6 +517,39 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
 
     }
 
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function simulateFrontendEnvironmentSetsRequest ()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a sub-page in the rootline
+         * Given a request-object in the super global
+         * Given that request-object has applicationType = 2 set
+         * When the method is called
+         * Then the method returns the value 1
+         * Then the request-object in the super global has applicationType = 1 set
+         * Then the request-object has the base-url of the sub-page set
+         */
+
+        /** @var $request \TYPO3\CMS\Core\Http\ServerRequest */
+        $request = new ServerRequest();
+        $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE);
+        $GLOBALS['TYPO3_REQUEST'] = $request;
+
+        self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
+
+        // @extensionScannerIgnoreLine
+        self::assertEquals(SystemEnvironmentBuilder::REQUESTTYPE_FE, $GLOBALS['TYPO3_REQUEST']->getAttribute('applicationType'));
+        self::assertEquals('www.example.local', $GLOBALS['TYPO3_REQUEST']->getUri()->getHost());
+
+    }
+
     //=============================================
 
 
@@ -758,6 +792,35 @@ class FrontendSimulatorUtilityTest extends FunctionalTestCase
         $settings = $configurationManager->getConfiguration($configurationManager::CONFIGURATION_TYPE_SETTINGS, 'coreExtended');
 
         self::assertEquals(1, $settings['backendContext']);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function resetFrontendEnvironmentRestoresRequest ()
+    {
+
+        /**
+         * Scenario:
+         *
+         * Given a request-object in the super global
+         * Given simulateFrontendEnvironment was called before
+         * When the method is called
+         * Then the method returns true
+         * Then the request-object in the super global has applicationType = 2 set
+         */
+
+        /** @var $request \TYPO3\CMS\Core\Http\ServerRequest */
+        $request = new ServerRequest();
+        $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE);
+        $GLOBALS['TYPO3_REQUEST'] = $request;
+
+        self::assertEquals(1, FrontendSimulatorUtility::simulateFrontendEnvironment(3));
+        self::assertTrue(FrontendSimulatorUtility::resetFrontendEnvironment());
+
+        self::assertEquals(SystemEnvironmentBuilder::REQUESTTYPE_BE, $GLOBALS['TYPO3_REQUEST']->getAttribute('applicationType'));
+
     }
 
     //=============================================

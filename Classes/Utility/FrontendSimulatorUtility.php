@@ -23,8 +23,10 @@ use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Context\WorkspaceAspect;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Http\Uri;
@@ -34,6 +36,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -236,114 +239,73 @@ class FrontendSimulatorUtility
      */
     protected static function initTypoScriptFrontendController(int $pid): void
     {
+
+        /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        $siteFinder->getAllSites(false);
+        $site = $siteFinder->getSiteByPageId($pid);
+        $language = $site->getDefaultLanguage();
+
+        /** @var  \TYPO3\CMS\Core\Context\Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+
+        // Fake a Request-Object
+        // Probably not needed in TYPO3 v11.0 anymore.
+        $uri = new Uri((string) $site->getBase());
+
+        /** @var $request \TYPO3\CMS\Core\Http\ServerRequest */
+        $request = new ServerRequest(
+            $uri,
+            'GET',
+            'php://input',
+            [],
+            [
+                'HTTP_HOST' => $uri->getHost(),
+                'SERVER_NAME' => $uri->getHost(),
+                'HTTPS' => $uri->getScheme() === 'https',
+                'SCRIPT_FILENAME' => __FILE__,
+                'SCRIPT_NAME' => rtrim($uri->getPath(), '/') . '/'
+            ]
+        );
+
+        $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
+        $GLOBALS['TYPO3_REQUEST'] = $request;
+
+        // __construct($context = null, $siteOrId = null, $siteLanguageOrType = null, $pageArguments = null, $cHashOrFrontendUser = null, $_2 = null, $MP = null)
+        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
+            \Madj2k\CoreExtended\Frontend\Controller\TypoScriptFrontendController::class,
+            $context,
+            $site,
+            $language
+        );
+
         /**
-         * Init TypoScriptFrontendController - but using our own class because
-         * we need to disable the groupAccessCheck e.g. in order to be able to send emails from pages with feGroups set
-         * @var \Madj2k\CoreExtended\Frontend\Controller\TypoScriptFrontendController $GLOBALS ['TSFE']
+         * Init database
+         * @see \TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization
          */
-        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
+        $connection->connect();
 
-            //  __construct($_ = null, $id, $type, $no_cache = null, $cHash = '', $_2 = null, $MP = '')
-            $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                \Madj2k\CoreExtended\Frontend\Controller\TypoScriptFrontendController::class,
-                null,
-                $pid,
-                0
-            );
+        /** @deprecated Keep the backwards-compatibility for TYPO3 v9, to have the fe_user within the global TSFE object */
+        $GLOBALS['TSFE']->fe_user = self::getFrontendUserAuthentication();
 
-            /**
-             * Init database
-             * @see \TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization
-             */
-            $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
-            $connection->connect();
+        // Determine the id and evaluate any preview settings
+        $GLOBALS['TSFE']->determineId();
 
-            /** @deprecated Keep the backwards-compatibility for TYPO3 v9, to have the fe_user within the global TSFE object*/
-            $GLOBALS['TSFE']->fe_user = self::getFrontendUserAuthentication();
+        // Init TemplateService implicitly and load TypoScript
+        $GLOBALS['TSFE']->getConfigArray();
 
-            // Determine the id and evaluate any preview settings
-            $GLOBALS['TSFE']->determineId();
+        /** @var \TYPO3\CMS\Core\Localization\LanguageService $languageService */
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $GLOBALS['LANG'] = $languageService;
 
-            // Init TemplateService implicitly and load TypoScript
-            $GLOBALS['TSFE']->getConfigArray();
+        $GLOBALS['TSFE']->getPageAndRootlineWithDomain($pid, $request);
 
-            /** @var \TYPO3\CMS\Lang\LanguageService $languageService */
-            $languageService = GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
-            $GLOBALS['LANG'] = $languageService;
+        // set absRefPrefix and baseURL accordingly
+        $GLOBALS['TSFE']->config['config']['absRefPrefix'] = $GLOBALS['TSFE']->config['config']['baseURL'] = self::getHostname($pid);
+        $GLOBALS['TSFE']->absRefPrefix = $GLOBALS['TSFE']->config['config']['absRefPrefix'] = '/';
 
-            $GLOBALS['TSFE']->getPageAndRootlineWithDomain(0);
-
-            // set absRefPrefix and baseURL accordingly
-            $GLOBALS['TSFE']->config['config']['absRefPrefix'] = $GLOBALS['TSFE']->config['config']['baseURL'] = self::getHostname($pid);
-            $GLOBALS['TSFE']->absRefPrefix = $GLOBALS['TSFE']->config['config']['absRefPrefix'] = '/';
-
-        } else {
-            /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
-            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-            $siteFinder->getAllSites(false);
-            $site = $siteFinder->getSiteByPageId($pid);
-            $language = $site->getDefaultLanguage();
-
-            /** @var  \TYPO3\CMS\Core\Context\Context $context */
-            $context = GeneralUtility::makeInstance(Context::class);
-
-            // Fake a Request-Object
-            // Probably not needed in TYPO3 v11.0 anymore.
-            $uri = new Uri((string) $site->getBase());
-
-            /** @var $request \TYPO3\CMS\Core\Http\ServerRequest */
-            $GLOBALS['TYPO3_REQUEST'] = $request = new ServerRequest(
-                $uri,
-                'GET',
-                'php://input',
-                [],
-                [
-                    'HTTP_HOST' => $uri->getHost(),
-                    'SERVER_NAME' => $uri->getHost(),
-                    'HTTPS' => $uri->getScheme() === 'https',
-                    'SCRIPT_FILENAME' => __FILE__,
-                    'SCRIPT_NAME' => rtrim($uri->getPath(), '/') . '/'
-                ]
-            );
-
-            // __construct($context = null, $siteOrId = null, $siteLanguageOrType = null, $pageArguments = null, $cHashOrFrontendUser = null, $_2 = null, $MP = null)
-            $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                \Madj2k\CoreExtended\Frontend\Controller\TypoScriptFrontendController::class,
-                $context,
-                $site,
-                $language
-            );
-
-            /**
-             * Init database
-             * @see \TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization
-             */
-            $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
-            $connection->connect();
-
-            /** @deprecated Keep the backwards-compatibility for TYPO3 v9, to have the fe_user within the global TSFE object*/
-            $GLOBALS['TSFE']->fe_user = self::getFrontendUserAuthentication();
-
-            // Determine the id and evaluate any preview settings
-            $GLOBALS['TSFE']->determineId();
-
-            // Init TemplateService implicitly and load TypoScript
-            $GLOBALS['TSFE']->getConfigArray();
-
-            /** @var \TYPO3\CMS\Core\Localization\LanguageService $languageService */
-            $languageService = GeneralUtility::makeInstance(LanguageService::class);
-            $GLOBALS['LANG'] = $languageService;
-
-            $GLOBALS['TSFE']->getPageAndRootlineWithDomain($pid, $request);
-
-            // set absRefPrefix and baseURL accordingly
-            $GLOBALS['TSFE']->config['config']['absRefPrefix'] = $GLOBALS['TSFE']->config['config']['baseURL'] = self::getHostname($pid);
-            $GLOBALS['TSFE']->absRefPrefix = $GLOBALS['TSFE']->config['config']['absRefPrefix'] = '/';
-
-        }
     }
-
-
 
 
     /**
@@ -417,21 +379,7 @@ class FrontendSimulatorUtility
 
         } catch (SiteNotFoundException $e) {
 
-            if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) < 10000000) {
-
-                // No site found, let's see if it is a legacy-pseudo-site
-                try {
-                    /** @var \TYPO3\CMS\Core\Site\PseudoSiteFinder $pseudoSiteFinder */
-                    $pseudoSiteFinder = GeneralUtility::makeInstance(PseudoSiteFinder::class);
-
-                    /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
-                    $site = $pseudoSiteFinder->getSiteByRootPageId($rootPageId);
-                    $domain = trim((string)$site->getBase(), '/');
-
-                } catch (SiteNotFoundException $e) {
-                    // No pseudo-site found either - fuck it!
-                }
-            }
+            //  fuck it!
         }
 
         return $domain;
@@ -449,13 +397,14 @@ class FrontendSimulatorUtility
     {
 
         // make a backup of the relevant data and also cache it
-        self::$cache[$pid]['TSFE'] = self::$backup['TSFE'] = (isset($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : null);
-        self::$cache[$pid]['LANG'] = self::$backup['LANG'] = (isset($GLOBALS['LANG']) ? $GLOBALS['LANG']: null);
-        self::$cache[$pid]['BE_USER'] = self::$backup['BE_USER'] = (isset($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER']: null);
-        self::$cache[$pid]['TYPO3_CONF_VARS'] = self::$backup['TYPO3_CONF_VARS'] = (isset($GLOBALS['TYPO3_CONF_VARS']) ? $GLOBALS['TYPO3_CONF_VARS']: null);
-        self::$cache[$pid]['_SERVER'] = self::$backup['_SERVER'] = (isset($_SERVER) ? $_SERVER : null);
-        self::$cache[$pid]['_GET'] = self::$backup['_GET'] = (isset($_GET) ? $_GET : null);
-        self::$cache[$pid]['_POST'] = self::$backup['_POST'] = (isset($_POST) ? $_POST : null);
+        self::$cache[$pid]['TSFE'] = self::$backup['TSFE'] = ($GLOBALS['TSFE'] ?? null);
+        self::$cache[$pid]['LANG'] = self::$backup['LANG'] = ($GLOBALS['LANG'] ?? null);
+        self::$cache[$pid]['BE_USER'] = self::$backup['BE_USER'] = ($GLOBALS['BE_USER'] ?? null);
+        self::$cache[$pid]['TYPO3_CONF_VARS'] = self::$backup['TYPO3_CONF_VARS'] = ($GLOBALS['TYPO3_CONF_VARS'] ?? null);
+        self::$cache[$pid]['TYPO3_REQUEST'] = self::$backup['TYPO3_REQUEST'] = ($GLOBALS['TYPO3_REQUEST'] ?? null);
+        self::$cache[$pid]['_SERVER'] = self::$backup['_SERVER'] = ($_SERVER ?? null);
+        self::$cache[$pid]['_GET'] = self::$backup['_GET'] = ($_GET ?? null);
+        self::$cache[$pid]['_POST'] = self::$backup['_POST'] = ($_POST ?? null);
 
         // get contextAspects
         $context = GeneralUtility::makeInstance(Context::class);
@@ -481,6 +430,7 @@ class FrontendSimulatorUtility
             $GLOBALS['LANG'] = ($stash['LANG'] ?? null);
             $GLOBALS['TYPO3_CONF_VARS'] = ($stash['TYPO3_CONF_VARS'] ?? null);
             $GLOBALS['BE_USER'] = ($stash['BE_USER'] ?? null);
+            $GLOBALS['TYPO3_REQUEST'] = ($stash['TYPO3_REQUEST'] ?? null);
             $_SERVER = ($stash['_SERVER'] ?? null);
             $_GET = ($stash['_GET'] ?? null);
             $_POST = ($stash['_POST'] ?? null);

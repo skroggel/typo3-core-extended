@@ -22,6 +22,7 @@ namespace Madj2k\CoreExtended\Domain\Model;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @deprecated since 2024-05-15 - do not use anymore
  */
 class MediaSources extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
