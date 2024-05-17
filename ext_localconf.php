@@ -5,21 +5,6 @@ call_user_func(
     function($extKey)
     {
 
-        //=================================================================
-        // Configure Plugins
-        //=================================================================
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Madj2k.CoreExtended',
-            'MediaSources',
-            array(
-                'MediaSources' => 'list, listPage',
-            ),
-            // non-cacheable actions
-            array(
-
-            )
-        );
-
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Madj2k.CoreExtended',
             'GoogleSitemap',
