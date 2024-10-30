@@ -85,7 +85,7 @@ lib.txCoreExtended {
     }
 [END]
 
-[extensionLoaded('rkw_events')]
+[extensionLoaded('rkw_events') && getTSFE().id == {$plugin.tx_rkwevents.settings.showPid} && request.getQueryParams()['tx_rkwevents_pi1']['event'] > 0]
     lib.txCoreExtended {
 
         titleTag {
@@ -94,14 +94,25 @@ lib.txCoreExtended {
             30 = COA
             30 {
 
-                10 = TEXT
+                10 = CONTENT
                 10 {
-                    dataWrap = DB:tx_rkwevents_domain_model_event:{gp:tx_rkwevents_pi1|event}:title
-                    wrap3 = {|}
-                    insertData=1
+                    table = tx_rkwevents_domain_model_event
+                    select {
+                        pidInList = {$plugin.tx_rkwevents.persistence.storagePid}
+                        selectFields = eventseries.title
+                        join = tx_rkwevents_domain_model_eventseries eventseries ON tx_rkwevents_domain_model_event.series = eventseries.uid
+                        where = tx_rkwevents_domain_model_event.uid = {gp:tx_rkwevents_pi1|event}
+                        where.insertData = 1
+                    }
+
+                    renderObj = TEXT
+                    renderObj {
+                        field = title
+                    }
                 }
 
                 stdWrap.noTrimWrap = |: | - Veranstaltung |
+                stdWrap.insertData = 1
                 stdWrap.required = 1
             }
         }
