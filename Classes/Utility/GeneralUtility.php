@@ -265,7 +265,7 @@ class GeneralUtility extends \TYPO3\CMS\Core\Utility\GeneralUtility
      * @param string $separator
      * @return string
      * @see \TYPO3\CMS\Core\DataHandling\SlugHelper
-     * @deprecated use \Madj2k\DrSeo\Utility\SlugUtility::slugify() instead, deprecated since 2024-04-05
+     * @deprecated use \Madj2k\DrSerp\Utility\SlugUtility::slugify() instead, deprecated since 2024-04-05
      */
     static public function slugify(string $slug, string $separator = '-'): string
     {
