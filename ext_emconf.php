@@ -30,7 +30,7 @@ $EM_CONF[$_EXTKEY] = [
 		'depends' => [
 			'typo3' => '9.5.0-10.4.99',
             'filemetadata' => '9.5.0.0-10.4.99',
-            'dr_seo' => '9.5.4-12.4.99',
+            'dr_serp' => '9.5.4-12.4.99',
         ],
 		'conflicts' => [
 		],

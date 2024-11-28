@@ -1,12 +1,12 @@
 ####################################################################
 # Canonical - @deprecated
-# use \Madj2k\DrSeo\MetaTag\CanonicalGenerator->getPath instead
+# use \Madj2k\DrSerp\MetaTag\CanonicalGenerator->getPath instead
 ####################################################################
 lib.txCoreExtended {
 
     canonical = USER_INT
     canonical {
-        userFunc = Madj2k\DrSeo\MetaTag\CanonicalGenerator->getPath
+        userFunc = Madj2k\DrSerp\MetaTag\CanonicalGenerator->getPath
         stdWrap.wrap = <link href="|" rel="canonical">
     }
 }

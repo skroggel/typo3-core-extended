@@ -21,9 +21,9 @@ namespace Madj2k\CoreExtended\MetaTag;
  * @copyright Steffen Kroggel
  * @package Madj2k_CoreExtended
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @deprecated since 2024-04-12 - use  \Madj2k\DrSeo\MetaTag\CanonicalGenerator instead
+ * @deprecated since 2024-04-12 - use  \Madj2k\DrSerp\MetaTag\CanonicalGenerator instead
  */
-class CanonicalGenerator extends \Madj2k\DrSeo\MetaTag\CanonicalGenerator
+class CanonicalGenerator extends \Madj2k\DrSerp\MetaTag\CanonicalGenerator
 {
 
 }
