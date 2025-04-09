@@ -80,6 +80,16 @@ class MediaCopyrightViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abstrac
             if ($mediaSource = $mediaSourceRepository->findByIdentifier($source)) {
                 $source = $mediaSource->getName();
             }
+
+            if (! $source) {
+
+                /** @var \Madj2k\CopyrightGuardian\Domain\Repository\MediaSourceRepository $mediaSourceRepository */
+                $mediaSourceRepository = $objectManager->get(\Madj2k\CopyrightGuardian\Domain\Repository\MediaSourceRepository::class);
+
+                if ($mediaSource = $mediaSourceRepository->findByIdentifier($source)) {
+                    $source = $mediaSource->getName();
+                }
+            }
         }
 
         if ($originator) {
